@@ -31,17 +31,10 @@ eeProg: clean $(SRC) $(INCLUDES)
 	$(SDAS) -g -l -o $(BUILD)$(NAME).rel $(SRC) 
 	$(SDCC) $(CFLAGS) -Wl-u -o $(BUILD)$(NAME).ihx $(OBJ) 
 	objcopy -Iihex -Obinary  $(BUILD)$(NAME).ihx $(BUILD)$(NAME).bin 
+	cp $(BUILD)$(NAME).bin dist/eeProg.bin 
 	# 
 	@ls -l  $(BUILD)$(NAME).bin 
 	# 
-
-
-hse: eeProg # cristal externe 24Mhz 
-	cp $(BUILD)$(NAME).bin dist/eeProg_hse.bin 
-
-hsi: eeProg # oscillateur interne 16Mhz 
-	cp $(BUILD)$(NAME).bin dist/eeProg_hsi.bin 
-
 
 .PHONY: clean 
 clean:
@@ -52,11 +45,8 @@ clean:
 	rm -f $(BUILD)*
 
 
-flash_hse: 
-	$(FLASH) -c $(PROGRAMMER) -p $(BOARD) -s flash -w dist/eeProg_hse.bin 
-
-flash_hsi:
-	$(FLASH) -c $(PROGRAMMER) -p $(BOARD) -s flash -w dist/eeProg_hsi.bin 	 
+flash:
+	$(FLASH) -c $(PROGRAMMER) -p $(BOARD) -s flash -w dist/eeProg.bin 	 
 
 
 # read flash memory 

@@ -1,0 +1,106 @@
+ASxxxx Linker V03.00 + NoICE + sdld,  page 1.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+.  .ABS.                            00000000    00000000 =           0. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  .__.ABS.                           HW_INIT
+     00000000  l_DATA                          
+     00000000  l_SSEG                          
+     00000000  l__CODE                         
+     00000000  s_DATA1                         
+     00000000  s_SSEG                          
+     00000000  s_SSEG0                         
+     00000000  s__CODE                         
+     00000001  s_DATA                          
+     00000020  RX_QUEUE_SIZE                      HW_INIT
+     00000034  l_DATA1                         
+     00000080  l_HOME                          
+     00000140  l_SSEG0                         
+     000003C8  l_CODE                          
+     00008000  s_HOME                          
+     00008080  s_CODE                          
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 2.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+SSEG0                               00000000    00000140 =         320. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00001740  pad                                HW_INIT
+     00001740  write_buffer                       HW_INIT
+     00001780  stack_full                         HW_INIT
+ASxxxx Linker V03.00 + NoICE + sdld,  page 3.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+HOME                                00008000    00000080 =         128. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+ASxxxx Linker V03.00 + NoICE + sdld,  page 4.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+DATA1                               00000000    00000034 =          52. bytes (ABS,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     00000000  base                               HW_INIT
+     00000001  fmstr                              HW_INIT
+     00000005  timer                              HW_INIT
+     00000008  ptr16                              HW_INIT
+     0000000A  flags                              HW_INIT
+     0000000B  rx1_head                           HW_INIT
+     0000000C  rx1_tail                           HW_INIT
+     0000000D  rx1_queue                          HW_INIT
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
+Hexadecimal  [32-Bits]
+
+Area                                    Addr        Size        Decimal Bytes (Attributes)
+--------------------------------        ----        ----        ------- ----- ------------
+CODE                                00008080    000003C8 =         968. bytes (REL,CON)
+
+      Value  Global                              Global Defined In Module
+      -----  --------------------------------   ------------------------
+     0000815F  putc                               HW_INIT
+     0000815F  uart_putc                          HW_INIT
+     00008168  qgetc                              HW_INIT
+     00008168  uart_qgetc                         HW_INIT
+     0000816E  getc                               HW_INIT
+     0000816E  uart_getc                          HW_INIT
+     00008196  puts                               HW_INIT
+     000081A1  bksp                               HW_INIT
+     000081A1  uart_bksp                          HW_INIT
+     000081B3  new_line                           HW_INIT
+     000081B9  clr_screen                         HW_INIT
+     000081C4  space                              HW_INIT
+     000081CA  spaces                             HW_INIT
+     000081D6  readln                             HW_INIT
+     00008222  to_hex_char                        HW_INIT
+     0000822D  print_hex                          HW_INIT
+     00008264  print_int                          HW_INIT
+     00008275  itoa                               HW_INIT
+ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
+
+Files Linked                              [ module(s) ]
+
+build/eeProg.rel                          [ HW_INIT ]
+
+ASxxxx Linker V03.00 + NoICE + sdld,  page 7.
+
+User Base Address Definitions
+
+HOME = 0x8000
+DATA = 0x0001
+
+

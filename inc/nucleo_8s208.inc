@@ -34,17 +34,10 @@ LED_BIT = 5
 LED_MASK = (1<<LED_BIT) ;bit 5 mask
 
      
-; B1 on schematic is user button
-; connected to PE4
-; external pullup resistor R6 4k7 and debounce capacitor C5 100nF
-USR_BTN_PORT = PE_BASE+GPIO_IDR 
-USR_BTN_BIT = 4
-USR_BTN_MASK = (1<<USR_BTN_BIT) ;bit 4 mask
-
 ;  user interface UART via ST-LINK , (T-VCP)
 
 UART=UART1
-; port used by  UART3 
+; port used by  UART1  
 UART_PORT_ODR=PA_ODR 
 UART_PORT_DDR=PA_DDR 
 UART_PORT_IDR=PA_IDR 

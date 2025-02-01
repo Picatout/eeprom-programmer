@@ -1,41 +1,35 @@
 ;;
-; Copyright Jacques Deschênes 2019 
-; This file is part of STM8_NUCLEO 
+; Copyright Jacques Deschênes 2025
+; This file is part of eeProg 
 ;
-;     STM8_NUCLEO is free software: you can redistribute it and/or modify
+;     eeProg is free software: you can redistribute it and/or modify
 ;     it under the terms of the GNU General Public License as published by
 ;     the Free Software Foundation, either version 3 of the License, or
 ;     (at your option) any later version.
 ;
-;     STM8_NUCLEO is distributed in the hope that it will be useful,
+;     eeProg is distributed in the hope that it will be useful,
 ;     but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;     GNU General Public License for more details.
 ;
 ;     You should have received a copy of the GNU General Public License
-;     along with STM8_NUCLEO.  If not, see <http://www.gnu.org/licenses/>.
+;     along with eeProg.  If not, see <http://www.gnu.org/licenses/>.
 ;;
 ;--------------------------------------
-        TAB_WIDTH=4 ; default tabulation width 
-        EOF=0xff ; end of file marker 
-        NLEN_MASK=0xf  ; mask to extract name len 
-
-
 	STACK_EMPTY=RAM_SIZE-1  
- 
-	RX_QUEUE_SIZE=8 
+    STACK_SIZE=128 
+    PAD_SIZE=64
+    TIB_SIZE=128 ; input buffer size 
+    RX_QUEUE_SIZE==32 ; UART receive queue size 
 
     TIM2_CLK_FREQ=62500
 
 ;--------------------------------------
-;   assembler flags 
+;   flags 
 ;-------------------------------------
 
-  
-    ; jump back to interp_loop 
-    .macro _next 
-        jp interp_loop 
-    .endm ; 2 cycles 
+    FUPPER=0 
+    FTIMER=1
     
 ;------------------------------------
 ;  board user LED control macros 
