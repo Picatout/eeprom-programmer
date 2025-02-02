@@ -50,60 +50,104 @@
     EEPROM_NOE=BIT2 ; eeprom output enable 
     EEPROM_NWE=BIT3 ; eeprom write enable 
 
-    .macro _enable_eeprom 
+    EEPROM_PAGE_SIZE=64
+
+;--------------------------------
+;     MACROS 
+;--------------------------------
+
+    ; reset eeprom ~CE bit 
+    ; activate eeprom
+    ; must be in this state 
+    ; for read/prog operations  
+    .macro _eeprom_enable  
         bres EEPROM_CTRL,#EEPROM_NCE 
     .endm 
 
-    .macro _disable_eeprom 
+    ; set eeprom ~CE bit 
+    ; put eeprom in low power mode 
+    ; data pin are in hi-z state 
+    ; can't be read/prog in this state 
+    .macro _eeprom_disable 
         bset EEPROM_CTRL,#EEPROM_NCE
     .endm 
 
-    .macro _enabe_eeprom_output 
+    ; reset eeprom ~OE bit
+    ; must be low to read eeprom  
+    .macro _eeprom_enabe_output 
         bres EEPROM_CTRL,#EEPROM_NOE 
     .endm 
 
-    .macro _disable_eeprom_output 
+    ; set eeprom ~OE bit
+    ; must be high to program eeprom  
+    .macro _eeprom_disable_output 
         bset EEPROM_CTRL,#EEPROM_NOE
     .endm 
 
-    .macro _enable_eeprom_write 
+    ; reset eeprom ~WE bit 
+    .macro _eeprom_we_low  
         bres EEPROM_CTRL,#EEPROM_NWE
     .endm 
 
-    .macro _disable_eeprom_write 
+    ; set eeprom ~WE bit 
+    .macro _eeprom_we_high 
         bset EEPROM_CTRL,#EEPROM_NWE
     .endm 
 
-    ; addres in X 
-    .macro _set_eeprom_addr  
-        ld a,xh 
-        ld ADDR_HIGH,a 
-        ld a,xl 
-        ld ADDR_LOW,a 
+    ; eeprom programming delay 
+    ; 11msec per 64 bytes page 
+    .macro _prog_delay 
+        ld a,#11
+        _straz timer+1 
+        bset flags,#FTIMER 
+        btjf flags,#FTIMER,.
     .endm 
 
     ; set DATA port as output 
     .macro _data_output 
         ld a,#255 
-         DATA_DDR,a ; output mode 
-         ld DATA_CR2,a ; high_speed  
+        ld DATA_CR1,a ; push pull output mode 
+        ld DATA_CR2,a ; high_speed  
+        ld DATA_DDR,a ; output mode 
     .endm 
 
     ; set DATA port as input 
     .macro _data_input
+        clr DATA_CR1  ; floating input
         clr DATA_CR2  ; disable ineterrupt
-        clr DATA_DDR  ; input mode 
+        clr DATA_DDR  ; input mode
+    .endm 
+
+    ;configure data port for output 
+    ; and enable eeprom ~OE bit.
+    .macro _config_write 
+        _data_output
+        _eeprom_disable_output
+    .endm 
+
+    ; configure data port for input 
+    ; and disable eeprom ~OE bit 
+    .macro _config_read 
+        _data_input
+        _eeprom_enabe_output
     .endm 
 
     ; data in A 
-    .macro _write_eeprom 
-        ld DATA_ODR,a 
+    .macro _eeprom_write  
+        _eeprom_we_low 
+        nop 
+        nop 
+        ld DATA_ODR,a
+        nop
+        nop 
+        _eeprom_we_high   
     .endm 
 
     ; read eeprom data in A 
-    .macro _read_eeprom 
+    .macro _eeprom_read  
         ld a,DATA_IDR  
     .endm 
+
 
 ;;--------------------------------------
     .area CODE
@@ -116,11 +160,14 @@
 ;       hex_number  -> display byte at that address 
 ;       hex_number.hex_number -> display bytes in that range 
 ;       hex_number: hex_byte [hex_byte]*  -> write to EEPROM data bytes  
+;       hex_number"STRING   write string in EEPROM 
+;       hex_numberXhex_number  erase range filling eeprom with FF 
 ;----------------------------------------------------
 ; operatiing modes 
     NOP=0
     READ=1 ; single address or block
     STORE=2 
+    ERASE=3 ; fill range with 0xFF 
 
     ; get next character from input buffer 
     .macro _next_char 
@@ -149,18 +196,14 @@ init_ports:
     ld PD_CR1,a ; push-pull 
     ld PD_CR2,a ; high speed 
     clr ADDR_LOW  
-; PORT B is bidirectionnal, default to input 
-    clr DATA_CR2  ; disable ineterrupt
-    clr DATA_DDR  ; input mode 
-    ld a,#255
-    ld DATA_CR1,a ; pullup  
 ; PORT C (control lines) bits 1,2,3 as output push-pull 
     ld a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
     ld PC_ODR,a ; all control lines to high 
     ld PC_CR1,a ; push-pull 
     ld PC_CR2,a ; high-speed 
     ld PC_DDR,a ; output 
-    _enable_eeprom
+    _eeprom_enable 
+    _config_read
     ret 
 
 ;----------------------
@@ -183,12 +226,16 @@ eeProg:
     call print_dec
     call new_line 
     call init_ports 
-
+    clr a 
+    _clrz xamadr 
+    _clrz storadr 
+    _clrz last  
 cli: 
-    ld a,#CR 
-    call putc
+    call new_line
     ld a,#'# 
     call putc ; prompt character 
+    clr a
+    clr tib
     call readln
 ; analyze input line      
     ldw y,x  
@@ -198,22 +245,35 @@ next_char:
     tnz a     
     jrne parse01
 ; at end of line 
-    tnz mode 
-    jreq cli 
+     tnz mode 
+     jreq cli 
     call exam_block 
     jra cli 
 parse01:
+    cp a,#'" 
+    jrne 1$ 
+    call write_string
+    jra cli 
+1$: 
+    cp a,#'X 
+    jrne 2$ 
+    ld a,#ERASE 
+    _straz mode 
+    jra next_char 
+2$:    
     cp a,#':
     jrne 5$ 
     call write_eeprom 
     jra cli     
 5$:
     cp a,#'. 
-    jrne 8$ 
-    tnz mode 
-    jreq cli ; here mode should be set to 1 
+    jrne 7$ 
+    ld a,#READ 
+    _straz mode  
+;    tnz mode 
+;    jreq cli ; here mode should be set to 1 
     jra next_char 
-8$: 
+7$: 
     cp a,#SPACE 
     jreq next_char ; skip separator and invalids characters  
     call parse_hex ; maybe an hexadecimal number 
@@ -221,6 +281,12 @@ parse01:
     jreq cli 
     tnz mode 
     jreq 9$
+    ld a,#ERASE 
+    cp a,mode 
+    jrne 8$
+    call erase_range 
+    jra cli
+8$:
     call exam_block
     jra next_char
 9$:
@@ -229,11 +295,23 @@ parse01:
     _incz mode
     jra next_char 
 
+
 ;-------------------------------------
-; write to eeprom  
+; write to eeprom 
+; write data to pad then transfert to eeprom  
 ; read byte list from input buffer
+; all bytes must be in same page.
+; i.e. only bit 5:0 of address change
+; maximum 64 bytes at once.
+; if delay between _eeprom_write >150µSec 
+; programming phase start.
 ;--------------------------------------
+    PAGE_CNTR=1
 write_eeprom:
+    push #EEPROM_PAGE_SIZE ; bytes per eeprom page 
+; load data in pad 
+    ldw x,#pad 
+    _strxz ptr16
 1$: 
 ; skip spaces 
     _next_char 
@@ -241,14 +319,20 @@ write_eeprom:
     jreq 1$ 
     call parse_hex
     tnz a 
-    jreq 9$ 
+    jreq 9$
     ld a,xl 
-    _ldxz storadr 
-    ld (x),a 
-    incw x 
-    _strxz storadr
+    ld [ptr16],a 
+    inc ptr8  
+    dec (PAGE_CNTR,sp)
+    jreq 9$ 
     jra 1$ 
-9$: _clrz mode 
+9$: ld a,#64 
+    sub a,(PAGE_CNTR,sp)
+    jreq 10$
+    call prog_eeprom 
+10$:
+    _clrz mode 
+    _drop 1 
     ret 
 
 ;-------------------------------------------
@@ -258,23 +342,25 @@ write_eeprom:
     VSIZE=1
 exam_block:
     _vars VSIZE
+    _config_read ; to read data from eeprom  
     _ldxz xamadr
 new_row: 
     ld a,#16
     ld (ROW_SIZE,sp),a ; bytes per row 
-    call new_line  
     call print_adr ; display address and first byte of row 
-    call print_mem ; display byte at address  
 row:
+    call print_mem ; display byte at address  
+    cpw x,last 
+    jreq 9$ 
     incw x 
     jreq 9$ ; overflow 
-    cpw x,last 
-    jrugt 9$ 
     dec (ROW_SIZE,sp)
-    jreq new_row  
-    call print_mem  
-    jra row 
-9$:
+    jrne row  
+    call new_line       
+    jra new_row 
+9$: incw x
+    _strxz xamadr
+    _strxz last 
     _clrz mode 
     _drop VSIZE 
     ret  
@@ -362,9 +448,146 @@ print_word:
 ;    X      not modified 
 ;-------------------------------------
 print_mem:
-    ld a,(x) 
+    call eeprom_addr 
+    _eeprom_read 
     call print_hex  
     call space 
     ret 
 
 
+;------------------------------
+; program data in pad to eeprom 
+; input:
+;    A     byte count 
+;    pad   data 
+;-------------------------------
+prog_eeprom:
+    push a ; bytes to program 
+    _config_write
+    ldw y,#pad 
+    _ldxz storadr 
+1$:
+    call eeprom_addr 
+    incw x 
+    ld a,(y)
+    incw y 
+    _eeprom_write 
+    dec (1,sp)
+    jrne 1$ 
+    _strxz storadr 
+    _prog_delay
+    _config_read 
+    _drop 1
+    ret 
+
+;---------------------------
+; set eeprom address 
+; input:
+;    X     address 
+; output:
+;    X     preserved 
+;---------------------------
+eeprom_addr:
+    push a 
+    ld a,xh 
+    ld ADDR_HIGH,a 
+    ld a,xl 
+    ld ADDR_LOW,a 
+    pop a
+    ret 
+
+;-----------------------------
+; copy tib to eeprom as 
+; .asciz 
+; input: 
+;   tib 
+; string max length 63 char.
+;-----------------------------
+write_string:
+    _config_write 
+    ldw x,y 
+    call strlen
+    tnz a 
+    jreq 10$
+    inc a 
+    cp a,#EEPROM_PAGE_SIZE
+    jrmi 1$ 
+    ld a,#PAD_SIZE 
+1$: push a 
+    _ldxz storadr 
+2$:
+    ld a,(y)
+    incw y 
+    call eeprom_addr 
+    incw x 
+    _eeprom_write 
+    dec (1,sp)
+    jrne 2$
+    _strxz storadr
+    _prog_delay
+    _config_read 
+    _drop 1  
+10$:
+    ret 
+
+;----------------------------
+;  erasse EEPROM range 
+;  filling with 0xFF value 
+;  cmd format: addr1Xaddr2 
+;----------------------------
+    COUNT=1
+    VSIZE=2
+erase_range:
+    _vars VSIZE 
+; fill pad with 0xFF
+    clr (COUNT,sp)
+    ld a,#EEPROM_PAGE_SIZE
+    ld (COUNT+1,sp),a
+    ldw x,#pad 
+    ld a,#0xff 
+1$: 
+    ld (x),a 
+    incw x 
+    dec (2,sp)
+    jrne 1$ 
+    _ldxz last 
+    subw x,storadr 
+    incw x 
+    ldw (COUNT,sp),x ; count to erase 
+2$:
+    ldw x,#EEPROM_PAGE_SIZE 
+    cpw x,(COUNT,sp)
+    jrule 4$ 
+    ldw x,(COUNT,sp)
+4$: ld a,xl 
+    push a 
+    _ldxz storadr 
+    call prog_eeprom 
+    pop ptr8 
+    clr ptr16 
+    ldw x,(COUNT,sp) 
+    subw x,ptr16
+    ldw (COUNT,sp),x  
+    jrne 2$ 
+    _drop VSIZE 
+    ret 
+
+;--------------------------
+; return lenght of string
+; input:
+;    X   *.asciz 
+; output:
+;    A     length 
+;    X     not changed 
+;--------------------------
+strlen:
+    pushw x
+    clr a 
+1$:
+    tnz (x)
+    jreq 9$
+    inc a 
+    incw x 
+    jra 1$
+9$: popw x
+    ret 

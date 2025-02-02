@@ -20,7 +20,7 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000034  l_DATA1                         
      00000080  l_HOME                          
      00000140  l_SSEG0                         
-     000003D1  l_CODE                          
+     0000053D  l_CODE                          
      00008000  s_HOME                          
      00008080  s_CODE                          
 
@@ -68,7 +68,7 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                00008080    000003D1 =         977. bytes (REL,CON)
+CODE                                00008080    0000053D =        1341. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
@@ -86,10 +86,10 @@ CODE                                00008080    000003D1 =         977. bytes (R
      000081C4  space                              HW_INIT
      000081CA  spaces                             HW_INIT
      000081D6  readln                             HW_INIT
-     00008222  to_hex_char                        HW_INIT
-     0000822D  print_hex                          HW_INIT
-     00008264  print_int                          HW_INIT
-     00008275  itoa                               HW_INIT
+     0000822F  to_hex_char                        HW_INIT
+     0000823A  print_hex                          HW_INIT
+     00008271  print_int                          HW_INIT
+     00008282  itoa                               HW_INIT
 ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
 
 Files Linked                              [ module(s) ]

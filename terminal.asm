@@ -259,15 +259,21 @@ spaces::
 ;   X     tib address 
 ;--------------------------
 MAX_LEN=79
-	LN_LEN=1
-	CHAR=2 
+	HI_LL=1
+	LN_LEN=2
+	CHAR=3 
 	VSIZE=CHAR  
 readln::
 	_vars VSIZE
 	clr (CHAR,sp) 
-	clr (LN_LEN,sp)
+	clr (HI_LL,sp)
+	ld (LN_LEN,sp),a
 	ldw x,#tib 
-	clr (x)
+	tnz a 
+	jreq 1$
+	call puts 
+	ldw x,#tib
+	addw x,(HI_LL,sp)
 1$:
 	call uart_getc
 	call to_upper
