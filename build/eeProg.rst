@@ -1872,7 +1872,7 @@ Hexadecimal [24-Bits]
                                     209 ; used for user interface 
       008116 CD 81 3B         [ 4]  210 	call uart_init
       008119 9A               [ 1]  211 	rim ; enable interrupts 
-      00811A CC 83 3D         [ 2]  212 	jp eeProg 
+      00811A CC 83 46         [ 2]  212 	jp eeProg 
       00811D 20 FE            [ 2]  213 	jra . 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 37.
 Hexadecimal [24-Bits]
@@ -2512,11 +2512,11 @@ Hexadecimal [24-Bits]
                                      67     .endm 
                                      68 
                                      69     .macro _enable_eeprom_write 
-                                     70         bres EEPROM,#EEPROM_NWE
+                                     70         bres EEPROM_CTRL,#EEPROM_NWE
                                      71     .endm 
                                      72 
                                      73     .macro _disable_eeprom_write 
-                                     74         bset EEPROM,#EEPROM_NWE
+                                     74         bset EEPROM_CTRL,#EEPROM_NWE
                                      75     .endm 
                                      76 
                                      77     ; addres in X 
@@ -2541,7 +2541,7 @@ Hexadecimal [24-Bits]
                                      96     .endm 
                                      97 
                                      98     ; data in A 
-                                     99     .macro _set_eeprom_data 
+                                     99     .macro _write_eeprom 
                                     100         ld DATA_ODR,a 
                                     101     .endm 
                                     102 
@@ -2590,29 +2590,29 @@ Hexadecimal [24-Bits]
       0082D7                        140 init_ports:
                                     141 ; PORT G (ADDR_HIGH) as output push-pull 
       0082D7 A6 FF            [ 1]  142     ld a,#255 
-      0082D9 B7 20            [ 1]  143     ld PG+GPIO_DDR,a ; output 
-      0082DB B7 21            [ 1]  144     ld PG+GPIO_CR1,a ; push-pull 
-      0082DD B7 22            [ 1]  145     ld PG+GPIO_CR2,a ; high speed 
-      0082DF 72 5F 50 1E      [ 1]  146     clr ADDR_HIGH     
+      0082D9 C7 50 20         [ 1]  143     ld PG_DDR,a ; output 
+      0082DC C7 50 21         [ 1]  144     ld PG_CR1,a ; push-pull 
+      0082DF C7 50 22         [ 1]  145     ld PG_CR2,a ; high speed 
+      0082E2 72 5F 50 1E      [ 1]  146     clr ADDR_HIGH     
                                     147 ; PORT D (ADDR_LOW) as outpout push-pull 
-      0082E3 B7 20            [ 1]  148     ld PG+GPIO_DDR,a ; output 
-      0082E5 B7 21            [ 1]  149     ld PG+GPIO_CR1,a ; push-pull 
-      0082E7 B7 22            [ 1]  150     ld PG+GPIO_CR2,a ; high speed 
-      0082E9 72 5F 50 0F      [ 1]  151     clr ADDR_LOW  
+      0082E6 C7 50 11         [ 1]  148     ld PD_DDR,a ; output 
+      0082E9 C7 50 12         [ 1]  149     ld PD_CR1,a ; push-pull 
+      0082EC C7 50 13         [ 1]  150     ld PD_CR2,a ; high speed 
+      0082EF 72 5F 50 0F      [ 1]  151     clr ADDR_LOW  
                                     152 ; PORT B is bidirectionnal, default to input 
-      0082ED 72 5F 50 09      [ 1]  153     clr DATA_CR2  ; disable ineterrupt
-      0082F1 72 5F 50 07      [ 1]  154     clr DATA_DDR  ; input mode 
-      0082F5 A6 FF            [ 1]  155     ld a,#255
-      0082F7 C7 50 08         [ 1]  156     ld DATA_CR1,a ; pullup  
+      0082F3 72 5F 50 09      [ 1]  153     clr DATA_CR2  ; disable ineterrupt
+      0082F7 72 5F 50 07      [ 1]  154     clr DATA_DDR  ; input mode 
+      0082FB A6 FF            [ 1]  155     ld a,#255
+      0082FD C7 50 08         [ 1]  156     ld DATA_CR1,a ; pullup  
                                     157 ; PORT C (control lines) bits 1,2,3 as output push-pull 
-      0082FA A6 0E            [ 1]  158     ld a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
-      0082FC C7 50 0A         [ 1]  159     ld PC_ODR,a ; all control lines to high 
-      0082FF B7 0D            [ 1]  160     ld PC+GPIO_CR1,a ; push-pull 
-      008301 B7 0E            [ 1]  161     ld PC+GPIO_CR2,a ; high-speed 
-      008303 B7 0C            [ 1]  162     ld PC+GPIO_DDR,a ; output 
-      000285                        163     _enable_eeprom
-      008305 72 13 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NCE 
-      008309 81               [ 4]  164     ret 
+      008300 A6 0E            [ 1]  158     ld a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
+      008302 C7 50 0A         [ 1]  159     ld PC_ODR,a ; all control lines to high 
+      008305 C7 50 0D         [ 1]  160     ld PC_CR1,a ; push-pull 
+      008308 C7 50 0E         [ 1]  161     ld PC_CR2,a ; high-speed 
+      00830B C7 50 0C         [ 1]  162     ld PC_DDR,a ; output 
+      00028E                        163     _enable_eeprom
+      00830E 72 13 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NCE 
+      008312 81               [ 4]  164     ret 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 50.
 Hexadecimal [24-Bits]
 
@@ -2622,7 +2622,7 @@ Hexadecimal [24-Bits]
                                     166 ;----------------------
                                     167 ;  eeProg entry point 
                                     168 ;---------------------
-      00830A 65 65 50 72 6F 67 2C   169 EEPROG_tibFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
+      008313 65 65 50 72 6F 67 2C   169 EEPROG_tibFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
              20 43 6F 70 79 72 69
              67 68 74 20 4A 61 63
              71 75 65 73 20 44 65
@@ -2630,105 +2630,105 @@ Hexadecimal [24-Bits]
              2C 20 32 30 32 35 0A
              76 65 72 73 69 6F 6E
              20 00
-      00833D                        170 eeProg:
-      00833D CD 81 B9         [ 4]  171     call clr_screen
-      008340 AE 83 0A         [ 2]  172     ldw x,#EEPROG_tibFO 
-      008343 CD 81 96         [ 4]  173     call puts 
-      008346 A6 01            [ 1]  174     ld a,#MAJOR
-      008348 CD 82 3D         [ 4]  175     call print_dec 
-      00834B A6 2E            [ 1]  176     ld a,#'. 
-      00834D CD 81 5F         [ 4]  177     call putc 
-      008350 A6 00            [ 1]  178     ld a,#MINOR 
-      008352 CD 82 3D         [ 4]  179     call print_dec
-      008355 A6 2E            [ 1]  180     ld a,#'. 
-      008357 CD 81 5F         [ 4]  181     call putc 
-      00835A A6 00            [ 1]  182     ld a,#REV 
-      00835C CD 82 3D         [ 4]  183     call print_dec
-      00835F CD 81 B3         [ 4]  184     call new_line 
-      008362 CD 82 D7         [ 4]  185     call init_ports 
+      008346                        170 eeProg:
+      008346 CD 81 B9         [ 4]  171     call clr_screen
+      008349 AE 83 13         [ 2]  172     ldw x,#EEPROG_tibFO 
+      00834C CD 81 96         [ 4]  173     call puts 
+      00834F A6 01            [ 1]  174     ld a,#MAJOR
+      008351 CD 82 3D         [ 4]  175     call print_dec 
+      008354 A6 2E            [ 1]  176     ld a,#'. 
+      008356 CD 81 5F         [ 4]  177     call putc 
+      008359 A6 00            [ 1]  178     ld a,#MINOR 
+      00835B CD 82 3D         [ 4]  179     call print_dec
+      00835E A6 2E            [ 1]  180     ld a,#'. 
+      008360 CD 81 5F         [ 4]  181     call putc 
+      008363 A6 00            [ 1]  182     ld a,#REV 
+      008365 CD 82 3D         [ 4]  183     call print_dec
+      008368 CD 81 B3         [ 4]  184     call new_line 
+      00836B CD 82 D7         [ 4]  185     call init_ports 
                                     186 
-      008365                        187 cli: 
-      008365 A6 0D            [ 1]  188     ld a,#CR 
-      008367 CD 81 5F         [ 4]  189     call putc
-      00836A A6 23            [ 1]  190     ld a,#'# 
-      00836C CD 81 5F         [ 4]  191     call putc ; prompt character 
-      00836F CD 81 D6         [ 4]  192     call readln
+      00836E                        187 cli: 
+      00836E A6 0D            [ 1]  188     ld a,#CR 
+      008370 CD 81 5F         [ 4]  189     call putc
+      008373 A6 23            [ 1]  190     ld a,#'# 
+      008375 CD 81 5F         [ 4]  191     call putc ; prompt character 
+      008378 CD 81 D6         [ 4]  192     call readln
                                     193 ; analyze input line      
-      008372 90 93            [ 1]  194     ldw y,x  
-      0002F4                        195     _clrz mode 
-      008374 3F 2D                    1     .byte 0x3f, mode 
-      008376                        196 next_char:     
-      0002F6                        197     _next_char
-      008376 90 F6            [ 1]    1     ld a,(y)
-      008378 90 5C            [ 1]    2     incw y 
-      00837A 4D               [ 1]  198     tnz a     
-      00837B 26 0B            [ 1]  199     jrne parse01
+      00837B 90 93            [ 1]  194     ldw y,x  
+      0002FD                        195     _clrz mode 
+      00837D 3F 2D                    1     .byte 0x3f, mode 
+      00837F                        196 next_char:     
+      0002FF                        197     _next_char
+      00837F 90 F6            [ 1]    1     ld a,(y)
+      008381 90 5C            [ 1]    2     incw y 
+      008383 4D               [ 1]  198     tnz a     
+      008384 26 0B            [ 1]  199     jrne parse01
                                     200 ; at end of line 
-      00837D 72 5D 00 2D      [ 1]  201     tnz mode 
-      008381 27 E2            [ 1]  202     jreq cli 
-      008383 CD 83 D4         [ 4]  203     call exam_block 
-      008386 20 DD            [ 2]  204     jra cli 
-      008388                        205 parse01:
-      008388 A1 3A            [ 1]  206     cp a,#':
-      00838A 26 05            [ 1]  207     jrne 5$ 
-      00838C CD 83 BA         [ 4]  208     call write_eeprom 
-      00838F 20 D4            [ 2]  209     jra cli     
+      008386 72 5D 00 2D      [ 1]  201     tnz mode 
+      00838A 27 E2            [ 1]  202     jreq cli 
+      00838C CD 83 DD         [ 4]  203     call exam_block 
+      00838F 20 DD            [ 2]  204     jra cli 
+      008391                        205 parse01:
+      008391 A1 3A            [ 1]  206     cp a,#':
+      008393 26 05            [ 1]  207     jrne 5$ 
+      008395 CD 83 C3         [ 4]  208     call write_eeprom 
+      008398 20 D4            [ 2]  209     jra cli     
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 51.
 Hexadecimal [24-Bits]
 
 
 
-      008391                        210 5$:
-      008391 A1 2E            [ 1]  211     cp a,#'. 
-      008393 26 08            [ 1]  212     jrne 8$ 
-      008395 72 5D 00 2D      [ 1]  213     tnz mode 
-      008399 27 CA            [ 1]  214     jreq cli ; here mode should be set to 1 
-      00839B 20 D9            [ 2]  215     jra next_char 
-      00839D                        216 8$: 
-      00839D A1 20            [ 1]  217     cp a,#SPACE 
-      00839F 27 D5            [ 1]  218     jreq next_char ; skip separator and invalids characters  
-      0083A1 CD 83 FB         [ 4]  219     call parse_hex ; maybe an hexadecimal number 
-      0083A4 4D               [ 1]  220     tnz a ; unknown token ignore rest of line
-      0083A5 27 BE            [ 1]  221     jreq cli 
-      0083A7 72 5D 00 2D      [ 1]  222     tnz mode 
-      0083AB 27 05            [ 1]  223     jreq 9$
-      0083AD CD 83 D4         [ 4]  224     call exam_block
-      0083B0 20 C4            [ 2]  225     jra next_char
-      0083B2                        226 9$:
-      000332                        227     _strxz xamadr 
-      0083B2 BF 2E                    1     .byte 0xbf,xamadr 
-      000334                        228     _strxz storadr
-      0083B4 BF 30                    1     .byte 0xbf,storadr 
-      000336                        229     _incz mode
-      0083B6 3C 2D                    1     .byte 0x3c, mode 
-      0083B8 20 BC            [ 2]  230     jra next_char 
+      00839A                        210 5$:
+      00839A A1 2E            [ 1]  211     cp a,#'. 
+      00839C 26 08            [ 1]  212     jrne 8$ 
+      00839E 72 5D 00 2D      [ 1]  213     tnz mode 
+      0083A2 27 CA            [ 1]  214     jreq cli ; here mode should be set to 1 
+      0083A4 20 D9            [ 2]  215     jra next_char 
+      0083A6                        216 8$: 
+      0083A6 A1 20            [ 1]  217     cp a,#SPACE 
+      0083A8 27 D5            [ 1]  218     jreq next_char ; skip separator and invalids characters  
+      0083AA CD 84 04         [ 4]  219     call parse_hex ; maybe an hexadecimal number 
+      0083AD 4D               [ 1]  220     tnz a ; unknown token ignore rest of line
+      0083AE 27 BE            [ 1]  221     jreq cli 
+      0083B0 72 5D 00 2D      [ 1]  222     tnz mode 
+      0083B4 27 05            [ 1]  223     jreq 9$
+      0083B6 CD 83 DD         [ 4]  224     call exam_block
+      0083B9 20 C4            [ 2]  225     jra next_char
+      0083BB                        226 9$:
+      00033B                        227     _strxz xamadr 
+      0083BB BF 2E                    1     .byte 0xbf,xamadr 
+      00033D                        228     _strxz storadr
+      0083BD BF 30                    1     .byte 0xbf,storadr 
+      00033F                        229     _incz mode
+      0083BF 3C 2D                    1     .byte 0x3c, mode 
+      0083C1 20 BC            [ 2]  230     jra next_char 
                                     231 
                                     232 ;-------------------------------------
                                     233 ; write to eeprom  
                                     234 ; read byte list from input buffer
                                     235 ;--------------------------------------
-      0083BA                        236 write_eeprom:
-      0083BA                        237 1$: 
+      0083C3                        236 write_eeprom:
+      0083C3                        237 1$: 
                                     238 ; skip spaces 
-      00033A                        239     _next_char 
-      0083BA 90 F6            [ 1]    1     ld a,(y)
-      0083BC 90 5C            [ 1]    2     incw y 
-      0083BE A1 20            [ 1]  240     cp a,#SPACE 
-      0083C0 27 F8            [ 1]  241     jreq 1$ 
-      0083C2 CD 83 FB         [ 4]  242     call parse_hex
-      0083C5 4D               [ 1]  243     tnz a 
-      0083C6 27 09            [ 1]  244     jreq 9$ 
-      0083C8 9F               [ 1]  245     ld a,xl 
-      000349                        246     _ldxz storadr 
-      0083C9 BE 30                    1     .byte 0xbe,storadr 
-      0083CB F7               [ 1]  247     ld (x),a 
-      0083CC 5C               [ 1]  248     incw x 
-      00034D                        249     _strxz storadr
-      0083CD BF 30                    1     .byte 0xbf,storadr 
-      0083CF 20 E9            [ 2]  250     jra 1$ 
-      000351                        251 9$: _clrz mode 
-      0083D1 3F 2D                    1     .byte 0x3f, mode 
-      0083D3 81               [ 4]  252     ret 
+      000343                        239     _next_char 
+      0083C3 90 F6            [ 1]    1     ld a,(y)
+      0083C5 90 5C            [ 1]    2     incw y 
+      0083C7 A1 20            [ 1]  240     cp a,#SPACE 
+      0083C9 27 F8            [ 1]  241     jreq 1$ 
+      0083CB CD 84 04         [ 4]  242     call parse_hex
+      0083CE 4D               [ 1]  243     tnz a 
+      0083CF 27 09            [ 1]  244     jreq 9$ 
+      0083D1 9F               [ 1]  245     ld a,xl 
+      000352                        246     _ldxz storadr 
+      0083D2 BE 30                    1     .byte 0xbe,storadr 
+      0083D4 F7               [ 1]  247     ld (x),a 
+      0083D5 5C               [ 1]  248     incw x 
+      000356                        249     _strxz storadr
+      0083D6 BF 30                    1     .byte 0xbf,storadr 
+      0083D8 20 E9            [ 2]  250     jra 1$ 
+      00035A                        251 9$: _clrz mode 
+      0083DA 3F 2D                    1     .byte 0x3f, mode 
+      0083DC 81               [ 4]  252     ret 
                                     253 
                                     254 ;-------------------------------------------
                                     255 ; display memory in range 'xamadr'...'last' 
@@ -2740,32 +2740,32 @@ Hexadecimal [24-Bits]
 
                            000001   257     ROW_SIZE=1
                            000001   258     VSIZE=1
-      0083D4                        259 exam_block:
-      000354                        260     _vars VSIZE
-      0083D4 52 01            [ 2]    1     sub sp,#VSIZE 
-      000356                        261     _ldxz xamadr
-      0083D6 BE 2E                    1     .byte 0xbe,xamadr 
-      0083D8                        262 new_row: 
-      0083D8 A6 10            [ 1]  263     ld a,#16
-      0083DA 6B 01            [ 1]  264     ld (ROW_SIZE,sp),a ; bytes per row 
-      0083DC CD 81 B3         [ 4]  265     call new_line  
-      0083DF CD 84 2C         [ 4]  266     call print_adr ; display address and first byte of row 
-      0083E2 CD 84 40         [ 4]  267     call print_mem ; display byte at address  
-      0083E5                        268 row:
-      0083E5 5C               [ 1]  269     incw x 
-      0083E6 27 0E            [ 1]  270     jreq 9$ ; overflow 
-      0083E8 C3 00 32         [ 2]  271     cpw x,last 
-      0083EB 22 09            [ 1]  272     jrugt 9$ 
-      0083ED 0A 01            [ 1]  273     dec (ROW_SIZE,sp)
-      0083EF 27 E7            [ 1]  274     jreq new_row  
-      0083F1 CD 84 40         [ 4]  275     call print_mem  
-      0083F4 20 EF            [ 2]  276     jra row 
-      0083F6                        277 9$:
-      000376                        278     _clrz mode 
-      0083F6 3F 2D                    1     .byte 0x3f, mode 
-      000378                        279     _drop VSIZE 
-      0083F8 5B 01            [ 2]    1     addw sp,#VSIZE 
-      0083FA 81               [ 4]  280     ret  
+      0083DD                        259 exam_block:
+      00035D                        260     _vars VSIZE
+      0083DD 52 01            [ 2]    1     sub sp,#VSIZE 
+      00035F                        261     _ldxz xamadr
+      0083DF BE 2E                    1     .byte 0xbe,xamadr 
+      0083E1                        262 new_row: 
+      0083E1 A6 10            [ 1]  263     ld a,#16
+      0083E3 6B 01            [ 1]  264     ld (ROW_SIZE,sp),a ; bytes per row 
+      0083E5 CD 81 B3         [ 4]  265     call new_line  
+      0083E8 CD 84 35         [ 4]  266     call print_adr ; display address and first byte of row 
+      0083EB CD 84 49         [ 4]  267     call print_mem ; display byte at address  
+      0083EE                        268 row:
+      0083EE 5C               [ 1]  269     incw x 
+      0083EF 27 0E            [ 1]  270     jreq 9$ ; overflow 
+      0083F1 C3 00 32         [ 2]  271     cpw x,last 
+      0083F4 22 09            [ 1]  272     jrugt 9$ 
+      0083F6 0A 01            [ 1]  273     dec (ROW_SIZE,sp)
+      0083F8 27 E7            [ 1]  274     jreq new_row  
+      0083FA CD 84 49         [ 4]  275     call print_mem  
+      0083FD 20 EF            [ 2]  276     jra row 
+      0083FF                        277 9$:
+      00037F                        278     _clrz mode 
+      0083FF 3F 2D                    1     .byte 0x3f, mode 
+      000381                        279     _drop VSIZE 
+      008401 5B 01            [ 2]    1     addw sp,#VSIZE 
+      008403 81               [ 4]  280     ret  
                                     281 
                                     282 ;----------------------------
                                     283 ; parse hexadecimal number 
@@ -2777,48 +2777,48 @@ Hexadecimal [24-Bits]
                                     289 ;    X     number 
                                     290 ;    Y     point after number 
                                     291 ;-----------------------------      
-      0083FB                        292 parse_hex:
-      0083FB 4B 00            [ 1]  293     push #0 ; digits count 
-      0083FD 5F               [ 1]  294     clrw x
-      0083FE                        295 1$:    
-      0083FE A1 47            [ 1]  296     cp a,#'G 
-      008400 2A 21            [ 1]  297     jrpl 9$ 
-      008402 A0 30            [ 1]  298     sub a,#'0
-      008404 2B 1D            [ 1]  299     jrmi 9$ 
-      008406 A1 0A            [ 1]  300     cp a,#10 
-      008408 2B 06            [ 1]  301     jrmi 2$   ; 0..9 
-      00840A A1 11            [ 1]  302     cp a,#17 
-      00840C 2B 15            [ 1]  303     jrmi 9$ 
-      00840E A0 07            [ 1]  304     sub a,#7 
-      008410                        305 2$: ; shift hex digit in X 
-      008410 4B 04            [ 1]  306     push #4 ; bit count 
-      008412 4E               [ 1]  307     swap a ; bits in 7:4 
+      008404                        292 parse_hex:
+      008404 4B 00            [ 1]  293     push #0 ; digits count 
+      008406 5F               [ 1]  294     clrw x
+      008407                        295 1$:    
+      008407 A1 47            [ 1]  296     cp a,#'G 
+      008409 2A 21            [ 1]  297     jrpl 9$ 
+      00840B A0 30            [ 1]  298     sub a,#'0
+      00840D 2B 1D            [ 1]  299     jrmi 9$ 
+      00840F A1 0A            [ 1]  300     cp a,#10 
+      008411 2B 06            [ 1]  301     jrmi 2$   ; 0..9 
+      008413 A1 11            [ 1]  302     cp a,#17 
+      008415 2B 15            [ 1]  303     jrmi 9$ 
+      008417 A0 07            [ 1]  304     sub a,#7 
+      008419                        305 2$: ; shift hex digit in X 
+      008419 4B 04            [ 1]  306     push #4 ; bit count 
+      00841B 4E               [ 1]  307     swap a ; bits in 7:4 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 53.
 Hexadecimal [24-Bits]
 
 
 
-      008413                        308 3$:
-      008413 48               [ 1]  309     sll a 
-      008414 59               [ 2]  310     rlcw x 
-      008415 0A 01            [ 1]  311     dec (1,sp)
-      008417 26 FA            [ 1]  312     jrne 3$
-      008419 84               [ 1]  313     pop a
-      00841A 0C 01            [ 1]  314     inc (1,sp) ; digits count  
-      00039C                        315     _next_char 
-      00841C 90 F6            [ 1]    1     ld a,(y)
-      00841E 90 5C            [ 1]    2     incw y 
-      008420 4D               [ 1]  316     tnz a 
-      008421 26 DB            [ 1]  317     jrne 1$
-      008423                        318 9$: ; end of hex number
-      008423 90 5A            [ 2]  319     decw y  ; put back last character  
-      008425 84               [ 1]  320     pop a ; hex digits count
-      008426 4D               [ 1]  321     tnz a 
-      008427 27 02            [ 1]  322     jreq 10$ ; no hex number 
-      0003A9                        323     _strxz last 
-      008429 BF 32                    1     .byte 0xbf,last 
-      00842B                        324 10$:
-      00842B 81               [ 4]  325     ret 
+      00841C                        308 3$:
+      00841C 48               [ 1]  309     sll a 
+      00841D 59               [ 2]  310     rlcw x 
+      00841E 0A 01            [ 1]  311     dec (1,sp)
+      008420 26 FA            [ 1]  312     jrne 3$
+      008422 84               [ 1]  313     pop a
+      008423 0C 01            [ 1]  314     inc (1,sp) ; digits count  
+      0003A5                        315     _next_char 
+      008425 90 F6            [ 1]    1     ld a,(y)
+      008427 90 5C            [ 1]    2     incw y 
+      008429 4D               [ 1]  316     tnz a 
+      00842A 26 DB            [ 1]  317     jrne 1$
+      00842C                        318 9$: ; end of hex number
+      00842C 90 5A            [ 2]  319     decw y  ; put back last character  
+      00842E 84               [ 1]  320     pop a ; hex digits count
+      00842F 4D               [ 1]  321     tnz a 
+      008430 27 02            [ 1]  322     jreq 10$ ; no hex number 
+      0003B2                        323     _strxz last 
+      008432 BF 32                    1     .byte 0xbf,last 
+      008434                        324 10$:
+      008434 81               [ 4]  325     ret 
                                     326 
                                     327 ;-----------------------------------
                                     328 ;  print address in xamadr variable
@@ -2828,12 +2828,12 @@ Hexadecimal [24-Bits]
                                     332 ;  output:
                                     333 ;   X      not modified 
                                     334 ;-------------------------------------
-      00842C                        335 print_adr: 
-      00842C AD 09            [ 4]  336     callr print_word 
-      00842E A6 3A            [ 1]  337     ld a,#': 
-      008430 CD 81 5F         [ 4]  338     call putc 
-      008433 CD 81 C4         [ 4]  339     call space
-      008436 81               [ 4]  340     ret 
+      008435                        335 print_adr: 
+      008435 AD 09            [ 4]  336     callr print_word 
+      008437 A6 3A            [ 1]  337     ld a,#': 
+      008439 CD 81 5F         [ 4]  338     call putc 
+      00843C CD 81 C4         [ 4]  339     call space
+      00843F 81               [ 4]  340     ret 
                                     341 
                                     342 ;-------------------------------
                                     343 ;  print hexadecimal number 
@@ -2842,12 +2842,12 @@ Hexadecimal [24-Bits]
                                     346 ; output:
                                     347 ;    none 
                                     348 ;--------------------------------
-      008437                        349 print_word: 
-      008437 9E               [ 1]  350     ld a,xh
-      008438 CD 82 2D         [ 4]  351     call print_hex  
-      00843B 9F               [ 1]  352     ld a,xl 
-      00843C CD 82 2D         [ 4]  353     call print_hex  
-      00843F 81               [ 4]  354     ret 
+      008440                        349 print_word: 
+      008440 9E               [ 1]  350     ld a,xh
+      008441 CD 82 2D         [ 4]  351     call print_hex  
+      008444 9F               [ 1]  352     ld a,xl 
+      008445 CD 82 2D         [ 4]  353     call print_hex  
+      008448 81               [ 4]  354     ret 
                                     355 
                                     356 ;-------------------------------------
                                     357 ;  print byte at memory location 
@@ -2862,11 +2862,11 @@ Hexadecimal [24-Bits]
                                     361 ;  output:
                                     362 ;    X      not modified 
                                     363 ;-------------------------------------
-      008440                        364 print_mem:
-      008440 F6               [ 1]  365     ld a,(x) 
-      008441 CD 82 2D         [ 4]  366     call print_hex  
-      008444 CD 81 C4         [ 4]  367     call space 
-      008447 81               [ 4]  368     ret 
+      008449                        364 print_mem:
+      008449 F6               [ 1]  365     ld a,(x) 
+      00844A CD 82 2D         [ 4]  366     call print_hex  
+      00844D CD 81 C4         [ 4]  367     call space 
+      008450 81               [ 4]  368     ret 
                                     369 
                                     370 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 55.
@@ -2961,7 +2961,7 @@ Symbol Table
     DM_BK1RH=  007F91     |     DM_BK1RL=  007F92     |     DM_BK2RE=  007F93 
     DM_BK2RH=  007F94     |     DM_BK2RL=  007F95     |     DM_CR1  =  007F96 
     DM_CR2  =  007F97     |     DM_CSR1 =  007F98     |     DM_CSR2 =  007F99 
-    DM_ENFCT=  007F9A     |   6 EEPROG_t   00028A R   |     EEPROM_B=  004000 
+    DM_ENFCT=  007F9A     |   6 EEPROG_t   000293 R   |     EEPROM_B=  004000 
     EEPROM_C=  00500A     |     EEPROM_E=  0047FF     |     EEPROM_N=  000001 
     EEPROM_N=  000002     |     EEPROM_N=  000003     |     EEPROM_S=  000800 
     EM      =  000019     |     ENQ     =  000005     |     EOF     =  00001A 
@@ -3237,25 +3237,25 @@ Symbol Table
     WDGOPT_L=  000003     |     WDGOPT_W=  000000     |     WDGOPT_W=  000001 
     WWDG_CR =  0050D1     |     WWDG_WR =  0050D2     |     XOFF    =  000013 
     XON     =  000011     |   5 base       000000 GR  |   6 bksp       000121 GR
-  6 clear_qu   0000DA R   |   6 cli        0002E5 R   |   6 clr_scre   000139 GR
-  6 cold_sta   00005D R   |   6 eeProg     0002BD R   |   6 exam_blo   000354 R
+  6 clear_qu   0000DA R   |   6 cli        0002EE R   |   6 clr_scre   000139 GR
+  6 cold_sta   00005D R   |   6 eeProg     0002C6 R   |   6 exam_blo   00035D R
   5 farptr     000007 R   |   5 flags      00000A GR  |   5 fmstr      000001 GR
   6 getc       0000EE GR  |   6 init_por   000257 R   |   6 itoa       0001F5 GR
   6 itoa_loo   00021A R   |   5 last       000032 R   |   5 mode       00002D R
-  6 new_line   000133 GR  |   6 new_row    000358 R   |   6 next_cha   0002F6 R
-  2 pad        001740 GR  |   6 parse01    000308 R   |   6 parse_he   00037B R
-  6 print_ad   0003AC R   |   6 print_de   0001BD R   |   6 print_he   0001AD GR
-  6 print_in   0001E4 GR  |   6 print_me   0003C0 R   |   6 print_wo   0003B7 R
+  6 new_line   000133 GR  |   6 new_row    000361 R   |   6 next_cha   0002FF R
+  2 pad        001740 GR  |   6 parse01    000311 R   |   6 parse_he   000384 R
+  6 print_ad   0003B5 R   |   6 print_de   0001BD R   |   6 print_he   0001AD GR
+  6 print_in   0001E4 GR  |   6 print_me   0003C9 R   |   6 print_wo   0003C0 R
   6 prt_digi   0001DC R   |   6 prt_i8     0001E2 R   |   5 ptr16      000008 GR
   5 ptr8       000009 R   |   6 putc       0000DF GR  |   6 puts       000116 GR
-  6 qgetc      0000E8 GR  |   6 readln     000156 GR  |   6 row        000365 R
+  6 qgetc      0000E8 GR  |   6 readln     000156 GR  |   6 row        00036E R
   5 rx1_head   00000B GR  |   5 rx1_queu   00000D GR  |   5 rx1_tail   00000C GR
   6 space      000144 GR  |   6 spaces     00014A GR  |   2 stack_fu   001780 GR
   2 stack_un   001800 R   |   5 storadr    000030 R   |   2 tib        0016C0 R
   5 ticks      000002 R   |   5 timer      000005 GR  |   6 timer4_i   000029 R
   6 to_hex_c   0001A2 GR  |   6 to_upper   00024C R   |   6 uart_bks   000121 GR
   6 uart_get   0000EE GR  |   6 uart_ini   0000BB R   |   6 uart_put   0000DF GR
-  6 uart_qge   0000E8 GR  |   2 write_bu   001740 GR  |   6 write_ee   00033A R
+  6 uart_qge   0000E8 GR  |   2 write_bu   001740 GR  |   6 write_ee   000343 R
   5 xamadr     00002E R
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 62.
@@ -3269,5 +3269,5 @@ Area Table
    3 HOME       size     80   flags    0
    4 DATA       size      0   flags    8
    5 DATA1      size     34   flags    8
-   6 CODE       size    3C8   flags    0
+   6 CODE       size    3D1   flags    0
 

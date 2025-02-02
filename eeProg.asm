@@ -67,11 +67,11 @@
     .endm 
 
     .macro _enable_eeprom_write 
-        bres EEPROM,#EEPROM_NWE
+        bres EEPROM_CTRL,#EEPROM_NWE
     .endm 
 
     .macro _disable_eeprom_write 
-        bset EEPROM,#EEPROM_NWE
+        bset EEPROM_CTRL,#EEPROM_NWE
     .endm 
 
     ; addres in X 
@@ -96,7 +96,7 @@
     .endm 
 
     ; data in A 
-    .macro _set_eeprom_data 
+    .macro _write_eeprom 
         ld DATA_ODR,a 
     .endm 
 
@@ -140,14 +140,14 @@
 init_ports:
 ; PORT G (ADDR_HIGH) as output push-pull 
     ld a,#255 
-    ld PG+GPIO_DDR,a ; output 
-    ld PG+GPIO_CR1,a ; push-pull 
-    ld PG+GPIO_CR2,a ; high speed 
+    ld PG_DDR,a ; output 
+    ld PG_CR1,a ; push-pull 
+    ld PG_CR2,a ; high speed 
     clr ADDR_HIGH     
 ; PORT D (ADDR_LOW) as outpout push-pull 
-    ld PG+GPIO_DDR,a ; output 
-    ld PG+GPIO_CR1,a ; push-pull 
-    ld PG+GPIO_CR2,a ; high speed 
+    ld PD_DDR,a ; output 
+    ld PD_CR1,a ; push-pull 
+    ld PD_CR2,a ; high speed 
     clr ADDR_LOW  
 ; PORT B is bidirectionnal, default to input 
     clr DATA_CR2  ; disable ineterrupt
@@ -157,9 +157,9 @@ init_ports:
 ; PORT C (control lines) bits 1,2,3 as output push-pull 
     ld a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
     ld PC_ODR,a ; all control lines to high 
-    ld PC+GPIO_CR1,a ; push-pull 
-    ld PC+GPIO_CR2,a ; high-speed 
-    ld PC+GPIO_DDR,a ; output 
+    ld PC_CR1,a ; push-pull 
+    ld PC_CR2,a ; high-speed 
+    ld PC_DDR,a ; output 
     _enable_eeprom
     ret 
 
