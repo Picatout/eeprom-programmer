@@ -97,7 +97,7 @@
     ; eeprom programming delay 
     ; 11msec per 64 bytes page 
     .macro _prog_delay 
-        ld a,#11
+        ld a,#10
         _straz timer+1 
         bset flags,#FTIMER 
         btjf flags,#FTIMER,.
@@ -348,15 +348,20 @@ new_row:
     ld a,#16
     ld (ROW_SIZE,sp),a ; bytes per row 
     call print_adr ; display address and first byte of row 
+    ldw y,#tib 
 row:
     call print_mem ; display byte at address  
     cpw x,last 
-    jreq 9$ 
+    jrmi 2$
+1$:
+    call print_text 
+    jra 9$ 
+2$:     
     incw x 
-    jreq 9$ ; overflow 
+    jreq 1$ ; overflow 
     dec (ROW_SIZE,sp)
-    jrne row  
-    call new_line       
+    jrne row
+    call print_text 
     jra new_row 
 9$: incw x
     _strxz xamadr
@@ -364,6 +369,20 @@ row:
     _clrz mode 
     _drop VSIZE 
     ret  
+
+;--------------------------------
+; print ASCII chr for this row  
+;--------------------------------
+print_text:
+    pushw x 
+    ldw x,#2 
+    call spaces 
+    clr (y)
+    ldw x,#tib 
+    call puts 
+    call new_line       
+    popw x 
+    ret 
 
 ;----------------------------
 ; parse hexadecimal number 
@@ -449,7 +468,17 @@ print_word:
 ;-------------------------------------
 print_mem:
     call eeprom_addr 
-    _eeprom_read 
+    _eeprom_read
+    push a 
+    cp a,#32 
+    jrpl 2$ 
+    cp a,#128
+    jrmi 2$ 
+    ld a,#32
+2$:     
+    ld (y),a 
+    incw y  
+    pop a 
     call print_hex  
     call space 
     ret 

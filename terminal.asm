@@ -224,8 +224,10 @@ clr_screen::
 ; output a single space
 ;--------------------------
 space::
+	push a 
 	ld a,#SPACE 
 	call putc 
+	pop a 
 	ret 
 
 ;--------------------------
@@ -284,6 +286,10 @@ readln::
 	jrne 2$
 	jra 9$ 
 2$:
+	cp a,#LF 
+	jrne 3$
+	jra 9$
+3$:
 	cp a,#BS 
 	jrne 1$ 
 	tnz (LN_LEN,sp)
