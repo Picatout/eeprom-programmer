@@ -1,3 +1,6 @@
+### 2025-02-03
+* Création du dépôt sur [github](https://github.com/Picatout/eeprom-programmer).
+
 ### 2025-02-02
 * Le travail avance sur [eeProg.asm](eeProg.asm).
 * Fonction lecture et programmation de l'EEPROM testés et fonctionnels.

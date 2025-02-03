@@ -5,7 +5,7 @@ J'avais besoin d'un programmeur d'EEPROM AT28C64B ou AT28C256  pour un projet. J
 ## liste matérielle.
 
 1.  Carte [NUCLEO_8S208RB](https://www.st.com/en/evaluation-tools/nucleo-8s208rb.html). 
-1.  3 résistance de 10Kohm 1/8 watt.
+1.  3 résistances de 10Kohm 1/8 watt.
 1.  1 condensateur céramique 100nF. 
 1.  1 condensateur électrolytique 10µF/25V 
 1.  1 embase DIP-28 sans force d'insertion **(ZIF socket)**.
@@ -31,13 +31,13 @@ Une fois la carte NUCLEO_8S208RB branchée au PC il faut utiliser un émulateur 
 ## Liste des commandes
 L'interface reprend le format du [WOZMON](https://github.com/Picatout/pomme-I).  avec quelques différences aux niveaux des commandes. Au lieu de lire et d'écrire dans la mémoire du STM8 les opérations sont effectuées sur l'EEPROM. dans de qui suit **adr** et **data** doivent-être entrés en hexadécimal comme dans le [WOZMON](https://github.com/Picatout/pomme-I).
 
-* **adr&lt;RETURN&gt;** affiche le contenue de l'EEPROM à cette adresse. un point **(.)**suivit de**&lt;RETURN&gt;** affiche le contenu de l'adresse suivante.
+* **adr&lt;RETURN&gt;** affiche le contenue de l'EEPROM à cette adresse. un point **(.)** suivit de **&lt;RETURN&gt;** affiche le contenu de l'adresse suivante.
 * **adr1.adr2&lt;RETURN&gt;** affiche le contenue de la plage mémoire à partir de **adr1** jusqu'à **adr2**. 16 octets sont affichés par ligne.
 * **adr: data data data ...&lt;RETURN&gt;** écriture d'une liste d'octets dans la mémoire EEPROM à partir de l'adresse **adr**.
 * **adr1Xadr2&lt;RETURN&gt;** Efface la plage mémoire de **adr1** jusqu'à **adr2**.
-* **adr"chaîne de caractères ASCII&lt;RETURN&gt;**  programme la chaîne de caractères dans l'EEPROM à partir de l'adresse **adr** la chaîne est terminée par un **0**.
+* **adr"chaîne de caractères ASCII&lt;RETURN&gt;**  programme la chaîne de caractères dans l'EEPROM à partir de l'adresse **adr** la chaîne est terminée par un **0**. Il ne faut pas mettre de guillemet à la fin de la chaîne.
 
-* Il est possible d'entrée une liste de commandes programmation dans un fichier texte et d'utililser la fonction *send RAW file* du terminal pour l'envoyer au programmeur. Cependant le terminal doit-être configuré pour un délais de 10msec entre l'envoie de chaque ligne. C'est le temps que ça prend à l'EEPROM pour compléter la programmation d'une ligne.
+* Il est possible d'entrer une liste de commandes de programmation dans un fichier texte et d'utililser la fonction *send RAW file* du terminal pour l'envoyer au programmeur. Cependant le terminal doit-être configuré pour un délais de 10msec entre l'envoie de chaque ligne. C'est le temps que ça prend à l'EEPROM pour compléter la programmation d'une ligne.
 
 ## capture d'écran d'une session.
 ```
