@@ -4,6 +4,8 @@
 * version 1.0R4
 * en mode programmation il est maintenant possible d'ajouter un commentaire à la fin de la ligne après les données. Les commentaires débutent par un point-virgule **;**.
 * version 10R5
+* Modifié [readme.md](readme.md) pour indiquer qu'il est possible de programmer plusieurs lignes à la suite sans donner d'adresse pour les lignes suivant la première.
+* Modifié [wozmon.hexdump](wozmon.hexdump) pour mettre l'instruction RTI à l'adresse $FFF8 et donner cette adresse pour les vecteurs IRQ et NMI.
 
 ### 2025-02-11 
 * Correction d'un bogue dans routine **print_mem**. 
