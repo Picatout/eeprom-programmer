@@ -17,10 +17,10 @@ Area                                    Addr        Size        Decimal Bytes (A
      00000000  s__CODE                         
      00000001  s_DATA                          
      00000020  RX_QUEUE_SIZE                      HW_INIT
-     00000034  l_DATA1                         
+     00000031  l_DATA1                         
      00000080  l_HOME                          
      00000140  l_SSEG0                         
-     00000572  l_CODE                          
+     00000564  l_CODE                          
      00008000  s_HOME                          
      00008080  s_CODE                          
 
@@ -50,46 +50,46 @@ Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-DATA1                               00000000    00000034 =          52. bytes (ABS,CON)
+DATA1                               00000000    00000031 =          49. bytes (ABS,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
      00000000  base                               HW_INIT
      00000001  fmstr                              HW_INIT
-     00000005  timer                              HW_INIT
-     00000008  ptr16                              HW_INIT
-     0000000A  flags                              HW_INIT
-     0000000B  rx1_head                           HW_INIT
-     0000000C  rx1_tail                           HW_INIT
-     0000000D  rx1_queue                          HW_INIT
+     00000002  timer                              HW_INIT
+     00000005  ptr16                              HW_INIT
+     00000007  flags                              HW_INIT
+     00000008  rx1_head                           HW_INIT
+     00000009  rx1_tail                           HW_INIT
+     0000000A  rx1_queue                          HW_INIT
 
 ASxxxx Linker V03.00 + NoICE + sdld,  page 5.
 Hexadecimal  [32-Bits]
 
 Area                                    Addr        Size        Decimal Bytes (Attributes)
 --------------------------------        ----        ----        ------- ----- ------------
-CODE                                00008080    00000572 =        1394. bytes (REL,CON)
+CODE                                00008080    00000564 =        1380. bytes (REL,CON)
 
       Value  Global                              Global Defined In Module
       -----  --------------------------------   ------------------------
-     0000815F  putc                               HW_INIT
-     0000815F  uart_putc                          HW_INIT
-     00008168  qgetc                              HW_INIT
-     00008168  uart_qgetc                         HW_INIT
-     0000816E  getc                               HW_INIT
-     0000816E  uart_getc                          HW_INIT
-     00008196  puts                               HW_INIT
-     000081A1  bksp                               HW_INIT
-     000081A1  uart_bksp                          HW_INIT
-     000081B3  new_line                           HW_INIT
-     000081B9  clr_screen                         HW_INIT
-     000081C4  space                              HW_INIT
-     000081CC  spaces                             HW_INIT
-     000081D8  readln                             HW_INIT
-     00008237  to_hex_char                        HW_INIT
-     00008242  print_hex                          HW_INIT
-     00008279  print_int                          HW_INIT
-     0000828A  itoa                               HW_INIT
+     0000814F  putc                               HW_INIT
+     0000814F  uart_putc                          HW_INIT
+     00008158  qgetc                              HW_INIT
+     00008158  uart_qgetc                         HW_INIT
+     0000815E  getc                               HW_INIT
+     0000815E  uart_getc                          HW_INIT
+     00008186  puts                               HW_INIT
+     00008191  bksp                               HW_INIT
+     00008191  uart_bksp                          HW_INIT
+     000081A3  new_line                           HW_INIT
+     000081A9  clr_screen                         HW_INIT
+     000081B4  space                              HW_INIT
+     000081BC  spaces                             HW_INIT
+     000081C8  readln                             HW_INIT
+     00008227  to_hex_char                        HW_INIT
+     00008232  print_hex                          HW_INIT
+     00008269  print_int                          HW_INIT
+     0000827A  itoa                               HW_INIT
 ASxxxx Linker V03.00 + NoICE + sdld,  page 6.
 
 Files Linked                              [ module(s) ]

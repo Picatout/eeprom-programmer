@@ -98,9 +98,10 @@
     ; 11msec per 64 bytes page 
     .macro _prog_delay 
         ld a,#10
-        _straz timer+1 
+        _straz timer+1
+        _clrz timer  
         bset flags,#FTIMER 
-        btjf flags,#FTIMER,.
+        btjt flags,#FTIMER,.
     .endm 
 
     ; set DATA port as output 
@@ -326,7 +327,7 @@ write_eeprom:
     dec (PAGE_CNTR,sp)
     jreq 9$ 
     jra 1$ 
-9$: ld a,#64 
+9$: ld a,#EEPROM_PAGE_SIZE 
     sub a,(PAGE_CNTR,sp)
     jreq 10$
     call prog_eeprom 
@@ -490,6 +491,7 @@ print_mem:
 ; input:
 ;    A     byte count 
 ;    pad   data 
+;    storadr  where to store data 
 ;-------------------------------
 prog_eeprom:
     push a ; bytes to program 
@@ -505,8 +507,8 @@ prog_eeprom:
     dec (1,sp)
     jrne 1$ 
     _strxz storadr 
-    _prog_delay
     _config_read 
+    _prog_delay
     _drop 1
     ret 
 
@@ -587,11 +589,10 @@ erase_range:
 2$:
     ldw x,#EEPROM_PAGE_SIZE 
     cpw x,(COUNT,sp)
-    jrule 4$ 
+    jrmi 4$ 
     ldw x,(COUNT,sp)
 4$: ld a,xl 
     push a 
-    _ldxz storadr 
     call prog_eeprom 
     pop ptr8 
     clr ptr16 

@@ -88,7 +88,6 @@ stack_unf: ; stack underflow ; control_stack bottom
 ; keep the following 3 variables in this order 
 base::  .blkb 1 ; nemeric base used to print integer 
 fmstr:: .blkb 1 ; frequency in Mhz of Fmaster
-ticks: .blkb 3 ; milliseconds ticks counter (see Timer4UpdateHandler)
 timer:: .blkw 1 ;  milliseconds count down timer 
 farptr: .blkb 1 ; 24 bits pointer used by file system, upper-byte
 ptr16::  .blkb 1 ; 16 bits pointer , farptr high-byte 
@@ -116,27 +115,17 @@ NonHandledInterrupt:
 ; TIMER 4 is used to maintain 
 ; a milliseconds 'ticks' counter
 ; and decrement 'timer' varaiable
-; ticks range {0..2^23-1}
+; ticks range {0..2^16-1}
 ; timer range {0..65535}
 ;--------------------------------
 Timer4UpdateHandler:
 	clr TIM4_SR 
-	_ldaz ticks 
-	_ldxz ticks+1
-	addw x,#1 
-	adc a,#0 
-	jrpl 0$
-; reset to 0 when negative
-	clr a 
-	clrw x 
-0$:	_straz ticks 
-	ldw ticks+1,x 
+	btjf flags,#FTIMER,1$ 
 	_ldxz timer
-	jreq 1$
 	decw x 
-	ldw timer,x
+	_strxz timer 
 	jrne 1$ 
-	bset flags,#FTIMER  
+	bres flags,#FTIMER  
 1$:	
 	iret 
 
