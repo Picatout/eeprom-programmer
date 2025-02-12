@@ -1,3 +1,7 @@
+### 2025-02-11 
+* Correction d'un bogue dans routine **print_mem**. 
+* version 1.0R1
+
 ### 2025-02-03
 * Création du dépôt sur [github](https://github.com/Picatout/eeprom-programmer).
 

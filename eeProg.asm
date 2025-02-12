@@ -470,14 +470,15 @@ print_mem:
     call eeprom_addr 
     _eeprom_read
     push a 
-    cp a,#32 
-    jrpl 2$ 
-    cp a,#128
+    cp a,#SPACE  
+    jrmi 1$ 
+    cp a,#127
     jrmi 2$ 
-    ld a,#32
+1$:
+    ld a,#SPACE
 2$:     
     ld (y),a 
-    incw y  
+    incw y
     pop a 
     call print_hex  
     call space 
