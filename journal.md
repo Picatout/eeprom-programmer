@@ -3,6 +3,8 @@
 * version 1.0R1
 * Corrigé bogue dans macro **_prog_delay** et dans routine **Timer4UpdateHandler*. 
 * version 1.0R2 
+* Ajout du fichier [wozmon.hexdump](wozmon.hexdump) au git.
+* version 1.0r3
 
 ### 2025-02-03
 * Création du dépôt sur [github](https://github.com/Picatout/eeprom-programmer).
