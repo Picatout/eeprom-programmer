@@ -79,6 +79,20 @@ version 1.0.0
 
 #   
 ```
+
+Notez qu'il est possible de programmer plusieurs lignes à la suite sans entrer d'adresse pour la seconde et les suivantes. Dans ce cas la programmation se fait à la suite. 
+```
+#0: 0 1 2 3 4
+
+#: 5 6 7 8 9
+
+#: A B C D E F
+
+#0.F
+0000: 00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F                   
+
+```
+
 # vidéo de démonstration.
 
 [vidéo de démonstration](https://youtu.be/UVvR8ozR9v8?si=aAWOlXhCpEt0Z5P7)
