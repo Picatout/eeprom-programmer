@@ -260,7 +260,7 @@ spaces::
 ;   A     line length 
 ;   X     tib address 
 ;--------------------------
-MAX_LEN=79
+MAX_LEN=TIB_SIZE-1
 	HI_LL=1
 	LN_LEN=2
 	CHAR=3 

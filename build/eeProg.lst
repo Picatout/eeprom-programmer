@@ -44,7 +44,7 @@ Hexadecimal [24-Bits]
                                       4 
                            000001     5     MAJOR=1
                            000000     6     MINOR=0
-                           000000     7     REV=0
+                           000003     7     REV=3
                                       8 
                            000010     9     FMSTR=16 ; master clock frequency in Mhz 
                                      10 
@@ -2153,7 +2153,7 @@ Hexadecimal [24-Bits]
                                     260 ;   A     line length 
                                     261 ;   X     tib address 
                                     262 ;--------------------------
-                           00004F   263 MAX_LEN=79
+                           00007F   263 MAX_LEN=TIB_SIZE-1
                            000001   264 	HI_LL=1
                            000002   265 	LN_LEN=2
                            000003   266 	CHAR=3 
@@ -2201,7 +2201,7 @@ Hexadecimal [24-Bits]
       000188                        302 4$:	
                                     303 ; append character to end of line 
       000188 7B 02            [ 1]  304 	ld a,(LN_LEN,sp)
-      00018A A1 4F            [ 1]  305 	cp a,#MAX_LEN 
+      00018A A1 7F            [ 1]  305 	cp a,#MAX_LEN 
       00018C 2B 02            [ 1]  306 	jrmi 5$
       00018E 20 CF            [ 2]  307     jra 1$ 
       000190                        308 5$:
@@ -2696,7 +2696,7 @@ Hexadecimal [24-Bits]
       0002E3 CD 01 C2         [ 4]  223     call print_dec
       0002E6 A6 2E            [ 1]  224     ld a,#'. 
       0002E8 CD 00 CF         [ 4]  225     call putc 
-      0002EB A6 00            [ 1]  226     ld a,#REV 
+      0002EB A6 03            [ 1]  226     ld a,#REV 
       0002ED CD 01 C2         [ 4]  227     call print_dec
       0002F0 CD 01 23         [ 4]  228     call new_line 
       0002F3 CD 02 5C         [ 4]  229     call init_ports 
@@ -3413,7 +3413,7 @@ Symbol Table
     IWDG_KEY=  0000AA     |     IWDG_KR =  0050E0     |     IWDG_PR =  0050E1 
     IWDG_RLR=  0050E2     |     LED_BIT =  000005     |     LED_MASK=  000020 
     LED_PORT=  00500A     |     LEN     =  000002     |     LF      =  00000A 
-    LN_LEN  =  000002     |     MAJOR   =  000001     |     MAX_LEN =  00004F 
+    LN_LEN  =  000002     |     MAJOR   =  000001     |     MAX_LEN =  00007F 
     MINOR   =  000000     |     NAFR    =  004804     |     NAK     =  000015 
     NCLKOPT =  004808     |     NFLASH_W=  00480E     |     NHSECNT =  00480A 
     NOP     =  000000     |     NOPT1   =  004802     |     NOPT2   =  004804 
@@ -3458,7 +3458,7 @@ Symbol Table
     PI      =  000028     |     PI_BASE =  005028     |     PI_CR1  =  00502B 
     PI_CR2  =  00502C     |     PI_DDR  =  00502A     |     PI_IDR  =  005029 
     PI_ODR  =  005028     |     RAM_BASE=  000000     |     RAM_END =  0017FF 
-    RAM_SIZE=  001800     |     READ    =  000001     |     REV     =  000000 
+    RAM_SIZE=  001800     |     READ    =  000001     |     REV     =  000003 
     ROP     =  004800     |     ROW_SIZE=  000001     |     RS      =  00001E 
     RST_SR  =  0050B3     |     RX_QUEUE=  000020 G   |     SEMIC   =  00003B 
     SFR_BASE=  005000     |     SFR_END =  0057FF     |     SHARP   =  000023 
