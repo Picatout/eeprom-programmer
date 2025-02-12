@@ -44,7 +44,7 @@ Hexadecimal [24-Bits]
                                       4 
                            000001     5     MAJOR=1
                            000000     6     MINOR=0
-                           000003     7     REV=3
+                           000004     7     REV=4
                                       8 
                            000010     9     FMSTR=16 ; master clock frequency in Mhz 
                                      10 
@@ -2723,7 +2723,7 @@ Hexadecimal  20-Bits]
       008366 A6 2E            [ 1]    1     ld a,(y)
       008368 CD 81            [ 1]    2     incw y 
       00836A 4F               [ 1]  246     tnz a     
-      00836B A6 03            [ 1]  247     jrne parse01
+      00836B A6 04            [ 1]  247     jrne parse01
                                     248 ; at end of line 
       00836D CD 82 42 CD      [ 1]  249      tnz mode 
       008371 81 A3            [ 1]  250      jreq cli 
@@ -3458,7 +3458,7 @@ Symbol Table
     PI      =  000028     |     PI_BASE =  005028     |     PI_CR1  =  00502B 
     PI_CR2  =  00502C     |     PI_DDR  =  00502A     |     PI_IDR  =  005029 
     PI_ODR  =  005028     |     RAM_BASE=  000000     |     RAM_END =  0017FF 
-    RAM_SIZE=  001800     |     READ    =  000001     |     REV     =  000003 
+    RAM_SIZE=  001800     |     READ    =  000001     |     REV     =  000004 
     ROP     =  004800     |     ROW_SIZE=  000001     |     RS      =  00001E 
     RST_SR  =  0050B3     |     RX_QUEUE=  000020 G   |     SEMIC   =  00003B 
     SFR_BASE=  005000     |     SFR_END =  0057FF     |     SHARP   =  000023 
