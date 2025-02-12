@@ -2,6 +2,8 @@
 * Modifié la routine **readln** dans [terminal.asm](terminal.asm) pour accepter des lignes de 127 caractères. De cette façon on peut programmer jusqu'à 32 octets par ligne au lieu de 16. Le fichier [wozmon.hexdump](wozmon.hexdump) a été modifié pour des lignes de 32 octets de données par ligne.
 * **NOTE** le délais interligne a du être augmenté à 20 msec pour que ça fonctionne correctement.
 * version 1.0R4
+* en mode programmation il est maintenant possible d'ajouter un commentaire à la fin de la ligne après les données. Les commentaires débutent par un point-virgule **;**.
+* version 10R5
 
 ### 2025-02-11 
 * Correction d'un bogue dans routine **print_mem**. 

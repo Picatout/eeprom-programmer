@@ -317,7 +317,9 @@ write_eeprom:
 ; skip spaces 
     _next_char 
     cp a,#SPACE 
-    jreq 1$ 
+    jreq 1$
+    cp a,#'; 
+    jreq 9$  
     call parse_hex
     tnz a 
     jreq 9$

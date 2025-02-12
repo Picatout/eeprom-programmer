@@ -44,7 +44,7 @@ Hexadecimal [24-Bits]
                                       4 
                            000001     5     MAJOR=1
                            000000     6     MINOR=0
-                           000004     7     REV=4
+                           000005     7     REV=5
                                       8 
                            000010     9     FMSTR=16 ; master clock frequency in Mhz 
                                      10 
@@ -2696,7 +2696,7 @@ Hexadecimal [24-Bits]
       0002E3 CD 01 C2         [ 4]  223     call print_dec
       0002E6 A6 2E            [ 1]  224     ld a,#'. 
       0002E8 CD 00 CF         [ 4]  225     call putc 
-      0002EB A6 04            [ 1]  226     ld a,#REV 
+      0002EB A6 05            [ 1]  226     ld a,#REV 
       0002ED CD 01 C2         [ 4]  227     call print_dec
       0002F0 CD 01 23         [ 4]  228     call new_line 
       0002F3 CD 02 5C         [ 4]  229     call init_ports 
@@ -2727,7 +2727,7 @@ Hexadecimal [24-Bits]
                                     248 ; at end of line 
       000318 72 5D 00 2A      [ 1]  249      tnz mode 
       00031C 27 DF            [ 1]  250      jreq cli 
-      00031E CD 03 A4         [ 4]  251     call exam_block 
+      00031E CD 03 A8         [ 4]  251     call exam_block 
       000321 20 DA            [ 2]  252     jra cli 
       000323                        253 parse01:
       000323 A1 22            [ 1]  254     cp a,#'" 
@@ -2737,7 +2737,7 @@ Hexadecimal [24-Bits]
 
 
 
-      000327 CD 04 BC         [ 4]  256     call write_string
+      000327 CD 04 C0         [ 4]  256     call write_string
       00032A 20 D1            [ 2]  257     jra cli 
       00032C                        258 1$: 
       00032C A1 58            [ 1]  259     cp a,#'X 
@@ -2763,7 +2763,7 @@ Hexadecimal [24-Bits]
       000349                        277 7$: 
       000349 A1 20            [ 1]  278     cp a,#SPACE 
       00034B 27 C4            [ 1]  279     jreq next_char ; skip separator and invalids characters  
-      00034D CD 03 FA         [ 4]  280     call parse_hex ; maybe an hexadecimal number 
+      00034D CD 03 FE         [ 4]  280     call parse_hex ; maybe an hexadecimal number 
       000350 4D               [ 1]  281     tnz a ; unknown token ignore rest of line
       000351 27 AA            [ 1]  282     jreq cli 
       000353 72 5D 00 2A      [ 1]  283     tnz mode 
@@ -2771,10 +2771,10 @@ Hexadecimal [24-Bits]
       000359 A6 03            [ 1]  285     ld a,#ERASE 
       00035B C1 00 2A         [ 1]  286     cp a,mode 
       00035E 26 05            [ 1]  287     jrne 8$
-      000360 CD 05 1B         [ 4]  288     call erase_range 
+      000360 CD 05 1F         [ 4]  288     call erase_range 
       000363 20 98            [ 2]  289     jra cli
       000365                        290 8$:
-      000365 CD 03 A4         [ 4]  291     call exam_block
+      000365 CD 03 A8         [ 4]  291     call exam_block
       000368 20 A7            [ 2]  292     jra next_char
       00036A                        293 9$:
       00036A                        294     _strxz xamadr 
@@ -2814,431 +2814,433 @@ Hexadecimal [24-Bits]
       000379 90 F6            [ 1]    1     ld a,(y)
       00037B 90 5C            [ 1]    2     incw y 
       00037D A1 20            [ 1]  319     cp a,#SPACE 
-      00037F 27 F8            [ 1]  320     jreq 1$ 
-      000381 CD 03 FA         [ 4]  321     call parse_hex
-      000384 4D               [ 1]  322     tnz a 
-      000385 27 0F            [ 1]  323     jreq 9$
-      000387 9F               [ 1]  324     ld a,xl 
-      000388 72 C7 00 05      [ 4]  325     ld [ptr16],a 
-      00038C 72 5C 00 06      [ 1]  326     inc ptr8  
-      000390 0A 01            [ 1]  327     dec (PAGE_CNTR,sp)
-      000392 27 02            [ 1]  328     jreq 9$ 
-      000394 20 E3            [ 2]  329     jra 1$ 
-      000396 A6 40            [ 1]  330 9$: ld a,#EEPROM_PAGE_SIZE 
-      000398 10 01            [ 1]  331     sub a,(PAGE_CNTR,sp)
-      00039A 27 03            [ 1]  332     jreq 10$
-      00039C CD 04 5C         [ 4]  333     call prog_eeprom 
-      00039F                        334 10$:
-      00039F                        335     _clrz mode 
-      00039F 3F 2A                    1     .byte 0x3f, mode 
-      0003A1                        336     _drop 1 
-      0003A1 5B 01            [ 2]    1     addw sp,#1 
-      0003A3 81               [ 4]  337     ret 
-                                    338 
-                                    339 ;-------------------------------------------
-                                    340 ; display memory in range 'xamadr'...'last' 
-                                    341 ;-------------------------------------------    
-                           000001   342     ROW_SIZE=1
-                           000001   343     VSIZE=1
-      0003A4                        344 exam_block:
-      0003A4                        345     _vars VSIZE
-      0003A4 52 01            [ 2]    1     sub sp,#VSIZE 
-      0003A6                        346     _config_read ; to read data from eeprom  
-      0003A6                          1         _data_input
-      0003A6 72 5F 50 08      [ 1]    1         clr DATA_CR1  ; floating input
-      0003AA 72 5F 50 09      [ 1]    2         clr DATA_CR2  ; disable ineterrupt
-      0003AE 72 5F 50 07      [ 1]    3         clr DATA_DDR  ; input mode
-      0003B2                          2         _eeprom_enabe_output
-      0003B2 72 15 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NOE 
-      0003B6                        347     _ldxz xamadr
-      0003B6 BE 2B                    1     .byte 0xbe,xamadr 
+      00037F 27 F8            [ 1]  320     jreq 1$
+      000381 A1 3B            [ 1]  321     cp a,#'; 
+      000383 27 15            [ 1]  322     jreq 9$  
+      000385 CD 03 FE         [ 4]  323     call parse_hex
+      000388 4D               [ 1]  324     tnz a 
+      000389 27 0F            [ 1]  325     jreq 9$
+      00038B 9F               [ 1]  326     ld a,xl 
+      00038C 72 C7 00 05      [ 4]  327     ld [ptr16],a 
+      000390 72 5C 00 06      [ 1]  328     inc ptr8  
+      000394 0A 01            [ 1]  329     dec (PAGE_CNTR,sp)
+      000396 27 02            [ 1]  330     jreq 9$ 
+      000398 20 DF            [ 2]  331     jra 1$ 
+      00039A A6 40            [ 1]  332 9$: ld a,#EEPROM_PAGE_SIZE 
+      00039C 10 01            [ 1]  333     sub a,(PAGE_CNTR,sp)
+      00039E 27 03            [ 1]  334     jreq 10$
+      0003A0 CD 04 60         [ 4]  335     call prog_eeprom 
+      0003A3                        336 10$:
+      0003A3                        337     _clrz mode 
+      0003A3 3F 2A                    1     .byte 0x3f, mode 
+      0003A5                        338     _drop 1 
+      0003A5 5B 01            [ 2]    1     addw sp,#1 
+      0003A7 81               [ 4]  339     ret 
+                                    340 
+                                    341 ;-------------------------------------------
+                                    342 ; display memory in range 'xamadr'...'last' 
+                                    343 ;-------------------------------------------    
+                           000001   344     ROW_SIZE=1
+                           000001   345     VSIZE=1
+      0003A8                        346 exam_block:
+      0003A8                        347     _vars VSIZE
+      0003A8 52 01            [ 2]    1     sub sp,#VSIZE 
+      0003AA                        348     _config_read ; to read data from eeprom  
+      0003AA                          1         _data_input
+      0003AA 72 5F 50 08      [ 1]    1         clr DATA_CR1  ; floating input
+      0003AE 72 5F 50 09      [ 1]    2         clr DATA_CR2  ; disable ineterrupt
+      0003B2 72 5F 50 07      [ 1]    3         clr DATA_DDR  ; input mode
+      0003B6                          2         _eeprom_enabe_output
+      0003B6 72 15 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NOE 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 54.
 Hexadecimal [24-Bits]
 
 
 
-      0003B8                        348 new_row: 
-      0003B8 A6 10            [ 1]  349     ld a,#16
-      0003BA 6B 01            [ 1]  350     ld (ROW_SIZE,sp),a ; bytes per row 
-      0003BC CD 04 2B         [ 4]  351     call print_adr ; display address and first byte of row 
-      0003BF 90 AE 16 C0      [ 2]  352     ldw y,#tib 
-      0003C3                        353 row:
-      0003C3 CD 04 3F         [ 4]  354     call print_mem ; display byte at address  
-      0003C6 C3 00 2F         [ 2]  355     cpw x,last 
-      0003C9 2B 05            [ 1]  356     jrmi 2$
-      0003CB                        357 1$:
-      0003CB CD 03 E6         [ 4]  358     call print_text 
-      0003CE 20 0C            [ 2]  359     jra 9$ 
-      0003D0                        360 2$:     
-      0003D0 5C               [ 1]  361     incw x 
-      0003D1 27 F8            [ 1]  362     jreq 1$ ; overflow 
-      0003D3 0A 01            [ 1]  363     dec (ROW_SIZE,sp)
-      0003D5 26 EC            [ 1]  364     jrne row
-      0003D7 CD 03 E6         [ 4]  365     call print_text 
-      0003DA 20 DC            [ 2]  366     jra new_row 
-      0003DC 5C               [ 1]  367 9$: incw x
-      0003DD                        368     _strxz xamadr
-      0003DD BF 2B                    1     .byte 0xbf,xamadr 
-      0003DF                        369     _strxz last 
-      0003DF BF 2F                    1     .byte 0xbf,last 
-      0003E1                        370     _clrz mode 
-      0003E1 3F 2A                    1     .byte 0x3f, mode 
-      0003E3                        371     _drop VSIZE 
-      0003E3 5B 01            [ 2]    1     addw sp,#VSIZE 
-      0003E5 81               [ 4]  372     ret  
-                                    373 
-                                    374 ;--------------------------------
-                                    375 ; print ASCII chr for this row  
+      0003BA                        349     _ldxz xamadr
+      0003BA BE 2B                    1     .byte 0xbe,xamadr 
+      0003BC                        350 new_row: 
+      0003BC A6 10            [ 1]  351     ld a,#16
+      0003BE 6B 01            [ 1]  352     ld (ROW_SIZE,sp),a ; bytes per row 
+      0003C0 CD 04 2F         [ 4]  353     call print_adr ; display address and first byte of row 
+      0003C3 90 AE 16 C0      [ 2]  354     ldw y,#tib 
+      0003C7                        355 row:
+      0003C7 CD 04 43         [ 4]  356     call print_mem ; display byte at address  
+      0003CA C3 00 2F         [ 2]  357     cpw x,last 
+      0003CD 2B 05            [ 1]  358     jrmi 2$
+      0003CF                        359 1$:
+      0003CF CD 03 EA         [ 4]  360     call print_text 
+      0003D2 20 0C            [ 2]  361     jra 9$ 
+      0003D4                        362 2$:     
+      0003D4 5C               [ 1]  363     incw x 
+      0003D5 27 F8            [ 1]  364     jreq 1$ ; overflow 
+      0003D7 0A 01            [ 1]  365     dec (ROW_SIZE,sp)
+      0003D9 26 EC            [ 1]  366     jrne row
+      0003DB CD 03 EA         [ 4]  367     call print_text 
+      0003DE 20 DC            [ 2]  368     jra new_row 
+      0003E0 5C               [ 1]  369 9$: incw x
+      0003E1                        370     _strxz xamadr
+      0003E1 BF 2B                    1     .byte 0xbf,xamadr 
+      0003E3                        371     _strxz last 
+      0003E3 BF 2F                    1     .byte 0xbf,last 
+      0003E5                        372     _clrz mode 
+      0003E5 3F 2A                    1     .byte 0x3f, mode 
+      0003E7                        373     _drop VSIZE 
+      0003E7 5B 01            [ 2]    1     addw sp,#VSIZE 
+      0003E9 81               [ 4]  374     ret  
+                                    375 
                                     376 ;--------------------------------
-      0003E6                        377 print_text:
-      0003E6 89               [ 2]  378     pushw x 
-      0003E7 AE 00 02         [ 2]  379     ldw x,#2 
-      0003EA CD 01 3C         [ 4]  380     call spaces 
-      0003ED 90 7F            [ 1]  381     clr (y)
-      0003EF AE 16 C0         [ 2]  382     ldw x,#tib 
-      0003F2 CD 01 06         [ 4]  383     call puts 
-      0003F5 CD 01 23         [ 4]  384     call new_line       
-      0003F8 85               [ 2]  385     popw x 
-      0003F9 81               [ 4]  386     ret 
-                                    387 
-                                    388 ;----------------------------
-                                    389 ; parse hexadecimal number 
-                                    390 ; from input buffer 
-                                    391 ; input:
-                                    392 ;    A   first character 
-                                    393 ;    Y   pointer to TIB 
-                                    394 ; output: 
-                                    395 ;    X     number 
-                                    396 ;    Y     point after number 
-                                    397 ;-----------------------------      
-      0003FA                        398 parse_hex:
+                                    377 ; print ASCII chr for this row  
+                                    378 ;--------------------------------
+      0003EA                        379 print_text:
+      0003EA 89               [ 2]  380     pushw x 
+      0003EB AE 00 02         [ 2]  381     ldw x,#2 
+      0003EE CD 01 3C         [ 4]  382     call spaces 
+      0003F1 90 7F            [ 1]  383     clr (y)
+      0003F3 AE 16 C0         [ 2]  384     ldw x,#tib 
+      0003F6 CD 01 06         [ 4]  385     call puts 
+      0003F9 CD 01 23         [ 4]  386     call new_line       
+      0003FC 85               [ 2]  387     popw x 
+      0003FD 81               [ 4]  388     ret 
+                                    389 
+                                    390 ;----------------------------
+                                    391 ; parse hexadecimal number 
+                                    392 ; from input buffer 
+                                    393 ; input:
+                                    394 ;    A   first character 
+                                    395 ;    Y   pointer to TIB 
+                                    396 ; output: 
+                                    397 ;    X     number 
+                                    398 ;    Y     point after number 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 55.
 Hexadecimal [24-Bits]
 
 
 
-      0003FA 4B 00            [ 1]  399     push #0 ; digits count 
-      0003FC 5F               [ 1]  400     clrw x
-      0003FD                        401 1$:    
-      0003FD A1 47            [ 1]  402     cp a,#'G 
-      0003FF 2A 21            [ 1]  403     jrpl 9$ 
-      000401 A0 30            [ 1]  404     sub a,#'0
-      000403 2B 1D            [ 1]  405     jrmi 9$ 
-      000405 A1 0A            [ 1]  406     cp a,#10 
-      000407 2B 06            [ 1]  407     jrmi 2$   ; 0..9 
-      000409 A1 11            [ 1]  408     cp a,#17 
-      00040B 2B 15            [ 1]  409     jrmi 9$ 
-      00040D A0 07            [ 1]  410     sub a,#7 
-      00040F                        411 2$: ; shift hex digit in X 
-      00040F 4B 04            [ 1]  412     push #4 ; bit count 
-      000411 4E               [ 1]  413     swap a ; bits in 7:4 
-      000412                        414 3$:
-      000412 48               [ 1]  415     sll a 
-      000413 59               [ 2]  416     rlcw x 
-      000414 0A 01            [ 1]  417     dec (1,sp)
-      000416 26 FA            [ 1]  418     jrne 3$
-      000418 84               [ 1]  419     pop a
-      000419 0C 01            [ 1]  420     inc (1,sp) ; digits count  
-      00041B                        421     _next_char 
-      00041B 90 F6            [ 1]    1     ld a,(y)
-      00041D 90 5C            [ 1]    2     incw y 
-      00041F 4D               [ 1]  422     tnz a 
-      000420 26 DB            [ 1]  423     jrne 1$
-      000422                        424 9$: ; end of hex number
-      000422 90 5A            [ 2]  425     decw y  ; put back last character  
-      000424 84               [ 1]  426     pop a ; hex digits count
-      000425 4D               [ 1]  427     tnz a 
-      000426 27 02            [ 1]  428     jreq 10$ ; no hex number 
-      000428                        429     _strxz last 
-      000428 BF 2F                    1     .byte 0xbf,last 
-      00042A                        430 10$:
-      00042A 81               [ 4]  431     ret 
-                                    432 
-                                    433 ;-----------------------------------
-                                    434 ;  print address in xamadr variable
-                                    435 ;  followed by ': '  
-                                    436 ;  input: 
-                                    437 ;    X     address to print 
-                                    438 ;  output:
-                                    439 ;   X      not modified 
-                                    440 ;-------------------------------------
-      00042B                        441 print_adr: 
-      00042B AD 09            [ 4]  442     callr print_word 
-      00042D A6 3A            [ 1]  443     ld a,#': 
-      00042F CD 00 CF         [ 4]  444     call putc 
-      000432 CD 01 34         [ 4]  445     call space
-      000435 81               [ 4]  446     ret 
-                                    447 
-                                    448 ;-------------------------------
-                                    449 ;  print hexadecimal number 
-                                    450 ; input:
+                                    399 ;-----------------------------      
+      0003FE                        400 parse_hex:
+      0003FE 4B 00            [ 1]  401     push #0 ; digits count 
+      000400 5F               [ 1]  402     clrw x
+      000401                        403 1$:    
+      000401 A1 47            [ 1]  404     cp a,#'G 
+      000403 2A 21            [ 1]  405     jrpl 9$ 
+      000405 A0 30            [ 1]  406     sub a,#'0
+      000407 2B 1D            [ 1]  407     jrmi 9$ 
+      000409 A1 0A            [ 1]  408     cp a,#10 
+      00040B 2B 06            [ 1]  409     jrmi 2$   ; 0..9 
+      00040D A1 11            [ 1]  410     cp a,#17 
+      00040F 2B 15            [ 1]  411     jrmi 9$ 
+      000411 A0 07            [ 1]  412     sub a,#7 
+      000413                        413 2$: ; shift hex digit in X 
+      000413 4B 04            [ 1]  414     push #4 ; bit count 
+      000415 4E               [ 1]  415     swap a ; bits in 7:4 
+      000416                        416 3$:
+      000416 48               [ 1]  417     sll a 
+      000417 59               [ 2]  418     rlcw x 
+      000418 0A 01            [ 1]  419     dec (1,sp)
+      00041A 26 FA            [ 1]  420     jrne 3$
+      00041C 84               [ 1]  421     pop a
+      00041D 0C 01            [ 1]  422     inc (1,sp) ; digits count  
+      00041F                        423     _next_char 
+      00041F 90 F6            [ 1]    1     ld a,(y)
+      000421 90 5C            [ 1]    2     incw y 
+      000423 4D               [ 1]  424     tnz a 
+      000424 26 DB            [ 1]  425     jrne 1$
+      000426                        426 9$: ; end of hex number
+      000426 90 5A            [ 2]  427     decw y  ; put back last character  
+      000428 84               [ 1]  428     pop a ; hex digits count
+      000429 4D               [ 1]  429     tnz a 
+      00042A 27 02            [ 1]  430     jreq 10$ ; no hex number 
+      00042C                        431     _strxz last 
+      00042C BF 2F                    1     .byte 0xbf,last 
+      00042E                        432 10$:
+      00042E 81               [ 4]  433     ret 
+                                    434 
+                                    435 ;-----------------------------------
+                                    436 ;  print address in xamadr variable
+                                    437 ;  followed by ': '  
+                                    438 ;  input: 
+                                    439 ;    X     address to print 
+                                    440 ;  output:
+                                    441 ;   X      not modified 
+                                    442 ;-------------------------------------
+      00042F                        443 print_adr: 
+      00042F AD 09            [ 4]  444     callr print_word 
+      000431 A6 3A            [ 1]  445     ld a,#': 
+      000433 CD 00 CF         [ 4]  446     call putc 
+      000436 CD 01 34         [ 4]  447     call space
+      000439 81               [ 4]  448     ret 
+                                    449 
+                                    450 ;-------------------------------
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 56.
 Hexadecimal [24-Bits]
 
 
 
-                                    451 ;    X  number to print 
-                                    452 ; output:
-                                    453 ;    none 
-                                    454 ;--------------------------------
-      000436                        455 print_word: 
-      000436 9E               [ 1]  456     ld a,xh
-      000437 CD 01 B2         [ 4]  457     call print_hex  
-      00043A 9F               [ 1]  458     ld a,xl 
+                                    451 ;  print hexadecimal number 
+                                    452 ; input:
+                                    453 ;    X  number to print 
+                                    454 ; output:
+                                    455 ;    none 
+                                    456 ;--------------------------------
+      00043A                        457 print_word: 
+      00043A 9E               [ 1]  458     ld a,xh
       00043B CD 01 B2         [ 4]  459     call print_hex  
-      00043E 81               [ 4]  460     ret 
-                                    461 
-                                    462 ;-------------------------------------
-                                    463 ;  print byte at memory location 
-                                    464 ;  pointed by X followed by ' ' 
-                                    465 ;  input:
-                                    466 ;     X     memory address 
-                                    467 ;  output:
-                                    468 ;    X      not modified 
-                                    469 ;-------------------------------------
-      00043F                        470 print_mem:
-      00043F CD 04 B1         [ 4]  471     call eeprom_addr 
-      000442                        472     _eeprom_read
-      000442 C6 50 06         [ 1]    1         ld a,DATA_IDR  
-      000445 88               [ 1]  473     push a 
-      000446 A1 20            [ 1]  474     cp a,#SPACE  
-      000448 2B 04            [ 1]  475     jrmi 1$ 
-      00044A A1 7F            [ 1]  476     cp a,#127
-      00044C 2B 02            [ 1]  477     jrmi 2$ 
-      00044E                        478 1$:
-      00044E A6 20            [ 1]  479     ld a,#SPACE
-      000450                        480 2$:     
-      000450 90 F7            [ 1]  481     ld (y),a 
-      000452 90 5C            [ 1]  482     incw y
-      000454 84               [ 1]  483     pop a 
-      000455 CD 01 B2         [ 4]  484     call print_hex  
-      000458 CD 01 34         [ 4]  485     call space 
-      00045B 81               [ 4]  486     ret 
-                                    487 
-                                    488 
-                                    489 ;------------------------------
-                                    490 ; program data in pad to eeprom 
-                                    491 ; input:
-                                    492 ;    A     byte count 
-                                    493 ;    pad   data 
-                                    494 ;    storadr  where to store data 
-                                    495 ;-------------------------------
-      00045C                        496 prog_eeprom:
-      00045C 88               [ 1]  497     push a ; bytes to program 
-      00045D                        498     _config_write
-      00045D                          1         _data_output
-      00045D A6 FF            [ 1]    1         ld a,#255 
-      00045F C7 50 08         [ 1]    2         ld DATA_CR1,a ; push pull output mode 
-      000462 C7 50 09         [ 1]    3         ld DATA_CR2,a ; high_speed  
-      000465 C7 50 07         [ 1]    4         ld DATA_DDR,a ; output mode 
-      000468                          2         _eeprom_disable_output
+      00043E 9F               [ 1]  460     ld a,xl 
+      00043F CD 01 B2         [ 4]  461     call print_hex  
+      000442 81               [ 4]  462     ret 
+                                    463 
+                                    464 ;-------------------------------------
+                                    465 ;  print byte at memory location 
+                                    466 ;  pointed by X followed by ' ' 
+                                    467 ;  input:
+                                    468 ;     X     memory address 
+                                    469 ;  output:
+                                    470 ;    X      not modified 
+                                    471 ;-------------------------------------
+      000443                        472 print_mem:
+      000443 CD 04 B5         [ 4]  473     call eeprom_addr 
+      000446                        474     _eeprom_read
+      000446 C6 50 06         [ 1]    1         ld a,DATA_IDR  
+      000449 88               [ 1]  475     push a 
+      00044A A1 20            [ 1]  476     cp a,#SPACE  
+      00044C 2B 04            [ 1]  477     jrmi 1$ 
+      00044E A1 7F            [ 1]  478     cp a,#127
+      000450 2B 02            [ 1]  479     jrmi 2$ 
+      000452                        480 1$:
+      000452 A6 20            [ 1]  481     ld a,#SPACE
+      000454                        482 2$:     
+      000454 90 F7            [ 1]  483     ld (y),a 
+      000456 90 5C            [ 1]  484     incw y
+      000458 84               [ 1]  485     pop a 
+      000459 CD 01 B2         [ 4]  486     call print_hex  
+      00045C CD 01 34         [ 4]  487     call space 
+      00045F 81               [ 4]  488     ret 
+                                    489 
+                                    490 
+                                    491 ;------------------------------
+                                    492 ; program data in pad to eeprom 
+                                    493 ; input:
+                                    494 ;    A     byte count 
+                                    495 ;    pad   data 
+                                    496 ;    storadr  where to store data 
+                                    497 ;-------------------------------
+      000460                        498 prog_eeprom:
+      000460 88               [ 1]  499     push a ; bytes to program 
+      000461                        500     _config_write
+      000461                          1         _data_output
+      000461 A6 FF            [ 1]    1         ld a,#255 
+      000463 C7 50 08         [ 1]    2         ld DATA_CR1,a ; push pull output mode 
+      000466 C7 50 09         [ 1]    3         ld DATA_CR2,a ; high_speed  
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 57.
 Hexadecimal [24-Bits]
 
 
 
-      000468 72 14 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NOE
-      00046C 90 AE 17 40      [ 2]  499     ldw y,#pad 
-      000470                        500     _ldxz storadr 
-      000470 BE 2D                    1     .byte 0xbe,storadr 
-      000472                        501 1$:
-      000472 CD 04 B1         [ 4]  502     call eeprom_addr 
-      000475 5C               [ 1]  503     incw x 
-      000476 90 F6            [ 1]  504     ld a,(y)
-      000478 90 5C            [ 1]  505     incw y 
-      00047A                        506     _eeprom_write 
-      00047A                          1         _eeprom_we_low 
-      00047A 72 17 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NWE
-      00047E 9D               [ 1]    2         nop 
-      00047F 9D               [ 1]    3         nop 
-      000480 C7 50 05         [ 1]    4         ld DATA_ODR,a
-      000483 9D               [ 1]    5         nop
-      000484 9D               [ 1]    6         nop 
-      000485                          7         _eeprom_we_high   
-      000485 72 16 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NWE
-      000489 0A 01            [ 1]  507     dec (1,sp)
-      00048B 26 E5            [ 1]  508     jrne 1$ 
-      00048D                        509     _strxz storadr 
-      00048D BF 2D                    1     .byte 0xbf,storadr 
-      00048F                        510     _config_read 
-      00048F                          1         _data_input
-      00048F 72 5F 50 08      [ 1]    1         clr DATA_CR1  ; floating input
-      000493 72 5F 50 09      [ 1]    2         clr DATA_CR2  ; disable ineterrupt
-      000497 72 5F 50 07      [ 1]    3         clr DATA_DDR  ; input mode
-      00049B                          2         _eeprom_enabe_output
-      00049B 72 15 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NOE 
-      00049F                        511     _prog_delay
-      00049F A6 0A            [ 1]    1         ld a,#10
-      0004A1                          2         _straz timer+1
-      0004A1 B7 03                    1     .byte 0xb7,timer+1 
-      0004A3                          3         _clrz timer  
-      0004A3 3F 02                    1     .byte 0x3f, timer 
-      0004A5 72 12 00 07      [ 1]    4         bset flags,#FTIMER 
-      0004A9 72 02 00 07 FB   [ 2]    5         btjt flags,#FTIMER,.
-      0004AE                        512     _drop 1
-      0004AE 5B 01            [ 2]    1     addw sp,#1 
-      0004B0 81               [ 4]  513     ret 
-                                    514 
-                                    515 ;---------------------------
-                                    516 ; set eeprom address 
-                                    517 ; input:
-                                    518 ;    X     address 
-                                    519 ; output:
-                                    520 ;    X     preserved 
-                                    521 ;---------------------------
-      0004B1                        522 eeprom_addr:
-      0004B1 88               [ 1]  523     push a 
-      0004B2 9E               [ 1]  524     ld a,xh 
-      0004B3 C7 50 1E         [ 1]  525     ld ADDR_HIGH,a 
-      0004B6 9F               [ 1]  526     ld a,xl 
-      0004B7 C7 50 0F         [ 1]  527     ld ADDR_LOW,a 
+      000469 C7 50 07         [ 1]    4         ld DATA_DDR,a ; output mode 
+      00046C                          2         _eeprom_disable_output
+      00046C 72 14 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NOE
+      000470 90 AE 17 40      [ 2]  501     ldw y,#pad 
+      000474                        502     _ldxz storadr 
+      000474 BE 2D                    1     .byte 0xbe,storadr 
+      000476                        503 1$:
+      000476 CD 04 B5         [ 4]  504     call eeprom_addr 
+      000479 5C               [ 1]  505     incw x 
+      00047A 90 F6            [ 1]  506     ld a,(y)
+      00047C 90 5C            [ 1]  507     incw y 
+      00047E                        508     _eeprom_write 
+      00047E                          1         _eeprom_we_low 
+      00047E 72 17 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NWE
+      000482 9D               [ 1]    2         nop 
+      000483 9D               [ 1]    3         nop 
+      000484 C7 50 05         [ 1]    4         ld DATA_ODR,a
+      000487 9D               [ 1]    5         nop
+      000488 9D               [ 1]    6         nop 
+      000489                          7         _eeprom_we_high   
+      000489 72 16 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NWE
+      00048D 0A 01            [ 1]  509     dec (1,sp)
+      00048F 26 E5            [ 1]  510     jrne 1$ 
+      000491                        511     _strxz storadr 
+      000491 BF 2D                    1     .byte 0xbf,storadr 
+      000493                        512     _config_read 
+      000493                          1         _data_input
+      000493 72 5F 50 08      [ 1]    1         clr DATA_CR1  ; floating input
+      000497 72 5F 50 09      [ 1]    2         clr DATA_CR2  ; disable ineterrupt
+      00049B 72 5F 50 07      [ 1]    3         clr DATA_DDR  ; input mode
+      00049F                          2         _eeprom_enabe_output
+      00049F 72 15 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NOE 
+      0004A3                        513     _prog_delay
+      0004A3 A6 0A            [ 1]    1         ld a,#10
+      0004A5                          2         _straz timer+1
+      0004A5 B7 03                    1     .byte 0xb7,timer+1 
+      0004A7                          3         _clrz timer  
+      0004A7 3F 02                    1     .byte 0x3f, timer 
+      0004A9 72 12 00 07      [ 1]    4         bset flags,#FTIMER 
+      0004AD 72 02 00 07 FB   [ 2]    5         btjt flags,#FTIMER,.
+      0004B2                        514     _drop 1
+      0004B2 5B 01            [ 2]    1     addw sp,#1 
+      0004B4 81               [ 4]  515     ret 
+                                    516 
+                                    517 ;---------------------------
+                                    518 ; set eeprom address 
+                                    519 ; input:
+                                    520 ;    X     address 
+                                    521 ; output:
+                                    522 ;    X     preserved 
+                                    523 ;---------------------------
+      0004B5                        524 eeprom_addr:
+      0004B5 88               [ 1]  525     push a 
+      0004B6 9E               [ 1]  526     ld a,xh 
+      0004B7 C7 50 1E         [ 1]  527     ld ADDR_HIGH,a 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 58.
 Hexadecimal [24-Bits]
 
 
 
-      0004BA 84               [ 1]  528     pop a
-      0004BB 81               [ 4]  529     ret 
-                                    530 
-                                    531 ;-----------------------------
-                                    532 ; copy tib to eeprom as 
-                                    533 ; .asciz 
-                                    534 ; input: 
-                                    535 ;   tib 
-                                    536 ; string max length 63 char.
-                                    537 ;-----------------------------
-      0004BC                        538 write_string:
-      0004BC                        539     _config_write 
-      0004BC                          1         _data_output
-      0004BC A6 FF            [ 1]    1         ld a,#255 
-      0004BE C7 50 08         [ 1]    2         ld DATA_CR1,a ; push pull output mode 
-      0004C1 C7 50 09         [ 1]    3         ld DATA_CR2,a ; high_speed  
-      0004C4 C7 50 07         [ 1]    4         ld DATA_DDR,a ; output mode 
-      0004C7                          2         _eeprom_disable_output
-      0004C7 72 14 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NOE
-      0004CB 93               [ 1]  540     ldw x,y 
-      0004CC CD 05 59         [ 4]  541     call strlen
-      0004CF 4D               [ 1]  542     tnz a 
-      0004D0 27 48            [ 1]  543     jreq 10$
-      0004D2 4C               [ 1]  544     inc a 
-      0004D3 A1 40            [ 1]  545     cp a,#EEPROM_PAGE_SIZE
-      0004D5 2B 02            [ 1]  546     jrmi 1$ 
-      0004D7 A6 40            [ 1]  547     ld a,#PAD_SIZE 
-      0004D9 88               [ 1]  548 1$: push a 
-      0004DA                        549     _ldxz storadr 
-      0004DA BE 2D                    1     .byte 0xbe,storadr 
-      0004DC                        550 2$:
-      0004DC 90 F6            [ 1]  551     ld a,(y)
-      0004DE 90 5C            [ 1]  552     incw y 
-      0004E0 CD 04 B1         [ 4]  553     call eeprom_addr 
-      0004E3 5C               [ 1]  554     incw x 
-      0004E4                        555     _eeprom_write 
-      0004E4                          1         _eeprom_we_low 
-      0004E4 72 17 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NWE
-      0004E8 9D               [ 1]    2         nop 
-      0004E9 9D               [ 1]    3         nop 
-      0004EA C7 50 05         [ 1]    4         ld DATA_ODR,a
-      0004ED 9D               [ 1]    5         nop
-      0004EE 9D               [ 1]    6         nop 
-      0004EF                          7         _eeprom_we_high   
-      0004EF 72 16 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NWE
-      0004F3 0A 01            [ 1]  556     dec (1,sp)
-      0004F5 26 E5            [ 1]  557     jrne 2$
-      0004F7                        558     _strxz storadr
-      0004F7 BF 2D                    1     .byte 0xbf,storadr 
-      0004F9                        559     _prog_delay
-      0004F9 A6 0A            [ 1]    1         ld a,#10
-      0004FB                          2         _straz timer+1
-      0004FB B7 03                    1     .byte 0xb7,timer+1 
-      0004FD                          3         _clrz timer  
-      0004FD 3F 02                    1     .byte 0x3f, timer 
+      0004BA 9F               [ 1]  528     ld a,xl 
+      0004BB C7 50 0F         [ 1]  529     ld ADDR_LOW,a 
+      0004BE 84               [ 1]  530     pop a
+      0004BF 81               [ 4]  531     ret 
+                                    532 
+                                    533 ;-----------------------------
+                                    534 ; copy tib to eeprom as 
+                                    535 ; .asciz 
+                                    536 ; input: 
+                                    537 ;   tib 
+                                    538 ; string max length 63 char.
+                                    539 ;-----------------------------
+      0004C0                        540 write_string:
+      0004C0                        541     _config_write 
+      0004C0                          1         _data_output
+      0004C0 A6 FF            [ 1]    1         ld a,#255 
+      0004C2 C7 50 08         [ 1]    2         ld DATA_CR1,a ; push pull output mode 
+      0004C5 C7 50 09         [ 1]    3         ld DATA_CR2,a ; high_speed  
+      0004C8 C7 50 07         [ 1]    4         ld DATA_DDR,a ; output mode 
+      0004CB                          2         _eeprom_disable_output
+      0004CB 72 14 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NOE
+      0004CF 93               [ 1]  542     ldw x,y 
+      0004D0 CD 05 5D         [ 4]  543     call strlen
+      0004D3 4D               [ 1]  544     tnz a 
+      0004D4 27 48            [ 1]  545     jreq 10$
+      0004D6 4C               [ 1]  546     inc a 
+      0004D7 A1 40            [ 1]  547     cp a,#EEPROM_PAGE_SIZE
+      0004D9 2B 02            [ 1]  548     jrmi 1$ 
+      0004DB A6 40            [ 1]  549     ld a,#PAD_SIZE 
+      0004DD 88               [ 1]  550 1$: push a 
+      0004DE                        551     _ldxz storadr 
+      0004DE BE 2D                    1     .byte 0xbe,storadr 
+      0004E0                        552 2$:
+      0004E0 90 F6            [ 1]  553     ld a,(y)
+      0004E2 90 5C            [ 1]  554     incw y 
+      0004E4 CD 04 B5         [ 4]  555     call eeprom_addr 
+      0004E7 5C               [ 1]  556     incw x 
+      0004E8                        557     _eeprom_write 
+      0004E8                          1         _eeprom_we_low 
+      0004E8 72 17 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NWE
+      0004EC 9D               [ 1]    2         nop 
+      0004ED 9D               [ 1]    3         nop 
+      0004EE C7 50 05         [ 1]    4         ld DATA_ODR,a
+      0004F1 9D               [ 1]    5         nop
+      0004F2 9D               [ 1]    6         nop 
+      0004F3                          7         _eeprom_we_high   
+      0004F3 72 16 50 0A      [ 1]    1         bset EEPROM_CTRL,#EEPROM_NWE
+      0004F7 0A 01            [ 1]  558     dec (1,sp)
+      0004F9 26 E5            [ 1]  559     jrne 2$
+      0004FB                        560     _strxz storadr
+      0004FB BF 2D                    1     .byte 0xbf,storadr 
+      0004FD                        561     _prog_delay
+      0004FD A6 0A            [ 1]    1         ld a,#10
+      0004FF                          2         _straz timer+1
+      0004FF B7 03                    1     .byte 0xb7,timer+1 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 59.
 Hexadecimal [24-Bits]
 
 
 
-      0004FF 72 12 00 07      [ 1]    4         bset flags,#FTIMER 
-      000503 72 02 00 07 FB   [ 2]    5         btjt flags,#FTIMER,.
-      000508                        560     _config_read 
-      000508                          1         _data_input
-      000508 72 5F 50 08      [ 1]    1         clr DATA_CR1  ; floating input
-      00050C 72 5F 50 09      [ 1]    2         clr DATA_CR2  ; disable ineterrupt
-      000510 72 5F 50 07      [ 1]    3         clr DATA_DDR  ; input mode
-      000514                          2         _eeprom_enabe_output
-      000514 72 15 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NOE 
-      000518                        561     _drop 1  
-      000518 5B 01            [ 2]    1     addw sp,#1 
-      00051A                        562 10$:
-      00051A 81               [ 4]  563     ret 
-                                    564 
-                                    565 ;----------------------------
-                                    566 ;  erasse EEPROM range 
-                                    567 ;  filling with 0xFF value 
-                                    568 ;  cmd format: addr1Xaddr2 
-                                    569 ;----------------------------
-                           000001   570     COUNT=1
-                           000002   571     VSIZE=2
-      00051B                        572 erase_range:
-      00051B                        573     _vars VSIZE 
-      00051B 52 02            [ 2]    1     sub sp,#VSIZE 
-                                    574 ; fill pad with 0xFF
-      00051D 0F 01            [ 1]  575     clr (COUNT,sp)
-      00051F A6 40            [ 1]  576     ld a,#EEPROM_PAGE_SIZE
-      000521 6B 02            [ 1]  577     ld (COUNT+1,sp),a
-      000523 AE 17 40         [ 2]  578     ldw x,#pad 
-      000526 A6 FF            [ 1]  579     ld a,#0xff 
-      000528                        580 1$: 
-      000528 F7               [ 1]  581     ld (x),a 
-      000529 5C               [ 1]  582     incw x 
-      00052A 0A 02            [ 1]  583     dec (2,sp)
-      00052C 26 FA            [ 1]  584     jrne 1$ 
-      00052E                        585     _ldxz last 
-      00052E BE 2F                    1     .byte 0xbe,last 
-      000530 72 B0 00 2D      [ 2]  586     subw x,storadr 
-      000534 5C               [ 1]  587     incw x 
-      000535 1F 01            [ 2]  588     ldw (COUNT,sp),x ; count to erase 
-      000537                        589 2$:
-      000537 AE 00 40         [ 2]  590     ldw x,#EEPROM_PAGE_SIZE 
-      00053A 13 01            [ 2]  591     cpw x,(COUNT,sp)
-      00053C 2B 02            [ 1]  592     jrmi 4$ 
-      00053E 1E 01            [ 2]  593     ldw x,(COUNT,sp)
-      000540 9F               [ 1]  594 4$: ld a,xl 
-      000541 88               [ 1]  595     push a 
-      000542 CD 04 5C         [ 4]  596     call prog_eeprom 
-      000545 32 00 06         [ 1]  597     pop ptr8 
-      000548 72 5F 00 05      [ 1]  598     clr ptr16 
-      00054C 1E 01            [ 2]  599     ldw x,(COUNT,sp) 
-      00054E 72 B0 00 05      [ 2]  600     subw x,ptr16
-      000552 1F 01            [ 2]  601     ldw (COUNT,sp),x  
-      000554 26 E1            [ 1]  602     jrne 2$ 
-      000556                        603     _drop VSIZE 
+      000501                          3         _clrz timer  
+      000501 3F 02                    1     .byte 0x3f, timer 
+      000503 72 12 00 07      [ 1]    4         bset flags,#FTIMER 
+      000507 72 02 00 07 FB   [ 2]    5         btjt flags,#FTIMER,.
+      00050C                        562     _config_read 
+      00050C                          1         _data_input
+      00050C 72 5F 50 08      [ 1]    1         clr DATA_CR1  ; floating input
+      000510 72 5F 50 09      [ 1]    2         clr DATA_CR2  ; disable ineterrupt
+      000514 72 5F 50 07      [ 1]    3         clr DATA_DDR  ; input mode
+      000518                          2         _eeprom_enabe_output
+      000518 72 15 50 0A      [ 1]    1         bres EEPROM_CTRL,#EEPROM_NOE 
+      00051C                        563     _drop 1  
+      00051C 5B 01            [ 2]    1     addw sp,#1 
+      00051E                        564 10$:
+      00051E 81               [ 4]  565     ret 
+                                    566 
+                                    567 ;----------------------------
+                                    568 ;  erasse EEPROM range 
+                                    569 ;  filling with 0xFF value 
+                                    570 ;  cmd format: addr1Xaddr2 
+                                    571 ;----------------------------
+                           000001   572     COUNT=1
+                           000002   573     VSIZE=2
+      00051F                        574 erase_range:
+      00051F                        575     _vars VSIZE 
+      00051F 52 02            [ 2]    1     sub sp,#VSIZE 
+                                    576 ; fill pad with 0xFF
+      000521 0F 01            [ 1]  577     clr (COUNT,sp)
+      000523 A6 40            [ 1]  578     ld a,#EEPROM_PAGE_SIZE
+      000525 6B 02            [ 1]  579     ld (COUNT+1,sp),a
+      000527 AE 17 40         [ 2]  580     ldw x,#pad 
+      00052A A6 FF            [ 1]  581     ld a,#0xff 
+      00052C                        582 1$: 
+      00052C F7               [ 1]  583     ld (x),a 
+      00052D 5C               [ 1]  584     incw x 
+      00052E 0A 02            [ 1]  585     dec (2,sp)
+      000530 26 FA            [ 1]  586     jrne 1$ 
+      000532                        587     _ldxz last 
+      000532 BE 2F                    1     .byte 0xbe,last 
+      000534 72 B0 00 2D      [ 2]  588     subw x,storadr 
+      000538 5C               [ 1]  589     incw x 
+      000539 1F 01            [ 2]  590     ldw (COUNT,sp),x ; count to erase 
+      00053B                        591 2$:
+      00053B AE 00 40         [ 2]  592     ldw x,#EEPROM_PAGE_SIZE 
+      00053E 13 01            [ 2]  593     cpw x,(COUNT,sp)
+      000540 2B 02            [ 1]  594     jrmi 4$ 
+      000542 1E 01            [ 2]  595     ldw x,(COUNT,sp)
+      000544 9F               [ 1]  596 4$: ld a,xl 
+      000545 88               [ 1]  597     push a 
+      000546 CD 04 60         [ 4]  598     call prog_eeprom 
+      000549 32 00 06         [ 1]  599     pop ptr8 
+      00054C 72 5F 00 05      [ 1]  600     clr ptr16 
+      000550 1E 01            [ 2]  601     ldw x,(COUNT,sp) 
+      000552 72 B0 00 05      [ 2]  602     subw x,ptr16
+      000556 1F 01            [ 2]  603     ldw (COUNT,sp),x  
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 60.
 Hexadecimal [24-Bits]
 
 
 
-      000556 5B 02            [ 2]    1     addw sp,#VSIZE 
-      000558 81               [ 4]  604     ret 
-                                    605 
-                                    606 ;--------------------------
-                                    607 ; return lenght of string
-                                    608 ; input:
-                                    609 ;    X   *.asciz 
-                                    610 ; output:
-                                    611 ;    A     length 
-                                    612 ;    X     not changed 
-                                    613 ;--------------------------
-      000559                        614 strlen:
-      000559 89               [ 2]  615     pushw x
-      00055A 4F               [ 1]  616     clr a 
-      00055B                        617 1$:
-      00055B 7D               [ 1]  618     tnz (x)
-      00055C 27 04            [ 1]  619     jreq 9$
-      00055E 4C               [ 1]  620     inc a 
-      00055F 5C               [ 1]  621     incw x 
-      000560 20 F9            [ 2]  622     jra 1$
-      000562 85               [ 2]  623 9$: popw x
-      000563 81               [ 4]  624     ret 
+      000558 26 E1            [ 1]  604     jrne 2$ 
+      00055A                        605     _drop VSIZE 
+      00055A 5B 02            [ 2]    1     addw sp,#VSIZE 
+      00055C 81               [ 4]  606     ret 
+                                    607 
+                                    608 ;--------------------------
+                                    609 ; return lenght of string
+                                    610 ; input:
+                                    611 ;    X   *.asciz 
+                                    612 ; output:
+                                    613 ;    A     length 
+                                    614 ;    X     not changed 
+                                    615 ;--------------------------
+      00055D                        616 strlen:
+      00055D 89               [ 2]  617     pushw x
+      00055E 4F               [ 1]  618     clr a 
+      00055F                        619 1$:
+      00055F 7D               [ 1]  620     tnz (x)
+      000560 27 04            [ 1]  621     jreq 9$
+      000562 4C               [ 1]  622     inc a 
+      000563 5C               [ 1]  623     incw x 
+      000564 20 F9            [ 2]  624     jra 1$
+      000566 85               [ 2]  625 9$: popw x
+      000567 81               [ 4]  626     ret 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 61.
 Hexadecimal [24-Bits]
 
@@ -3458,7 +3460,7 @@ Symbol Table
     PI      =  000028     |     PI_BASE =  005028     |     PI_CR1  =  00502B 
     PI_CR2  =  00502C     |     PI_DDR  =  00502A     |     PI_IDR  =  005029 
     PI_ODR  =  005028     |     RAM_BASE=  000000     |     RAM_END =  0017FF 
-    RAM_SIZE=  001800     |     READ    =  000001     |     REV     =  000004 
+    RAM_SIZE=  001800     |     READ    =  000001     |     REV     =  000005 
     ROP     =  004800     |     ROW_SIZE=  000001     |     RS      =  00001E 
     RST_SR  =  0050B3     |     RX_QUEUE=  000020 G   |     SEMIC   =  00003B 
     SFR_BASE=  005000     |     SFR_END =  0057FF     |     SHARP   =  000023 
@@ -3610,26 +3612,26 @@ Symbol Table
     WWDG_WR =  0050D2     |     XOFF    =  000013     |     XON     =  000011 
   5 base       000000 GR  |   6 bksp       000111 GR  |   6 clear_qu   0000CA R
   6 cli        0002FD R   |   6 clr_scre   000129 GR  |   6 cold_sta   00004D R
-  6 eeProg     0002CE R   |   6 eeprom_a   0004B1 R   |   6 erase_ra   00051B R
-  6 exam_blo   0003A4 R   |   5 farptr     000004 R   |   5 flags      000007 GR
+  6 eeProg     0002CE R   |   6 eeprom_a   0004B5 R   |   6 erase_ra   00051F R
+  6 exam_blo   0003A8 R   |   5 farptr     000004 R   |   5 flags      000007 GR
   5 fmstr      000001 GR  |   6 getc       0000DE GR  |   6 init_por   00025C R
   6 itoa       0001FA GR  |   6 itoa_loo   00021F R   |   5 last       00002F R
-  5 mode       00002A R   |   6 new_line   000123 GR  |   6 new_row    0003B8 R
+  5 mode       00002A R   |   6 new_line   000123 GR  |   6 new_row    0003BC R
   6 next_cha   000311 R   |   2 pad        001740 GR  |   6 parse01    000323 R
-  6 parse_he   0003FA R   |   6 print_ad   00042B R   |   6 print_de   0001C2 R
-  6 print_he   0001B2 GR  |   6 print_in   0001E9 GR  |   6 print_me   00043F R
-  6 print_te   0003E6 R   |   6 print_wo   000436 R   |   6 prog_eep   00045C R
+  6 parse_he   0003FE R   |   6 print_ad   00042F R   |   6 print_de   0001C2 R
+  6 print_he   0001B2 GR  |   6 print_in   0001E9 GR  |   6 print_me   000443 R
+  6 print_te   0003EA R   |   6 print_wo   00043A R   |   6 prog_eep   000460 R
   6 prt_digi   0001E1 R   |   6 prt_i8     0001E7 R   |   5 ptr16      000005 GR
   5 ptr8       000006 R   |   6 putc       0000CF GR  |   6 puts       000106 GR
-  6 qgetc      0000D8 GR  |   6 readln     000148 GR  |   6 row        0003C3 R
+  6 qgetc      0000D8 GR  |   6 readln     000148 GR  |   6 row        0003C7 R
   5 rx1_head   000008 GR  |   5 rx1_queu   00000A GR  |   5 rx1_tail   000009 GR
   6 space      000134 GR  |   6 spaces     00013C GR  |   2 stack_fu   001780 GR
-  2 stack_un   001800 R   |   5 storadr    00002D R   |   6 strlen     000559 R
+  2 stack_un   001800 R   |   5 storadr    00002D R   |   6 strlen     00055D R
   2 tib        0016C0 R   |   5 timer      000002 GR  |   6 timer4_i   000019 R
   6 to_hex_c   0001A7 GR  |   6 to_upper   000251 R   |   6 uart_bks   000111 GR
   6 uart_get   0000DE GR  |   6 uart_ini   0000AB R   |   6 uart_put   0000CF GR
   6 uart_qge   0000D8 GR  |   2 write_bu   001740 GR  |   6 write_ee   000372 R
-  6 write_st   0004BC R   |   5 xamadr     00002B R
+  6 write_st   0004C0 R   |   5 xamadr     00002B R
 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 68.
 Hexadecimal [24-Bits]
@@ -3642,5 +3644,5 @@ Area Table
    3 HOME       size     80   flags    0
    4 DATA       size      0   flags    8
    5 DATA1      size     31   flags    8
-   6 CODE       size    564   flags    0
+   6 CODE       size    568   flags    0
 
