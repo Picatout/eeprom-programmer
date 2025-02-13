@@ -1,0 +1,7 @@
+build/*.lk
+build/*.lst
+build/*.map
+build/*.rel
+build/*.rst
+KiCAD/eeprom-programmer-backups
+connect.sh
