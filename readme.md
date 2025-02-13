@@ -37,7 +37,7 @@ L'interface reprend le format du [WOZMON](https://github.com/Picatout/stm8_wozmo
 * **adr1Xadr2&lt;RETURN&gt;** Efface la plage mémoire de **adr1** jusqu'à **adr2**.
 * **adr"chaîne de caractères ASCII&lt;RETURN&gt;**  programme la chaîne de caractères dans l'EEPROM à partir de l'adresse **adr** la chaîne est terminée par un **0**. Il ne faut pas mettre de guillemet à la fin de la chaîne.
 
-* Il est possible d'entrer une liste de commandes de programmation dans un fichier texte et d'utililser la fonction *send RAW file* du terminal pour l'envoyer au programmeur. Cependant le terminal doit-être configuré pour un délais de 10msec entre l'envoie de chaque ligne. C'est le temps que ça prend à l'EEPROM pour compléter la programmation d'une ligne.
+* Il est possible d'entrer une liste de commandes de programmation dans un fichier texte et d'utililser la fonction *send RAW file* du terminal pour l'envoyer au programmeur. Cependant le terminal doit-être configuré pour un délais de 15msec entre l'envoie de chaque ligne. C'est le temps que ça prend à l'EEPROM pour compléter la programmation d'une ligne.
 
 ## capture d'écran d'une session.
 ```
