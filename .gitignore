@@ -4,4 +4,5 @@ build/*.map
 build/*.rel
 build/*.rst
 KiCAD/eeprom-programmer-backups
+KiCAD/*.bak
 connect.sh
