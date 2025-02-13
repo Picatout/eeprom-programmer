@@ -4,21 +4,21 @@ Hexadecimal [24-Bits]
 
 
                                       1 ;;
-                                      2 ; Copyright Jacques Deschênes 2024,2025  
-                                      3 ; This file is part of stm8_ebi 
+                                      2 ; Copyright Jacques Deschênes 2025  
+                                      3 ; This file is part of eeprom-programmer 
                                       4 ;
-                                      5 ;     stm8_ebi is free software: you can redistribute it and/or modify
+                                      5 ;     eeprom-programmer is free software: you can redistribute it and/or modify
                                       6 ;     it under the terms of the GNU General Public License as published by
                                       7 ;     the Free Software Foundation, either version 3 of the License, or
                                       8 ;     (at your option) any later version.
                                       9 ;
-                                     10 ;     stm8_ebi is distributed in the hope that it will be useful,
+                                     10 ;     eeprom-programmer is distributed in the hope that it will be useful,
                                      11 ;     but WITHOUT ANY WARRANTY; without even the implied warranty of
                                      12 ;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
                                      13 ;     GNU General Public License for more details.
                                      14 ;
                                      15 ;     You should have received a copy of the GNU General Public License
-                                     16 ;     along with stm8_ebi.  If not, see <http://www.gnu.org/licenses/>.
+                                     16 ;     along with eeprom-programmer.  If not, see <http://www.gnu.org/licenses/>.
                                      17 ;;
                                      18 
                                      19 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1867,594 +1867,595 @@ Hexadecimal [24-Bits]
 
 
                                       1 ;;
-                                      2 ; Copyright Jacques Deschênes 2019,2022,2025 
-                                      3 ; This file is part of eBasic 
+                                      2 ; Copyright Jacques Deschênes 2025  
+                                      3 ; This file is part of eeprom-programmer 
                                       4 ;
-                                      5 ;     eBasic is free software: you can redistribute it and/or modify
+                                      5 ;     eeprom-programmer is free software: you can redistribute it and/or modify
                                       6 ;     it under the terms of the GNU General Public License as published by
                                       7 ;     the Free Software Foundation, either version 3 of the License, or
                                       8 ;     (at your option) any later version.
                                       9 ;
-                                     10 ;     eBasic is distributed in the hope that it will be useful,
+                                     10 ;     eeprom-programmer is distributed in the hope that it will be useful,
                                      11 ;     but WITHOUT ANY WARRANTY; without even the implied warranty of
                                      12 ;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
                                      13 ;     GNU General Public License for more details.
                                      14 ;
                                      15 ;     You should have received a copy of the GNU General Public License
-                                     16 ;     along with eBasic.  If not, see <http://www.gnu.org/licenses/>.
+                                     16 ;     along with eeprom-programmer.  If not, see <http://www.gnu.org/licenses/>.
                                      17 ;;
-                                     18 ;------------------------------
-                                     19 ; This file is for functions 
-                                     20 ; interfacing with VT100 terminal
-                                     21 ; emulator.
-                                     22 ;------------------------------
-                                     23 
-                                     24     .module TERMINAL  
-                                     25 
-                                     26     .area CODE 
-                                     27 
-                                     28 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                     29 ;;   UART subroutines
-                                     30 ;;   used for user interface 
-                                     31 ;;   communication channel.
-                                     32 ;;   settings: 
-                                     33 ;;		115200 8N1 no flow control
-                                     34 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                     35 
+                                     18 
+                                     19 ;------------------------------
+                                     20 ; This file is for functions 
+                                     21 ; interfacing with VT100 terminal
+                                     22 ; emulator.
+                                     23 ;------------------------------
+                                     24 
+                                     25     .module TERMINAL  
+                                     26 
+                                     27     .area CODE 
+                                     28 
+                                     29 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                     30 ;;   UART subroutines
+                                     31 ;;   used for user interface 
+                                     32 ;;   communication channel.
+                                     33 ;;   settings: 
+                                     34 ;;		115200 8N1 no flow control
+                                     35 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
                                      36 
                                      37 
-                                     38 	.area CODE
-                                     39 
-                                     40 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                     41 ;;; Uart1 intterrupt handler 
-                                     42 ;;; on receive character 
-                                     43 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-                                     44 ;--------------------------
-                                     45 ; UART receive character
-                                     46 ; in a FIFO buffer 
-                                     47 ; CTRL+C (ASCII 3)
-                                     48 ; cancel program execution
-                                     49 ; and fall back to command line
-                                     50 ; CTRL+X reboot system 
-                                     51 ; CTLR+Z erase EEPROM autorun 
-                                     52 ;        information and reboot
-                                     53 ;--------------------------
-      00810F                         54 UartRxHandler: ; console receive char 
-      00810F 72 0B 52 30 16   [ 2]   55 	btjf UART_SR,#UART_SR_RXNE,5$ 
+                                     38 
+                                     39 	.area CODE
+                                     40 
+                                     41 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                     42 ;;; Uart1 intterrupt handler 
+                                     43 ;;; on receive character 
+                                     44 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+                                     45 ;--------------------------
+                                     46 ; UART receive character
+                                     47 ; in a FIFO buffer 
+                                     48 ; CTRL+C (ASCII 3)
+                                     49 ; cancel program execution
+                                     50 ; and fall back to command line
+                                     51 ; CTRL+X reboot system 
+                                     52 ; CTLR+Z erase EEPROM autorun 
+                                     53 ;        information and reboot
+                                     54 ;--------------------------
+      00810F                         55 UartRxHandler: ; console receive char 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 38.
 Hexadecimal [24-Bits]
 
 
 
-      008114 C6 52 31         [ 1]   56 	ld a,UART_DR 
-      008117 88               [ 1]   57 	push a 
-      008118 A6 0A            [ 1]   58 	ld a,#rx1_queue 
-      00811A CB 00 09         [ 1]   59 	add a,rx1_tail 
-      00811D 5F               [ 1]   60 	clrw x 
-      00811E 97               [ 1]   61 	ld xl,a 
-      00811F 84               [ 1]   62 	pop a 
-      008120 F7               [ 1]   63 	ld (x),a 
-      008121 C6 00 09         [ 1]   64 	ld a,rx1_tail 
-      008124 4C               [ 1]   65 	inc a 
-      008125 A4 1F            [ 1]   66 	and a,#RX_QUEUE_SIZE-1
-      008127 C7 00 09         [ 1]   67 	ld rx1_tail,a 
-      00812A                         68 5$:	
-      00812A 80               [11]   69 	iret 
-                                     70 
+      00810F 72 0B 52 30 16   [ 2]   56 	btjf UART_SR,#UART_SR_RXNE,5$ 
+      008114 C6 52 31         [ 1]   57 	ld a,UART_DR 
+      008117 88               [ 1]   58 	push a 
+      008118 A6 0A            [ 1]   59 	ld a,#rx1_queue 
+      00811A CB 00 09         [ 1]   60 	add a,rx1_tail 
+      00811D 5F               [ 1]   61 	clrw x 
+      00811E 97               [ 1]   62 	ld xl,a 
+      00811F 84               [ 1]   63 	pop a 
+      008120 F7               [ 1]   64 	ld (x),a 
+      008121 C6 00 09         [ 1]   65 	ld a,rx1_tail 
+      008124 4C               [ 1]   66 	inc a 
+      008125 A4 1F            [ 1]   67 	and a,#RX_QUEUE_SIZE-1
+      008127 C7 00 09         [ 1]   68 	ld rx1_tail,a 
+      00812A                         69 5$:	
+      00812A 80               [11]   70 	iret 
                                      71 
-                                     72 ;---------------------------------------------
-                                     73 ; initialize UART, 115200 8N1
-                                     74 ; called from cold_start in hardware_init.asm 
-                                     75 ; input:
-                                     76 ;	none
-                                     77 ; output:
-                                     78 ;   none
-                                     79 ;---------------------------------------------
-                           01C200    80 BAUD_RATE=115200
-                                     81 ; BRR value = 16Mhz/115200 = 0x8B  
-                           000008    82 BRR1_VAL=8 
-                           00000B    83 BRR2_VAL=0xB
-      00812B                         84 uart_init:
-      00812B A6 0B            [ 1]   85 	ld a,#BRR2_VAL
-      00812D C7 52 33         [ 1]   86 	ld UART_BRR2,a 
-      008130 A6 08            [ 1]   87 	ld a,#BRR1_VAL  
-      008132 C7 52 32         [ 1]   88 	ld UART_BRR1,a
-      008135 72 5F 52 31      [ 1]   89     clr UART_DR
-      008139 35 2C 52 35      [ 1]   90 	mov UART_CR2,#((1<<UART_CR2_TEN)|(1<<UART_CR2_REN)|(1<<UART_CR2_RIEN));
-      00813D 72 10 52 35      [ 1]   91 	bset UART_CR2,#UART_CR2_SBK
-      008141 72 0D 52 30 FB   [ 2]   92     btjf UART_SR,#UART_SR_TC,.
-      008146 CD 81 4A         [ 4]   93 	call clear_queue
-      008149 81               [ 4]   94 	ret
-                                     95 
-                                     96 ;---------------------------
-                                     97 ;  clear rx1_queue 
-                                     98 ;---------------------------
-      00814A                         99 clear_queue:
-      0000CA                        100     _clrz rx1_head 
+                                     72 
+                                     73 ;---------------------------------------------
+                                     74 ; initialize UART, 115200 8N1
+                                     75 ; called from cold_start in hardware_init.asm 
+                                     76 ; input:
+                                     77 ;	none
+                                     78 ; output:
+                                     79 ;   none
+                                     80 ;---------------------------------------------
+                           01C200    81 BAUD_RATE=115200
+                                     82 ; BRR value = 16Mhz/115200 = 0x8B  
+                           000008    83 BRR1_VAL=8 
+                           00000B    84 BRR2_VAL=0xB
+      00812B                         85 uart_init:
+      00812B A6 0B            [ 1]   86 	ld a,#BRR2_VAL
+      00812D C7 52 33         [ 1]   87 	ld UART_BRR2,a 
+      008130 A6 08            [ 1]   88 	ld a,#BRR1_VAL  
+      008132 C7 52 32         [ 1]   89 	ld UART_BRR1,a
+      008135 72 5F 52 31      [ 1]   90     clr UART_DR
+      008139 35 2C 52 35      [ 1]   91 	mov UART_CR2,#((1<<UART_CR2_TEN)|(1<<UART_CR2_REN)|(1<<UART_CR2_RIEN));
+      00813D 72 10 52 35      [ 1]   92 	bset UART_CR2,#UART_CR2_SBK
+      008141 72 0D 52 30 FB   [ 2]   93     btjf UART_SR,#UART_SR_TC,.
+      008146 CD 81 4A         [ 4]   94 	call clear_queue
+      008149 81               [ 4]   95 	ret
+                                     96 
+                                     97 ;---------------------------
+                                     98 ;  clear rx1_queue 
+                                     99 ;---------------------------
+      00814A                        100 clear_queue:
+      0000CA                        101     _clrz rx1_head 
       00814A 3F 08                    1     .byte 0x3f, rx1_head 
-      0000CC                        101 	_clrz rx1_tail 
+      0000CC                        102 	_clrz rx1_tail 
       00814C 3F 09                    1     .byte 0x3f, rx1_tail 
-      00814E 81               [ 4]  102 	ret 
-                                    103 
+      00814E 81               [ 4]  103 	ret 
                                     104 
-                                    105 ;---------------------------------
-                                    106 ; uart_putc
-                                    107 ; send a character via UART
-                                    108 ; input:
+                                    105 
+                                    106 ;---------------------------------
+                                    107 ; uart_putc
+                                    108 ; send a character via UART
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 39.
 Hexadecimal [24-Bits]
 
 
 
-                                    109 ;    A  	character to send
-                                    110 ;---------------------------------
-      00814F                        111 putc::
-      00814F                        112 uart_putc:: 
-      00814F 72 0F 52 30 FB   [ 2]  113 	btjf UART_SR,#UART_SR_TXE,.
-      008154 C7 52 31         [ 1]  114 	ld UART_DR,a 
-      008157 81               [ 4]  115 	ret 
-                                    116 
+                                    109 ; input:
+                                    110 ;    A  	character to send
+                                    111 ;---------------------------------
+      00814F                        112 putc::
+      00814F                        113 uart_putc:: 
+      00814F 72 0F 52 30 FB   [ 2]  114 	btjf UART_SR,#UART_SR_TXE,.
+      008154 C7 52 31         [ 1]  115 	ld UART_DR,a 
+      008157 81               [ 4]  116 	ret 
                                     117 
-                                    118 ;---------------------------------
-                                    119 ; Query for character in rx1_queue
-                                    120 ; input:
-                                    121 ;   none 
-                                    122 ; output:
-                                    123 ;   A     0 no charcter available
-                                    124 ;   Z     1 no character available
-                                    125 ;---------------------------------
-      008158                        126 qgetc::
-      008158                        127 uart_qgetc::
-      0000D8                        128 	_ldaz rx1_head 
+                                    118 
+                                    119 ;---------------------------------
+                                    120 ; Query for character in rx1_queue
+                                    121 ; input:
+                                    122 ;   none 
+                                    123 ; output:
+                                    124 ;   A     0 no charcter available
+                                    125 ;   Z     1 no character available
+                                    126 ;---------------------------------
+      008158                        127 qgetc::
+      008158                        128 uart_qgetc::
+      0000D8                        129 	_ldaz rx1_head 
       008158 B6 08                    1     .byte 0xb6,rx1_head 
-      00815A C0 00 09         [ 1]  129 	sub a,rx1_tail 
-      00815D 81               [ 4]  130 	ret 
-                                    131 
-                                    132 ;---------------------------------
-                                    133 ; wait character from UART 
-                                    134 ; input:
-                                    135 ;   none
-                                    136 ; output:
-                                    137 ;   A 			char  
-                                    138 ;--------------------------------	
-      00815E                        139 getc:: ;console input
-      00815E                        140 uart_getc::
-      00815E CD 81 58         [ 4]  141 	call uart_qgetc
-      008161 27 FB            [ 1]  142 	jreq uart_getc 
-      008163 89               [ 2]  143 	pushw x 
-                                    144 ;; rx1_queue must be in page 0 	
-      008164 A6 0A            [ 1]  145 	ld a,#rx1_queue
-      008166 CB 00 08         [ 1]  146 	add a,rx1_head 
-      008169 5F               [ 1]  147 	clrw x  
-      00816A 97               [ 1]  148 	ld xl,a 
-      00816B F6               [ 1]  149 	ld a,(x)
-      00816C 88               [ 1]  150 	push a
-      0000ED                        151 	_ldaz rx1_head 
+      00815A C0 00 09         [ 1]  130 	sub a,rx1_tail 
+      00815D 81               [ 4]  131 	ret 
+                                    132 
+                                    133 ;---------------------------------
+                                    134 ; wait character from UART 
+                                    135 ; input:
+                                    136 ;   none
+                                    137 ; output:
+                                    138 ;   A 			char  
+                                    139 ;--------------------------------	
+      00815E                        140 getc:: ;console input
+      00815E                        141 uart_getc::
+      00815E CD 81 58         [ 4]  142 	call uart_qgetc
+      008161 27 FB            [ 1]  143 	jreq uart_getc 
+      008163 89               [ 2]  144 	pushw x 
+                                    145 ;; rx1_queue must be in page 0 	
+      008164 A6 0A            [ 1]  146 	ld a,#rx1_queue
+      008166 CB 00 08         [ 1]  147 	add a,rx1_head 
+      008169 5F               [ 1]  148 	clrw x  
+      00816A 97               [ 1]  149 	ld xl,a 
+      00816B F6               [ 1]  150 	ld a,(x)
+      00816C 88               [ 1]  151 	push a
+      0000ED                        152 	_ldaz rx1_head 
       00816D B6 08                    1     .byte 0xb6,rx1_head 
-      00816F 4C               [ 1]  152 	inc a 
-      008170 A4 1F            [ 1]  153 	and a,#RX_QUEUE_SIZE-1
-      0000F2                        154 	_straz rx1_head 
+      00816F 4C               [ 1]  153 	inc a 
+      008170 A4 1F            [ 1]  154 	and a,#RX_QUEUE_SIZE-1
+      0000F2                        155 	_straz rx1_head 
       008172 B7 08                    1     .byte 0xb7,rx1_head 
-      008174 84               [ 1]  155 	pop a 
-      008175 72 01 00 07 0A   [ 2]  156 	btjf flags,#FUPPER,1$
-      00817A A1 61            [ 1]  157 	cp a,#'a 
-      00817C 2B 06            [ 1]  158 	jrmi 1$
-      00817E A1 7B            [ 1]  159 	cp a,#'z+1 
-      008180 2B 02            [ 1]  160 	jrmi 1$ 
+      008174 84               [ 1]  156 	pop a 
+      008175 72 01 00 07 0A   [ 2]  157 	btjf flags,#FUPPER,1$
+      00817A A1 61            [ 1]  158 	cp a,#'a 
+      00817C 2B 06            [ 1]  159 	jrmi 1$
+      00817E A1 7B            [ 1]  160 	cp a,#'z+1 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 40.
 Hexadecimal [24-Bits]
 
 
 
-      008182 A4 DF            [ 1]  161 	and a,#0xDF  
-      008184                        162 1$: 
-      008184 85               [ 2]  163 	popw x
-      008185 81               [ 4]  164 	ret 
-                                    165 
-                                    166 ;-----------------------------
-                                    167 ; send an ASCIZ string to UART 
-                                    168 ; input: 
-                                    169 ;   x 		char * 
-                                    170 ; output:
-                                    171 ;   none 
-                                    172 ;-------------------------------
-      008186                        173 puts::
-      008186 F6               [ 1]  174     ld a,(x)
-      008187 27 06            [ 1]  175 	jreq 1$
-      008189 CD 81 4F         [ 4]  176 	call putc 
-      00818C 5C               [ 1]  177 	incw x 
-      00818D 20 F7            [ 2]  178 	jra puts 
-      00818F 5C               [ 1]  179 1$:	incw x 
-      008190 81               [ 4]  180 	ret 
-                                    181 
-                                    182 ;---------------------------
-                                    183 ; delete character at left 
-                                    184 ; of cursor on terminal 
-                                    185 ; input:
-                                    186 ;   none 
-                                    187 ; output:
-                                    188 ;	none 
-                                    189 ;---------------------------
-      008191                        190 uart_bksp::
-      008191                        191 bksp::
-      008191 88               [ 1]  192 	push a 
-      008192 A6 08            [ 1]  193 	ld a,#BS 
-      008194 CD 81 4F         [ 4]  194 	call putc  
-      008197 A6 20            [ 1]  195 	ld a,#SPACE 
-      008199 CD 81 4F         [ 4]  196 	call putc 
-      00819C A6 08            [ 1]  197 	ld a,#BS 
-      00819E CD 81 4F         [ 4]  198 	call putc 
-      0081A1 84               [ 1]  199 	pop a 
-      0081A2 81               [ 4]  200 	ret 
-                                    201  
-                                    202 
-                                    203 ;---------------------------
-                                    204 ; send LF character 
-                                    205 ; terminal interpret it 
-                                    206 ; as CRLF 
-                                    207 ;---------------------------
-      0081A3                        208 new_line:: 
-      0081A3 A6 0D            [ 1]  209 	ld a,#CR  
-      0081A5 CD 81 4F         [ 4]  210 	call putc 
-      0081A8 81               [ 4]  211 	ret 
-                                    212 
-                                    213 ;--------------------------
-                                    214 ; erase terminal screen 
-                                    215 ;--------------------------
+      008180 2B 02            [ 1]  161 	jrmi 1$ 
+      008182 A4 DF            [ 1]  162 	and a,#0xDF  
+      008184                        163 1$: 
+      008184 85               [ 2]  164 	popw x
+      008185 81               [ 4]  165 	ret 
+                                    166 
+                                    167 ;-----------------------------
+                                    168 ; send an ASCIZ string to UART 
+                                    169 ; input: 
+                                    170 ;   x 		char * 
+                                    171 ; output:
+                                    172 ;   none 
+                                    173 ;-------------------------------
+      008186                        174 puts::
+      008186 F6               [ 1]  175     ld a,(x)
+      008187 27 06            [ 1]  176 	jreq 1$
+      008189 CD 81 4F         [ 4]  177 	call putc 
+      00818C 5C               [ 1]  178 	incw x 
+      00818D 20 F7            [ 2]  179 	jra puts 
+      00818F 5C               [ 1]  180 1$:	incw x 
+      008190 81               [ 4]  181 	ret 
+                                    182 
+                                    183 ;---------------------------
+                                    184 ; delete character at left 
+                                    185 ; of cursor on terminal 
+                                    186 ; input:
+                                    187 ;   none 
+                                    188 ; output:
+                                    189 ;	none 
+                                    190 ;---------------------------
+      008191                        191 uart_bksp::
+      008191                        192 bksp::
+      008191 88               [ 1]  193 	push a 
+      008192 A6 08            [ 1]  194 	ld a,#BS 
+      008194 CD 81 4F         [ 4]  195 	call putc  
+      008197 A6 20            [ 1]  196 	ld a,#SPACE 
+      008199 CD 81 4F         [ 4]  197 	call putc 
+      00819C A6 08            [ 1]  198 	ld a,#BS 
+      00819E CD 81 4F         [ 4]  199 	call putc 
+      0081A1 84               [ 1]  200 	pop a 
+      0081A2 81               [ 4]  201 	ret 
+                                    202  
+                                    203 
+                                    204 ;---------------------------
+                                    205 ; send LF character 
+                                    206 ; terminal interpret it 
+                                    207 ; as CRLF 
+                                    208 ;---------------------------
+      0081A3                        209 new_line:: 
+      0081A3 A6 0D            [ 1]  210 	ld a,#CR  
+      0081A5 CD 81 4F         [ 4]  211 	call putc 
+      0081A8 81               [ 4]  212 	ret 
+                                    213 
+                                    214 ;--------------------------
+                                    215 ; erase terminal screen 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 41.
 Hexadecimal [24-Bits]
 
 
 
-      0081A9                        216 clr_screen::
-      0081A9 A6 1B            [ 1]  217 	ld a,#ESC 
-      0081AB CD 81 4F         [ 4]  218 	call putc 
-      0081AE A6 63            [ 1]  219 	ld a,#'c 
-      0081B0 CD 81 4F         [ 4]  220 	call putc 
-      0081B3 81               [ 4]  221 	ret 
-                                    222 
-                                    223 ;--------------------------
-                                    224 ; output a single space
-                                    225 ;--------------------------
-      0081B4                        226 space::
-      0081B4 88               [ 1]  227 	push a 
-      0081B5 A6 20            [ 1]  228 	ld a,#SPACE 
-      0081B7 CD 81 4F         [ 4]  229 	call putc 
-      0081BA 84               [ 1]  230 	pop a 
-      0081BB 81               [ 4]  231 	ret 
-                                    232 
-                                    233 ;--------------------------
-                                    234 ; print n spaces on terminal
-                                    235 ; input:
-                                    236 ;  X 		number of spaces 
-                                    237 ; output:
-                                    238 ;	none 
-                                    239 ;---------------------------
-      0081BC                        240 spaces::
-      0081BC A6 20            [ 1]  241 	ld a,#SPACE 
-      0081BE 5D               [ 2]  242 1$:	tnzw x
-      0081BF 27 06            [ 1]  243 	jreq 9$
-      0081C1 CD 81 4F         [ 4]  244 	call putc 
-      0081C4 5A               [ 2]  245 	decw x
-      0081C5 20 F7            [ 2]  246 	jra 1$
-      0081C7                        247 9$: 
-      0081C7 81               [ 4]  248 	ret 
-                                    249 
-                                    250 ;--------------------------
-                                    251 ; this version of readln 
-                                    252 ; if to be used with 
-                                    253 ; non ANSI terminal 
-                                    254 ; like STM8_terminal 
-                                    255 ; 
-                                    256 ; BS      delete last character 
-                                    257 ; input:
-                                    258 ;   A     initial line length
-                                    259 ; output:
-                                    260 ;   A     line length 
-                                    261 ;   X     tib address 
-                                    262 ;--------------------------
-                           00007F   263 MAX_LEN=TIB_SIZE-1
-                           000001   264 	HI_LL=1
-                           000002   265 	LN_LEN=2
-                           000003   266 	CHAR=3 
-                           000003   267 	VSIZE=CHAR  
-      0081C8                        268 readln::
-      000148                        269 	_vars VSIZE
-      0081C8 52 03            [ 2]    1     sub sp,#VSIZE 
+                                    216 ;--------------------------
+      0081A9                        217 clr_screen::
+      0081A9 A6 1B            [ 1]  218 	ld a,#ESC 
+      0081AB CD 81 4F         [ 4]  219 	call putc 
+      0081AE A6 63            [ 1]  220 	ld a,#'c 
+      0081B0 CD 81 4F         [ 4]  221 	call putc 
+      0081B3 81               [ 4]  222 	ret 
+                                    223 
+                                    224 ;--------------------------
+                                    225 ; output a single space
+                                    226 ;--------------------------
+      0081B4                        227 space::
+      0081B4 88               [ 1]  228 	push a 
+      0081B5 A6 20            [ 1]  229 	ld a,#SPACE 
+      0081B7 CD 81 4F         [ 4]  230 	call putc 
+      0081BA 84               [ 1]  231 	pop a 
+      0081BB 81               [ 4]  232 	ret 
+                                    233 
+                                    234 ;--------------------------
+                                    235 ; print n spaces on terminal
+                                    236 ; input:
+                                    237 ;  X 		number of spaces 
+                                    238 ; output:
+                                    239 ;	none 
+                                    240 ;---------------------------
+      0081BC                        241 spaces::
+      0081BC A6 20            [ 1]  242 	ld a,#SPACE 
+      0081BE 5D               [ 2]  243 1$:	tnzw x
+      0081BF 27 06            [ 1]  244 	jreq 9$
+      0081C1 CD 81 4F         [ 4]  245 	call putc 
+      0081C4 5A               [ 2]  246 	decw x
+      0081C5 20 F7            [ 2]  247 	jra 1$
+      0081C7                        248 9$: 
+      0081C7 81               [ 4]  249 	ret 
+                                    250 
+                                    251 ;--------------------------
+                                    252 ; this version of readln 
+                                    253 ; if to be used with 
+                                    254 ; non ANSI terminal 
+                                    255 ; like STM8_terminal 
+                                    256 ; 
+                                    257 ; BS      delete last character 
+                                    258 ; input:
+                                    259 ;   A     initial line length
+                                    260 ; output:
+                                    261 ;   A     line length 
+                                    262 ;   X     tib address 
+                                    263 ;--------------------------
+                           00007F   264 MAX_LEN=TIB_SIZE-1
+                           000001   265 	HI_LL=1
+                           000002   266 	LN_LEN=2
+                           000003   267 	CHAR=3 
+                           000003   268 	VSIZE=CHAR  
+      0081C8                        269 readln::
+      000148                        270 	_vars VSIZE
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 42.
 Hexadecimal [24-Bits]
 
 
 
-      0081CA 0F 03            [ 1]  270 	clr (CHAR,sp) 
-      0081CC 0F 01            [ 1]  271 	clr (HI_LL,sp)
-      0081CE 6B 02            [ 1]  272 	ld (LN_LEN,sp),a
-      0081D0 AE 16 C0         [ 2]  273 	ldw x,#tib 
-      0081D3 4D               [ 1]  274 	tnz a 
-      0081D4 27 09            [ 1]  275 	jreq 1$
-      0081D6 CD 81 86         [ 4]  276 	call puts 
-      0081D9 AE 16 C0         [ 2]  277 	ldw x,#tib
-      0081DC 72 FB 01         [ 2]  278 	addw x,(HI_LL,sp)
-      0081DF                        279 1$:
-      0081DF CD 81 5E         [ 4]  280 	call uart_getc
-      0081E2 CD 82 D1         [ 4]  281 	call to_upper
-      0081E5 6B 03            [ 1]  282 	ld (CHAR,sp),a 
-      0081E7 A1 20            [ 1]  283 	cp a,#SPACE 
-      0081E9 24 1D            [ 1]  284 	jruge 4$
-      0081EB A1 0D            [ 1]  285 	cp a,#CR 
-      0081ED 26 02            [ 1]  286 	jrne 2$
-      0081EF 20 2B            [ 2]  287 	jra 9$ 
-      0081F1                        288 2$:
-      0081F1 A1 0A            [ 1]  289 	cp a,#LF 
-      0081F3 26 02            [ 1]  290 	jrne 3$
-      0081F5 20 25            [ 2]  291 	jra 9$
-      0081F7                        292 3$:
-      0081F7 A1 08            [ 1]  293 	cp a,#BS 
-      0081F9 26 E4            [ 1]  294 	jrne 1$ 
-      0081FB 0D 02            [ 1]  295 	tnz (LN_LEN,sp)
-      0081FD 27 E0            [ 1]  296 	jreq 1$ 
-      0081FF CD 81 91         [ 4]  297 	call bksp 
-      008202 5A               [ 2]  298 	decw x 
-      008203 7F               [ 1]  299 	clr (x)
-      008204 0A 02            [ 1]  300 	dec (LN_LEN,sp)
-      008206 20 D7            [ 2]  301 	jra 1$ 
-      008208                        302 4$:	
-                                    303 ; append character to end of line 
-      008208 7B 02            [ 1]  304 	ld a,(LN_LEN,sp)
-      00820A A1 7F            [ 1]  305 	cp a,#MAX_LEN 
-      00820C 2B 02            [ 1]  306 	jrmi 5$
-      00820E 20 CF            [ 2]  307     jra 1$ 
-      008210                        308 5$:
-      008210 7B 03            [ 1]  309 	ld a,(CHAR,sp)
-      008212 CD 81 4F         [ 4]  310 	call uart_putc 
-      008215 F7               [ 1]  311 	ld (x),a 
-      008216 5C               [ 1]  312 	incw x 
-      008217 7F               [ 1]  313 	clr (x)
-      008218 0C 02            [ 1]  314 	inc (LN_LEN,sp)
-      00821A 20 C3            [ 2]  315 	jra 1$ 
-      00821C CD 81 4F         [ 4]  316 9$:	call uart_putc  
-      00821F                        317 10$: 
-      00821F AE 16 C0         [ 2]  318 	ldw x,#tib 
-      008222 7B 02            [ 1]  319 	ld a,(LN_LEN,sp)
-      0001A4                        320 	_drop VSIZE 
+      0081C8 52 03            [ 2]    1     sub sp,#VSIZE 
+      0081CA 0F 03            [ 1]  271 	clr (CHAR,sp) 
+      0081CC 0F 01            [ 1]  272 	clr (HI_LL,sp)
+      0081CE 6B 02            [ 1]  273 	ld (LN_LEN,sp),a
+      0081D0 AE 16 C0         [ 2]  274 	ldw x,#tib 
+      0081D3 4D               [ 1]  275 	tnz a 
+      0081D4 27 09            [ 1]  276 	jreq 1$
+      0081D6 CD 81 86         [ 4]  277 	call puts 
+      0081D9 AE 16 C0         [ 2]  278 	ldw x,#tib
+      0081DC 72 FB 01         [ 2]  279 	addw x,(HI_LL,sp)
+      0081DF                        280 1$:
+      0081DF CD 81 5E         [ 4]  281 	call uart_getc
+      0081E2 CD 82 D1         [ 4]  282 	call to_upper
+      0081E5 6B 03            [ 1]  283 	ld (CHAR,sp),a 
+      0081E7 A1 20            [ 1]  284 	cp a,#SPACE 
+      0081E9 24 1D            [ 1]  285 	jruge 4$
+      0081EB A1 0D            [ 1]  286 	cp a,#CR 
+      0081ED 26 02            [ 1]  287 	jrne 2$
+      0081EF 20 2B            [ 2]  288 	jra 9$ 
+      0081F1                        289 2$:
+      0081F1 A1 0A            [ 1]  290 	cp a,#LF 
+      0081F3 26 02            [ 1]  291 	jrne 3$
+      0081F5 20 25            [ 2]  292 	jra 9$
+      0081F7                        293 3$:
+      0081F7 A1 08            [ 1]  294 	cp a,#BS 
+      0081F9 26 E4            [ 1]  295 	jrne 1$ 
+      0081FB 0D 02            [ 1]  296 	tnz (LN_LEN,sp)
+      0081FD 27 E0            [ 1]  297 	jreq 1$ 
+      0081FF CD 81 91         [ 4]  298 	call bksp 
+      008202 5A               [ 2]  299 	decw x 
+      008203 7F               [ 1]  300 	clr (x)
+      008204 0A 02            [ 1]  301 	dec (LN_LEN,sp)
+      008206 20 D7            [ 2]  302 	jra 1$ 
+      008208                        303 4$:	
+                                    304 ; append character to end of line 
+      008208 7B 02            [ 1]  305 	ld a,(LN_LEN,sp)
+      00820A A1 7F            [ 1]  306 	cp a,#MAX_LEN 
+      00820C 2B 02            [ 1]  307 	jrmi 5$
+      00820E 20 CF            [ 2]  308     jra 1$ 
+      008210                        309 5$:
+      008210 7B 03            [ 1]  310 	ld a,(CHAR,sp)
+      008212 CD 81 4F         [ 4]  311 	call uart_putc 
+      008215 F7               [ 1]  312 	ld (x),a 
+      008216 5C               [ 1]  313 	incw x 
+      008217 7F               [ 1]  314 	clr (x)
+      008218 0C 02            [ 1]  315 	inc (LN_LEN,sp)
+      00821A 20 C3            [ 2]  316 	jra 1$ 
+      00821C CD 81 4F         [ 4]  317 9$:	call uart_putc  
+      00821F                        318 10$: 
+      00821F AE 16 C0         [ 2]  319 	ldw x,#tib 
+      008222 7B 02            [ 1]  320 	ld a,(LN_LEN,sp)
+      0001A4                        321 	_drop VSIZE 
       008224 5B 03            [ 2]    1     addw sp,#VSIZE 
-      008226 81               [ 4]  321 	ret 
-                                    322 
-                                    323 ;----------------------------------
+      008226 81               [ 4]  322 	ret 
+                                    323 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 43.
 Hexadecimal [24-Bits]
 
 
 
-                                    324 ; convert to hexadecimal digit 
-                                    325 ; input:
-                                    326 ;   A       digit to convert 
-                                    327 ; output:
-                                    328 ;   A       hexdecimal character 
-                                    329 ;----------------------------------
-      008227                        330 to_hex_char::
-      008227 A4 0F            [ 1]  331 	and a,#15 
-      008229 A1 0A            [ 1]  332 	cp a,#10 
-      00822B 2B 02            [ 1]  333 	jrmi 1$ 
-      00822D AB 07            [ 1]  334 	add a,#7
-      00822F AB 30            [ 1]  335 1$: add a,#'0 
-      008231 81               [ 4]  336 	ret 
-                                    337 
-                                    338 ;------------------------------
-                                    339 ; print byte  in hexadecimal 
-                                    340 ; on console
-                                    341 ; no space separator 
-                                    342 ; input:
-                                    343 ;    A		byte to print
-                                    344 ;------------------------------
-      008232                        345 print_hex::
-      008232 88               [ 1]  346 	push a 
-      008233 4E               [ 1]  347 	swap a 
-      008234 CD 82 27         [ 4]  348 	call to_hex_char 
-      008237 CD 81 4F         [ 4]  349 	call putc 
-      00823A 84               [ 1]  350     pop a  
-      00823B CD 82 27         [ 4]  351 	call to_hex_char
-      00823E CD 81 4F         [ 4]  352 	call putc   
-      008241 81               [ 4]  353 	ret 
-                                    354 
-                                    355 ;------------------------------
-                                    356 ; print A in decimal base 
-                                    357 ; not space after, no leading 
-                                    358 ; zero.
-                                    359 ; input:
-                                    360 ;    A    int8 to print 
-                                    361 ;-------------------------------
-      008242                        362 print_dec:
-      008242 89               [ 2]  363 	pushw x 
-      008243 5F               [ 1]  364 	clrw x 
-      008244 97               [ 1]  365 	ld xl,a 
-      008245 A6 0A            [ 1]  366 	ld a,#10
-      008247 62               [ 2]  367 	div x,a  
-      008248 88               [ 1]  368 	push a 
-      008249 A6 0A            [ 1]  369 	ld a,#10 
-      00824B 62               [ 2]  370 	div x,a 
-      00824C 88               [ 1]  371 	push a 
-      00824D 9F               [ 1]  372 	ld a,xl 
-      00824E 4D               [ 1]  373 	tnz a 
-      00824F 27 03            [ 1]  374 	jreq 1$ 
-      008251 CD 82 61         [ 4]  375 	call prt_digit 
-      008254 84               [ 1]  376 1$: pop a 
-      008255 4D               [ 1]  377 	tnz a 
-      008256 27 03            [ 1]  378 	jreq 2$ 
+                                    324 ;----------------------------------
+                                    325 ; convert to hexadecimal digit 
+                                    326 ; input:
+                                    327 ;   A       digit to convert 
+                                    328 ; output:
+                                    329 ;   A       hexdecimal character 
+                                    330 ;----------------------------------
+      008227                        331 to_hex_char::
+      008227 A4 0F            [ 1]  332 	and a,#15 
+      008229 A1 0A            [ 1]  333 	cp a,#10 
+      00822B 2B 02            [ 1]  334 	jrmi 1$ 
+      00822D AB 07            [ 1]  335 	add a,#7
+      00822F AB 30            [ 1]  336 1$: add a,#'0 
+      008231 81               [ 4]  337 	ret 
+                                    338 
+                                    339 ;------------------------------
+                                    340 ; print byte  in hexadecimal 
+                                    341 ; on console
+                                    342 ; no space separator 
+                                    343 ; input:
+                                    344 ;    A		byte to print
+                                    345 ;------------------------------
+      008232                        346 print_hex::
+      008232 88               [ 1]  347 	push a 
+      008233 4E               [ 1]  348 	swap a 
+      008234 CD 82 27         [ 4]  349 	call to_hex_char 
+      008237 CD 81 4F         [ 4]  350 	call putc 
+      00823A 84               [ 1]  351     pop a  
+      00823B CD 82 27         [ 4]  352 	call to_hex_char
+      00823E CD 81 4F         [ 4]  353 	call putc   
+      008241 81               [ 4]  354 	ret 
+                                    355 
+                                    356 ;------------------------------
+                                    357 ; print A in decimal base 
+                                    358 ; not space after, no leading 
+                                    359 ; zero.
+                                    360 ; input:
+                                    361 ;    A    int8 to print 
+                                    362 ;-------------------------------
+      008242                        363 print_dec:
+      008242 89               [ 2]  364 	pushw x 
+      008243 5F               [ 1]  365 	clrw x 
+      008244 97               [ 1]  366 	ld xl,a 
+      008245 A6 0A            [ 1]  367 	ld a,#10
+      008247 62               [ 2]  368 	div x,a  
+      008248 88               [ 1]  369 	push a 
+      008249 A6 0A            [ 1]  370 	ld a,#10 
+      00824B 62               [ 2]  371 	div x,a 
+      00824C 88               [ 1]  372 	push a 
+      00824D 9F               [ 1]  373 	ld a,xl 
+      00824E 4D               [ 1]  374 	tnz a 
+      00824F 27 03            [ 1]  375 	jreq 1$ 
+      008251 CD 82 61         [ 4]  376 	call prt_digit 
+      008254 84               [ 1]  377 1$: pop a 
+      008255 4D               [ 1]  378 	tnz a 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 44.
 Hexadecimal [24-Bits]
 
 
 
-      008258 CD 82 61         [ 4]  379 	call prt_digit 
-      00825B 84               [ 1]  380 2$:	pop a 
-      00825C CD 82 61         [ 4]  381 	call prt_digit 
-      00825F 85               [ 2]  382 	popw x 
-      008260 81               [ 4]  383 	ret 
-      008261                        384 prt_digit:
-      008261 AB 30            [ 1]  385 	add a,#'0 
-      008263 CD 81 4F         [ 4]  386 	call putc 
-      008266 81               [ 4]  387 	ret 
-                                    388 
+      008256 27 03            [ 1]  379 	jreq 2$ 
+      008258 CD 82 61         [ 4]  380 	call prt_digit 
+      00825B 84               [ 1]  381 2$:	pop a 
+      00825C CD 82 61         [ 4]  382 	call prt_digit 
+      00825F 85               [ 2]  383 	popw x 
+      008260 81               [ 4]  384 	ret 
+      008261                        385 prt_digit:
+      008261 AB 30            [ 1]  386 	add a,#'0 
+      008263 CD 81 4F         [ 4]  387 	call putc 
+      008266 81               [ 4]  388 	ret 
                                     389 
-                                    390 ;------------------------
-                                    391 ; print int8 
-                                    392 ; input:
-                                    393 ;    A    int8 
-                                    394 ; output:
-                                    395 ;    none 
-                                    396 ;-----------------------
-      008267                        397 prt_i8:
-      008267 5F               [ 1]  398 	clrw x 
-      008268 97               [ 1]  399 	ld xl,a  
-                                    400 
+                                    390 
+                                    391 ;------------------------
+                                    392 ; print int8 
+                                    393 ; input:
+                                    394 ;    A    int8 
+                                    395 ; output:
+                                    396 ;    none 
+                                    397 ;-----------------------
+      008267                        398 prt_i8:
+      008267 5F               [ 1]  399 	clrw x 
+      008268 97               [ 1]  400 	ld xl,a  
                                     401 
-                                    402 ;------------------------------------
-                                    403 ; print integer  
-                                    404 ; input:
-                                    405 ;	X  		    integer to print 
-                                    406 ;	'base' 		numerical base for conversion 
-                                    407 ;    A 			signed||unsigned conversion
-                                    408 ;  output:
-                                    409 ;    A          string length
-                                    410 ;------------------------------------
-      008269                        411 print_int::
-      0001E9                        412 	_ldaz base 
+                                    402 
+                                    403 ;------------------------------------
+                                    404 ; print integer  
+                                    405 ; input:
+                                    406 ;	X  		    integer to print 
+                                    407 ;	'base' 		numerical base for conversion 
+                                    408 ;    A 			signed||unsigned conversion
+                                    409 ;  output:
+                                    410 ;    A          string length
+                                    411 ;------------------------------------
+      008269                        412 print_int::
+      0001E9                        413 	_ldaz base 
       008269 B6 00                    1     .byte 0xb6,base 
-      00826B A0 10            [ 1]  413 	sub a,#16 
-      00826D 27 02            [ 1]  414 	jreq 1$
-      00826F A6 FF            [ 1]  415 	ld a,#255  ; signed conversion  when base 10 
-      008271                        416 1$:
-      008271 CD 82 7A         [ 4]  417     call itoa  ; conversion entier en  .asciz
-      008274 88               [ 1]  418 	push a 
-      008275 CD 81 86         [ 4]  419 	call puts
-      008278 84               [ 1]  420 	pop a 
-      008279 81               [ 4]  421     ret	
-                                    422 
-                                    423 ;------------------------------------
-                                    424 ; convert integer in x to string
-                                    425 ; input:
-                                    426 ;   'base'	conversion base 
-                                    427 ;	X   	integer to convert
-                                    428 ;   A       0=unsigned, else signed 
-                                    429 ; output:
-                                    430 ;   X  		pointer to first char of string
-                                    431 ;   A       string length
-                                    432 ; use:
+      00826B A0 10            [ 1]  414 	sub a,#16 
+      00826D 27 02            [ 1]  415 	jreq 1$
+      00826F A6 FF            [ 1]  416 	ld a,#255  ; signed conversion  when base 10 
+      008271                        417 1$:
+      008271 CD 82 7A         [ 4]  418     call itoa  ; conversion entier en  .asciz
+      008274 88               [ 1]  419 	push a 
+      008275 CD 81 86         [ 4]  420 	call puts
+      008278 84               [ 1]  421 	pop a 
+      008279 81               [ 4]  422     ret	
+                                    423 
+                                    424 ;------------------------------------
+                                    425 ; convert integer in x to string
+                                    426 ; input:
+                                    427 ;   'base'	conversion base 
+                                    428 ;	X   	integer to convert
+                                    429 ;   A       0=unsigned, else signed 
+                                    430 ; output:
+                                    431 ;   X  		pointer to first char of string
+                                    432 ;   A       string length
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 45.
 Hexadecimal [24-Bits]
 
 
 
-                                    433 ;   pad     to build string 
-                                    434 ;------------------------------------
-                           000001   435 	SIGN=1  ; 1 byte, integer sign 
-                           000002   436 	LEN=SIGN+1   ; 1 byte, string length 
-                           000002   437 	VSIZE=2 ;locals size
-      00827A                        438 itoa::
-      00827A 90 89            [ 2]  439 	pushw y 
-      0001FC                        440 	_vars VSIZE
+                                    433 ; use:
+                                    434 ;   pad     to build string 
+                                    435 ;------------------------------------
+                           000001   436 	SIGN=1  ; 1 byte, integer sign 
+                           000002   437 	LEN=SIGN+1   ; 1 byte, string length 
+                           000002   438 	VSIZE=2 ;locals size
+      00827A                        439 itoa::
+      00827A 90 89            [ 2]  440 	pushw y 
+      0001FC                        441 	_vars VSIZE
       00827C 52 02            [ 2]    1     sub sp,#VSIZE 
-      00827E 0F 02            [ 1]  441 	clr (LEN,sp) ; string length  
-      008280 0F 01            [ 1]  442 	clr (SIGN,sp)    ; sign
-      008282 4D               [ 1]  443 	tnz a
-      008283 27 06            [ 1]  444 	jreq 1$ ; unsigned conversion  
-      008285 5D               [ 2]  445 	tnzw x 
-      008286 2A 03            [ 1]  446 	jrpl 1$ 
-      008288 03 01            [ 1]  447 	cpl (SIGN,sp)
-      00828A 50               [ 2]  448 	negw x 
-      00828B                        449 1$:
-                                    450 ; initialize string pointer 
-                                    451 ; build string at end of pad  
-      00828B 90 AE 17 40      [ 2]  452 	ldw y,#pad 
-      00828F 72 A9 00 40      [ 2]  453 	addw y,#PAD_SIZE 
-      008293 90 5A            [ 2]  454 	decw y 
-      008295 90 7F            [ 1]  455 	clr (y)
-      008297 A6 20            [ 1]  456 	ld a,#SPACE
-      008299 90 5A            [ 2]  457 	decw y
-      00829B 90 F7            [ 1]  458 	ld (y),a 
-      00829D 0C 02            [ 1]  459 	inc (LEN,sp)
-      00829F                        460 itoa_loop:
-      00021F                        461     _ldaz base 
+      00827E 0F 02            [ 1]  442 	clr (LEN,sp) ; string length  
+      008280 0F 01            [ 1]  443 	clr (SIGN,sp)    ; sign
+      008282 4D               [ 1]  444 	tnz a
+      008283 27 06            [ 1]  445 	jreq 1$ ; unsigned conversion  
+      008285 5D               [ 2]  446 	tnzw x 
+      008286 2A 03            [ 1]  447 	jrpl 1$ 
+      008288 03 01            [ 1]  448 	cpl (SIGN,sp)
+      00828A 50               [ 2]  449 	negw x 
+      00828B                        450 1$:
+                                    451 ; initialize string pointer 
+                                    452 ; build string at end of pad  
+      00828B 90 AE 17 40      [ 2]  453 	ldw y,#pad 
+      00828F 72 A9 00 40      [ 2]  454 	addw y,#PAD_SIZE 
+      008293 90 5A            [ 2]  455 	decw y 
+      008295 90 7F            [ 1]  456 	clr (y)
+      008297 A6 20            [ 1]  457 	ld a,#SPACE
+      008299 90 5A            [ 2]  458 	decw y
+      00829B 90 F7            [ 1]  459 	ld (y),a 
+      00829D 0C 02            [ 1]  460 	inc (LEN,sp)
+      00829F                        461 itoa_loop:
+      00021F                        462     _ldaz base 
       00829F B6 00                    1     .byte 0xb6,base 
-      0082A1 62               [ 2]  462     div x,a 
-      0082A2 AB 30            [ 1]  463     add a,#'0  ; remainder of division
-      0082A4 A1 3A            [ 1]  464     cp a,#'9+1
-      0082A6 2B 02            [ 1]  465     jrmi 2$
-      0082A8 AB 07            [ 1]  466     add a,#7 
-      0082AA                        467 2$:	
-      0082AA 90 5A            [ 2]  468 	decw y
-      0082AC 90 F7            [ 1]  469     ld (y),a
-      0082AE 0C 02            [ 1]  470 	inc (LEN,sp)
-                                    471 ; if x==0 conversion done
-      0082B0 5D               [ 2]  472 	tnzw x 
-      0082B1 26 EC            [ 1]  473     jrne itoa_loop
-      000233                        474 	_ldaz base 
+      0082A1 62               [ 2]  463     div x,a 
+      0082A2 AB 30            [ 1]  464     add a,#'0  ; remainder of division
+      0082A4 A1 3A            [ 1]  465     cp a,#'9+1
+      0082A6 2B 02            [ 1]  466     jrmi 2$
+      0082A8 AB 07            [ 1]  467     add a,#7 
+      0082AA                        468 2$:	
+      0082AA 90 5A            [ 2]  469 	decw y
+      0082AC 90 F7            [ 1]  470     ld (y),a
+      0082AE 0C 02            [ 1]  471 	inc (LEN,sp)
+                                    472 ; if x==0 conversion done
+      0082B0 5D               [ 2]  473 	tnzw x 
+      0082B1 26 EC            [ 1]  474     jrne itoa_loop
+      000233                        475 	_ldaz base 
       0082B3 B6 00                    1     .byte 0xb6,base 
-      0082B5 A0 0A            [ 1]  475 	sub a,#10 
-      0082B7 27 04            [ 1]  476 	jreq 3$
-      0082B9 A6 24            [ 1]  477 	ld a,#'$ 
-      0082BB 20 06            [ 2]  478 	jra 4$
-      0082BD                        479 3$:
-      0082BD 7B 01            [ 1]  480 	ld a,(SIGN,sp)
-      0082BF 27 08            [ 1]  481     jreq 10$
-      0082C1 A6 2D            [ 1]  482     ld a,#'-
-      0082C3                        483 4$:
-      0082C3 90 5A            [ 2]  484     decw y
+      0082B5 A0 0A            [ 1]  476 	sub a,#10 
+      0082B7 27 04            [ 1]  477 	jreq 3$
+      0082B9 A6 24            [ 1]  478 	ld a,#'$ 
+      0082BB 20 06            [ 2]  479 	jra 4$
+      0082BD                        480 3$:
+      0082BD 7B 01            [ 1]  481 	ld a,(SIGN,sp)
+      0082BF 27 08            [ 1]  482     jreq 10$
+      0082C1 A6 2D            [ 1]  483     ld a,#'-
+      0082C3                        484 4$:
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 46.
 Hexadecimal [24-Bits]
 
 
 
-      0082C5 90 F7            [ 1]  485     ld (y),a
-      0082C7 0C 02            [ 1]  486 	inc (LEN,sp)
-      0082C9                        487 10$:
-      0082C9 7B 02            [ 1]  488 	ld a,(LEN,sp)
-      0082CB 93               [ 1]  489 	ldw x,y 
-      00024C                        490 	_drop VSIZE
+      0082C3 90 5A            [ 2]  485     decw y
+      0082C5 90 F7            [ 1]  486     ld (y),a
+      0082C7 0C 02            [ 1]  487 	inc (LEN,sp)
+      0082C9                        488 10$:
+      0082C9 7B 02            [ 1]  489 	ld a,(LEN,sp)
+      0082CB 93               [ 1]  490 	ldw x,y 
+      00024C                        491 	_drop VSIZE
       0082CC 5B 02            [ 2]    1     addw sp,#VSIZE 
-      0082CE 90 85            [ 2]  491 	popw y 
-      0082D0 81               [ 4]  492 	ret
-                                    493 
-                                    494 ;--------------------------
-                                    495 ; convert lower letters 
-                                    496 ; to upper case 
-                                    497 ; input:
-                                    498 ;    A 
-                                    499 ; output:
-                                    500 ;    A 
-                                    501 ;-------------------------
-      0082D1                        502 to_upper:
-      0082D1 A1 61            [ 1]  503 	cp a,#'a 
-      0082D3 2B 06            [ 1]  504 	jrmi 9$ 
-      0082D5 A1 7B            [ 1]  505 	cp a,#'z+1 
-      0082D7 2A 02            [ 1]  506 	jrpl 9$ 
-      0082D9 A4 DF            [ 1]  507 	and a,#0xDF 
-      0082DB                        508 9$:
-      0082DB 81               [ 4]  509 	ret 
+      0082CE 90 85            [ 2]  492 	popw y 
+      0082D0 81               [ 4]  493 	ret
+                                    494 
+                                    495 ;--------------------------
+                                    496 ; convert lower letters 
+                                    497 ; to upper case 
+                                    498 ; input:
+                                    499 ;    A 
+                                    500 ; output:
+                                    501 ;    A 
+                                    502 ;-------------------------
+      0082D1                        503 to_upper:
+      0082D1 A1 61            [ 1]  504 	cp a,#'a 
+      0082D3 2B 06            [ 1]  505 	jrmi 9$ 
+      0082D5 A1 7B            [ 1]  506 	cp a,#'z+1 
+      0082D7 2A 02            [ 1]  507 	jrpl 9$ 
+      0082D9 A4 DF            [ 1]  508 	and a,#0xDF 
+      0082DB                        509 9$:
+      0082DB 81               [ 4]  510 	ret 
 ASxxxx Assembler V02.00 + NoICE + SDCC mods  (STMicroelectronics STM8), page 47.
 Hexadecimal [24-Bits]
 
 
 
                                       1 ;;
-                                      2 ; Copyright Jacques Deschênes 2025
-                                      3 ; This file is part of eeProg 
+                                      2 ; Copyright Jacques Deschênes 2025  
+                                      3 ; This file is part of eeprom-programmer 
                                       4 ;
-                                      5 ;     eeProg is free software: you can redistribute it and/or modify
+                                      5 ;     eeprom-programmer is free software: you can redistribute it and/or modify
                                       6 ;     it under the terms of the GNU General Public License as published by
                                       7 ;     the Free Software Foundation, either version 3 of the License, or
                                       8 ;     (at your option) any later version.
                                       9 ;
-                                     10 ;     eeProg is distributed in the hope that it will be useful,
+                                     10 ;     eeprom-programmer is distributed in the hope that it will be useful,
                                      11 ;     but WITHOUT ANY WARRANTY; without even the implied warranty of
                                      12 ;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
                                      13 ;     GNU General Public License for more details.
                                      14 ;
                                      15 ;     You should have received a copy of the GNU General Public License
-                                     16 ;     along with eeProg.  If not, see <http://www.gnu.org/licenses/>.
+                                     16 ;     along with eeprom-programmer.  If not, see <http://www.gnu.org/licenses/>.
                                      17 ;;
-                                     18 ;--------------------------------------
+                                     18 
                                      19 
                                      20 ;;---------------------------------------
                                      21 ;; at28C64B || at28c256  EEPROM programmer 
