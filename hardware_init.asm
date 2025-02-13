@@ -1,19 +1,19 @@
 ;;
-; Copyright Jacques Deschênes 2024,2025  
-; This file is part of stm8_ebi 
+; Copyright Jacques Deschênes 2025  
+; This file is part of eeprom-programmer 
 ;
-;     stm8_ebi is free software: you can redistribute it and/or modify
+;     eeprom-programmer is free software: you can redistribute it and/or modify
 ;     it under the terms of the GNU General Public License as published by
 ;     the Free Software Foundation, either version 3 of the License, or
 ;     (at your option) any later version.
 ;
-;     stm8_ebi is distributed in the hope that it will be useful,
+;     eeprom-programmer is distributed in the hope that it will be useful,
 ;     but WITHOUT ANY WARRANTY; without even the implied warranty of
 ;     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 ;     GNU General Public License for more details.
 ;
 ;     You should have received a copy of the GNU General Public License
-;     along with stm8_ebi.  If not, see <http://www.gnu.org/licenses/>.
+;     along with eeprom-programmer.  If not, see <http://www.gnu.org/licenses/>.
 ;;
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
