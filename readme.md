@@ -29,7 +29,7 @@ L'embase accepte les EEPROM compatibles **AT28C64B** de **8KO** et **AT28C256** 
 Une fois la carte NUCLEO_8S208RB branchée au PC il faut utiliser un émulateur de terminal pour communiquer avec le programmeur.
 
 ## Liste des commandes
-L'interface reprend le format du [WOZMON](https://github.com/Picatout/pomme-I).  avec quelques différences aux niveaux des commandes. Au lieu de lire et d'écrire dans la mémoire du STM8 les opérations sont effectuées sur l'EEPROM. dans de qui suit **adr** et **data** doivent-être entrés en hexadécimal comme dans le [WOZMON](https://github.com/Picatout/pomme-I).
+L'interface reprend le format du [WOZMON](https://github.com/Picatout/stm8_wozmon).  avec quelques différences aux niveaux des commandes. Au lieu de lire et d'écrire dans la mémoire du STM8 les opérations sont effectuées sur l'EEPROM. dans de qui suit **adr** et **data** doivent-être entrés en hexadécimal comme dans le [WOZMON](https://github.com/Picatout/stm8_wozmon).
 
 * **adr&lt;RETURN&gt;** affiche le contenue de l'EEPROM à cette adresse. un point **(.)** suivit de **&lt;RETURN&gt;** affiche le contenu de l'adresse suivante.
 * **adr1.adr2&lt;RETURN&gt;** affiche le contenue de la plage mémoire à partir de **adr1** jusqu'à **adr2**. 16 octets sont affichés par ligne.
