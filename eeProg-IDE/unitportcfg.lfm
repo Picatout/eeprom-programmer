@@ -1,0 +1,80 @@
+object FormPortCfg: TFormPortCfg
+  Left = 627
+  Height = 250
+  Top = 216
+  Width = 337
+  BorderStyle = bsDialog
+  Caption = 'serial port selection'
+  ClientHeight = 250
+  ClientWidth = 337
+  OnCreate = FormCreate
+  LCLVersion = '3.8.0.0'
+  object BtnOk: TButton
+    Left = 144
+    Height = 25
+    Top = 112
+    Width = 75
+    Caption = '&Ok'
+    TabOrder = 0
+    OnClick = BtnOkClick
+  end
+  object BtnCancel: TButton
+    Left = 144
+    Height = 25
+    Top = 152
+    Width = 75
+    Caption = '&Cancel'
+    TabOrder = 1
+    OnClick = BtnCancelClick
+  end
+  object Label1: TLabel
+    Left = 72
+    Height = 17
+    Top = 32
+    Width = 60
+    Caption = 'serial port'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Edit1: TEdit
+    Left = 144
+    Height = 25
+    Top = 32
+    Width = 80
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    TabOrder = 2
+    Text = 'com3'
+  end
+  object Label2: TLabel
+    Left = 40
+    Height = 17
+    Top = 72
+    Width = 97
+    Caption = 'line delay (msec)'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object Edit2: TEdit
+    Left = 144
+    Height = 25
+    Top = 72
+    Width = 80
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+    TabOrder = 3
+    Text = '15'
+  end
+end

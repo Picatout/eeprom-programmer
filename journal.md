@@ -1,4 +1,6 @@
 ### 2025-02-16
+* Débuter le projet [eeProg-IDE](eeProg-IDE/eeProg_IDE.lpr), un enviromment graphique pour le programmeur eeProg conçu en free  Pascal en utilisant l'IDE [Lazarus](https://www.lazarus-ide.org/). La version 3.0 est disponible dans les dépôts de Ubuntu 24.04LTS.
+
 * la variable *base* n'était pas initialisée.
 * Modifié la routine *print_txt* pour mettre la chaîne ASCII en commentaire. 
 * bogue dans XAMBLOCK
