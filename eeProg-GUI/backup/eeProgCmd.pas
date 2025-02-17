@@ -1,36 +1,61 @@
 unit eeProgCmd;
-
+{
+ communication with the programmer
+ using serial port
+}
 {$mode ObjFPC}{$H+}
 
 interface
 uses
   Classes, SysUtils,StdCtrls;
 
+function OpenComm(ComPortName:String):LongInt;
+
+procedure CloseComm();
+
 procedure eeProgCmd(cmd:String;answer:Tmemo);
 
 implementation
-{
-  Usage:
-  TestSerialPortCom
-    Uses port COM3.
-    print '0.F<CR>'
-    read result and display it.
-    and leave
-}
 uses
-  serial, crt;
+  serial;
+
+var
+  serialhandle : LongInt;
+
+function OpenComm(ComPortName:String):LongInt;
+var
+  Flags        : TSerialFlags; { set of (RtsCtsFlowControl); }
+
+begin
+  CloseComm; // in case a port is already open
+  serialhandle := SerOpen(ComPortName);
+  if (serialHandle>0) then
+  begin
+     Flags:= []; // none
+     SerSetParams(serialhandle, 115200, 8, NoneParity, 1,Flags);
+  end;
+  result:= serialHandle;
+end;
+
+procedure CloseComm;
+begin
+  if (serialHandle>0) then
+  begin
+  SerSync(serialhandle); // flush out any remaining before closure
+  SerFlushOutput(serialhandle); // discard any remaining output
+  SerClose(serialhandle);
+  serialHandle:=-1;
+  end;
+end;
+
 
 procedure eeProgCmd(cmd:String;answer:Tmemo);
 var
-  serialhandle : LongInt;
-  ComPortName  : String;
-  s,tmpstr,txt : AnsiString;
+  s : AnsiString;
   ComIn        : integer;
-  ComPortNr    : Integer;
   writecount   : Integer;
   readCount    : Integer;
   status       : LongInt;
-  Flags        : TSerialFlags; { set of (RtsCtsFlowControl); }
   ErrorCode    : Integer;
 
 
@@ -59,18 +84,7 @@ begin
 end;
 
 begin
-  ComPortNr:= 3;
-  tmpstr:= '';
-  txt:= '0.F';
-
-  str(ComPortNr, tmpstr);
-
-  ComPortName:= 'COM'+tmpstr+':';
-
-  serialhandle := SerOpen(ComPortName);
-  Flags:= []; // none
-  SerSetParams(serialhandle, 115200, 8, NoneParity, 1,Flags);
-
+  if serialHandle<=0 then exit;
   s:= cmd; // use the input text
   s:= s+#13; // CR
   writecount:= s.length;
@@ -93,11 +107,6 @@ begin
   else
     writeln('Error: unable to send');
 
-  SerSync(serialhandle); // flush out any remaining before closure
-
-  SerFlushOutput(serialhandle); // discard any remaining output
-
-  SerClose(serialhandle);
   end;
 
 end.

@@ -20,11 +20,14 @@ type
     Label2: TLabel;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
+    procedure BtnOkEnter(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
 
   public
-
+    CommPortName:AnsiString;
+    LineDelay:integer;
   end;
 
 var
@@ -41,14 +44,26 @@ begin
 
 end;
 
+procedure TFormPortCfg.FormShow(Sender: TObject);
+begin
+    Edit1.Text:=CommPortName;
+    Edit2.Text:=IntToStr(LineDelay);
+end;
+
 procedure TFormPortCfg.BtnOkClick(Sender: TObject);
 begin
-  formPortCfg.Close;
+  CommPortName:=Edit1.Text;
+  LineDelay:=StrToInt(Edit2.Text);
+  Close;
+end;
+
+procedure TFormPortCfg.BtnOkEnter(Sender: TObject);
+begin
 end;
 
 procedure TFormPortCfg.BtnCancelClick(Sender: TObject);
 begin
-  formPortCfg.Close;
+  Close;
 end;
 
 end.

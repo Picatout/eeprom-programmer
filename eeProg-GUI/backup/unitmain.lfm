@@ -1,28 +1,31 @@
 object FormMain: TFormMain
-  Left = 450
+  Left = 472
   Height = 567
-  Top = 141
+  Top = 362
   Width = 895
-  Caption = 'eeProg IDE'
+  Caption = 'eeProg'
   ClientHeight = 567
   ClientWidth = 895
   Menu = MainMenu1
-  LCLVersion = '3.8.0.0'
+  OnActivate = FormActivate
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '3.0.0.3'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 544
+    Height = 20
+    Top = 547
     Width = 895
     Panels = <>
   end
   object Memo1: TMemo
     Left = 0
     Height = 512
-    Top = 32
+    Top = 35
     Width = 895
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Courier'
     Font.Pitch = fpFixed
     Font.Quality = fqDraft
@@ -44,7 +47,7 @@ object FormMain: TFormMain
   end
   object EditCmd: TEdit
     Left = 143
-    Height = 32
+    Height = 35
     Top = 0
     Width = 752
     Align = alRight

@@ -32,6 +32,9 @@ type
     procedure EditCmdEditingDone(Sender: TObject);
     procedure EditCmdExit(Sender: TObject);
     procedure EditCmdKeyPress(Sender: TObject; var Key: char);
+    procedure FormActivate(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure Memo1Change(Sender: TObject);
     procedure MenuItem6Click(Sender: TObject);
     procedure MenuItemPortClick(Sender: TObject);
@@ -47,7 +50,10 @@ var
 
 implementation
 uses
-  unitPortCfg, eeProgCmd ;
+  unitPortCfg, eeProgCmd,CommError ;
+
+var
+DlgPortCfg:TFormPortCfg;
 
 {$R *.lfm}
 
@@ -59,8 +65,17 @@ begin
 end;
 
 procedure TFormMain.MenuItemPortClick(Sender: TObject);
+var
+ serHandle:longInt;
 begin
-  FormPortCfg.Show;
+  DlgPortCfg.ShowModal;
+  memo1.lines.append(DlgPortCfg.CommPortname);
+  serhandle:=OpenComm(DlgPortCfg.CommPortname);
+  if  serHandle<0 then FormCommError.show
+  else
+    begin
+    memo1.lines[memo1.lines.count]:=memo1.lines[memo1.lines.count]+' opended'
+    end;
 end;
 
 procedure TFormMain.MenuItem6Click(Sender: TObject);
@@ -89,6 +104,21 @@ procedure TFormMain.EditCmdKeyPress(Sender: TObject; var Key: char);
 begin
   key:=UpCase(key);
    if (key=#13) then FormMain.EditCmdExit(self)
+end;
+
+procedure TFormMain.FormActivate(Sender: TObject);
+begin
+end;
+
+procedure TFormMain.FormCreate(Sender: TObject);
+begin
+  DlgPortCfg:=TFormPortCfg.Create(FormMain);
+  DlgPortCfg.LineDelay:=15;
+  DlgPortCfg.CommPortName:='/dev/ttyACM0';
+end;
+
+procedure TFormMain.FormShow(Sender: TObject);
+begin
 end;
 
 procedure TFormMain.Memo1Change(Sender: TObject);

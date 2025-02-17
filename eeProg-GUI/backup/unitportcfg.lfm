@@ -1,14 +1,15 @@
 object FormPortCfg: TFormPortCfg
-  Left = 627
+  Left = 557
   Height = 250
-  Top = 216
+  Top = 304
   Width = 337
   BorderStyle = bsDialog
   Caption = 'serial port selection'
   ClientHeight = 250
   ClientWidth = 337
   OnCreate = FormCreate
-  LCLVersion = '3.8.0.0'
+  OnShow = FormShow
+  LCLVersion = '3.0.0.3'
   object BtnOk: TButton
     Left = 144
     Height = 25
@@ -17,6 +18,7 @@ object FormPortCfg: TFormPortCfg
     Caption = '&Ok'
     TabOrder = 0
     OnClick = BtnOkClick
+    OnEnter = BtnOkEnter
   end
   object BtnCancel: TButton
     Left = 144
@@ -41,22 +43,22 @@ object FormPortCfg: TFormPortCfg
   end
   object Edit1: TEdit
     Left = 144
-    Height = 25
+    Height = 34
     Top = 32
-    Width = 80
+    Width = 117
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
     TabOrder = 2
-    Text = 'com3'
+    Text = '/dev/ttyACM0'
   end
   object Label2: TLabel
     Left = 40
     Height = 17
     Top = 72
-    Width = 97
+    Width = 95
     Caption = 'line delay (msec)'
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -66,7 +68,7 @@ object FormPortCfg: TFormPortCfg
   end
   object Edit2: TEdit
     Left = 144
-    Height = 25
+    Height = 34
     Top = 72
     Width = 80
     Font.CharSet = ANSI_CHARSET
