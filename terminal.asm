@@ -46,15 +46,14 @@
 ; UART receive character
 ; in a FIFO buffer 
 ; CTRL+C (ASCII 3)
-; cancel program execution
+; cancel operation 
 ; and fall back to command line
-; CTRL+X reboot system 
-; CTLR+Z erase EEPROM autorun 
-;        information and reboot
 ;--------------------------
 UartRxHandler: ; console receive char 
 	btjf UART_SR,#UART_SR_RXNE,5$ 
 	ld a,UART_DR 
+	cp a,#CTRL_C 
+	jreq 6$
 	push a 
 	ld a,#rx1_queue 
 	add a,rx1_tail 
@@ -68,6 +67,11 @@ UartRxHandler: ; console receive char
 	ld rx1_tail,a 
 5$:	
 	iret 
+6$:
+	ldw x,#eeProg_1
+	ldw (8,sp),x 
+	iret 
+ 
 
 
 ;---------------------------------------------

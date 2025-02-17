@@ -210,10 +210,11 @@ init_ports:
 ;----------------------
 ;  eeProg entry point 
 ;---------------------
-EEPROG_tibFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
+EEPROG_INFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
 eeProg:
+    mov base,#16 
     call clr_screen
-    ldw x,#EEPROG_tibFO 
+    ldw x,#EEPROG_INFO 
     call puts 
     ld a,#MAJOR
     call print_dec 
@@ -230,7 +231,10 @@ eeProg:
     clr a 
     _clrz xamadr 
     _clrz storadr 
-    _clrz last  
+    _clrz last    
+eeProg_1:
+	ldw x,#STACK_EMPTY ; in case CTRL_C was used 
+	ldw sp,x
 cli: 
     call new_line
     ld a,#'# 
@@ -355,7 +359,7 @@ new_row:
 row:
     call print_mem ; display byte at address  
     cpw x,last 
-    jrmi 2$
+    jrult 2$
 1$:
     call print_text 
     jra 9$ 
@@ -378,13 +382,14 @@ row:
 ;--------------------------------
 print_text:
     pushw x 
-    ldw x,#2 
-    call spaces 
+    ld a,#';
+    call putc 
+    call space 
     clr (y)
     ldw x,#tib 
     call puts 
     call new_line       
-    popw x 
+    popw x
     ret 
 
 ;----------------------------
