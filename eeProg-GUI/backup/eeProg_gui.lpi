@@ -67,6 +67,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="CommError"/>
       </Unit>
+      <Unit>
+        <Filename Value="unitrange.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormRange"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="unitRange"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

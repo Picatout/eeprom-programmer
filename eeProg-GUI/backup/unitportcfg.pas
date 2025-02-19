@@ -76,6 +76,7 @@ end;
 
 procedure TFormPortCfg.BtnCancelClick(Sender: TObject);
 begin
+  CommPortName:='';
   Close;
 end;
 

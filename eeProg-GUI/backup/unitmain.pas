@@ -15,22 +15,21 @@ type
   TFormMain = class(TForm)
     EditCmd: TEdit;
     Label1: TLabel;
-    MainMenu1: TMainMenu;
+    mItemFiles: TMainMenu;
     Memo1: TMemo;
     MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItemPort: TMenuItem;
-    MenuItemSendHex: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
+    mItemConfig: TMenuItem;
+    mItemView: TMenuItem;
+    MItemPortCfg: TMenuItem;
+    MItemProg: TMenuItem;
+    mItemDump: TMenuItem;
+    MItemQuit: TMenuItem;
+    mItemAbout: TMenuItem;
+    mItemErase: TMenuItem;
     OpenDialog: TOpenDialog;
     SaveDialog: TSaveDialog;
     Separator1: TMenuItem;
     StatusBar1: TStatusBar;
-    procedure delayTimer(Sender: TObject);
     procedure EditCmdChange(Sender: TObject);
     procedure EditCmdEditingDone(Sender: TObject);
     procedure EditCmdExit(Sender: TObject);
@@ -40,13 +39,14 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure Memo1Change(Sender: TObject);
-    procedure MenuItemSendHexClick(Sender: TObject);
-    procedure MenuItem6Click(Sender: TObject);
-    procedure MenuItemPortClick(Sender: TObject);
-    procedure MenuItem8Click(Sender: TObject);
+    procedure mItemViewClick(Sender: TObject);
+    procedure MItemProgClick(Sender: TObject);
+    procedure mItemDumpClick(Sender: TObject);
+    procedure MItemPortCfgClick(Sender: TObject);
+    procedure MItemQuitClick(Sender: TObject);
+    procedure mItemEraseClick(Sender: TObject);
   private
   public
-
   end;
 
 var
@@ -54,7 +54,7 @@ var
 
 implementation
 uses
-  unitPortCfg, eeProgCmd,CommError,FileUtil;
+  unitPortCfg, eeProgCmd,CommError,FileUtil,unitRange;
 
 var
 DlgPortCfg:TFormPortCfg;
@@ -63,12 +63,34 @@ DlgPortCfg:TFormPortCfg;
 
 { TFormMain }
 
-procedure TFormMain.MenuItem8Click(Sender: TObject);
+procedure TFormMain.MItemQuitClick(Sender: TObject);
 begin
   close ;
 end;
 
-procedure TFormMain.MenuItemPortClick(Sender: TObject);
+procedure TFormMain.mItemEraseClick(Sender: TObject);
+
+procedure EraseRange;
+var
+   cmd:string;
+begin
+  with FormRange do
+  begin
+    cmd:=StartHex+'X'+EndHex;
+    eeProgCmd.eeProgCmd(cmd,memo1);
+  end;
+
+end;
+
+begin
+  FormRange.ShowModal;
+  if FormRange.confirm then
+  begin
+       EraseRange;
+  end;
+end;
+
+procedure TFormMain.MItemPortCfgClick(Sender: TObject);
 var
  serHandle:longInt;
 begin
@@ -89,7 +111,7 @@ begin
   end;
 end;
 
-procedure TFormMain.MenuItem6Click(Sender: TObject);
+procedure TFormMain.mItemDumpClick(Sender: TObject);
 begin
 
 end;
@@ -130,7 +152,6 @@ end;
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
-  DlgPortCfg.LineDelay:=15;
   DlgPortCfg.CommPortName:='/dev/ttyACM0';
 end;
 
@@ -143,7 +164,22 @@ begin
 
 end;
 
-procedure TFormMain.MenuItemSendHexClick(Sender: TObject);
+procedure TFormMain.mItemViewClick(Sender: TObject);
+var
+    cmd:string;
+begin
+  with FormRange do
+  begin
+       ShowModal;
+       if Confirm then
+       begin
+           cmd:=StartHex+'.'+EndHex;
+           eeprogCmd.eeprogCmd(cmd,memo1);
+       end;
+  end;
+end;
+
+procedure TFormMain.MItemProgClick(Sender: TObject);
 
 
 procedure ProgHexFile(FileName:string);

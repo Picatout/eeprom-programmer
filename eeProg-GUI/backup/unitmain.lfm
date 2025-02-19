@@ -6,7 +6,7 @@ object FormMain: TFormMain
   Caption = 'eeProg'
   ClientHeight = 567
   ClientWidth = 895
-  Menu = MainMenu1
+  Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
@@ -57,48 +57,50 @@ object FormMain: TFormMain
     OnExit = EditCmdExit
     OnKeyPress = EditCmdKeyPress
   end
-  object MainMenu1: TMainMenu
+  object mItemFiles: TMainMenu
     Left = 10
     Top = 11
     object MenuItem1: TMenuItem
-      Caption = 'Files'
-      object MenuItemSendHex: TMenuItem
-        Caption = 'Send HEX file'
-        Hint = 'Send text file to eeProg'
-        OnClick = MenuItemSendHexClick
+      Caption = '&Files'
+      object mItemView: TMenuItem
+        Caption = '&View range'
+        Hint = 'view eeprom range'
+        OnClick = mItemViewClick
       end
-      object MenuItem5: TMenuItem
-        Caption = 'Send binary'
-        Hint = 'Send binary file to eeProg'
+      object mItemErase: TMenuItem
+        Caption = '&Erase range'
+        Hint = 'erase EEPROM range'
+        OnClick = mItemEraseClick
       end
-      object MenuItem6: TMenuItem
-        Caption = 'Read hexdump'
-        Hint = 'hexadecimal dump eeprom to text file'
-        OnClick = MenuItem6Click
+      object MItemProg: TMenuItem
+        Caption = '&Program EEPROM'
+        Hint = 'program EEPROM from file'
+        OnClick = MItemProgClick
       end
-      object MenuItem7: TMenuItem
-        Caption = 'read binary'
-        Hint = 'save eeprom memory to binary file'
+      object mItemDump: TMenuItem
+        Caption = '&Dump range'
+        Hint = 'Dump eeprom range to file'
+        OnClick = mItemDumpClick
       end
       object Separator1: TMenuItem
         Caption = '-'
       end
-      object MenuItem8: TMenuItem
-        Caption = 'Quit'
+      object MItemQuit: TMenuItem
+        Caption = '&Quit'
         Hint = 'Leave eeProg IDE'
-        OnClick = MenuItem8Click
+        OnClick = MItemQuitClick
       end
     end
-    object MenuItem2: TMenuItem
-      Caption = 'Config'
-      object MenuItemPort: TMenuItem
-        Caption = 'port'
+    object mItemConfig: TMenuItem
+      Caption = '&Config'
+      object MItemPortCfg: TMenuItem
+        Caption = '&Port'
         Hint = 'configure serial port'
-        OnClick = MenuItemPortClick
+        OnClick = MItemPortCfgClick
       end
     end
-    object MenuItem9: TMenuItem
-      Caption = 'About'
+    object mItemAbout: TMenuItem
+      Caption = '&About'
     end
   end
   object OpenDialog: TOpenDialog

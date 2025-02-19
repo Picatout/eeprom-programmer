@@ -15,19 +15,15 @@ type
     BtnOk: TButton;
     BtnCancel: TButton;
     CBDeviceList: TComboBox;
-    Edit2: TEdit;
     Label1: TLabel;
-    Label2: TLabel;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnOkEnter(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormShow(Sender: TObject);
   private
 
   public
     CommPortName:AnsiString;
-    LineDelay:integer;
   end;
 
 var
@@ -56,15 +52,10 @@ begin
   FindClose(rst);
 end;
 
-procedure TFormPortCfg.FormShow(Sender: TObject);
-begin
-    Edit2.Text:=IntToStr(LineDelay);
-end;
 
 procedure TFormPortCfg.BtnOkClick(Sender: TObject);
 begin
   CommPortName:='/dev/'+CBDeviceList.Items[CBDeviceList.ItemIndex];
-  LineDelay:=StrToInt(Edit2.Text);
   Close;
 end;
 
