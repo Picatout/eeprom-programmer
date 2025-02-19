@@ -2,6 +2,10 @@
 
 ### 2025-02-17
 
+* Travail sur menu Send Hex file.
+
+### 2025-02-17
+
 * Travail sur dialgue PortCfg.
 
 ### 2025-02-16

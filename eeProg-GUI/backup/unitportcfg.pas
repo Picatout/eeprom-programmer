@@ -14,7 +14,7 @@ type
   TFormPortCfg = class(TForm)
     BtnOk: TButton;
     BtnCancel: TButton;
-    Edit1: TEdit;
+    CBDeviceList: TComboBox;
     Edit2: TEdit;
     Label1: TLabel;
     Label2: TLabel;
@@ -37,22 +37,33 @@ implementation
 
 {$R *.lfm}
 
+
+
 { TFormPortCfg }
 
 procedure TFormPortCfg.FormCreate(Sender: TObject);
+var
+  rst: TSearchRec;
+  error: LongInt ;
 begin
-
+  CBDeviceList.Items.Clear;
+  error:= FindFirst('/dev/ttyACM*',faAnyFile,rst);
+  while error=0 do
+  begin
+       CBDeviceList.Items.Append(rst.Name);
+       error:=FindNext(rst);
+  end;
+  FindClose(rst);
 end;
 
 procedure TFormPortCfg.FormShow(Sender: TObject);
 begin
-    Edit1.Text:=CommPortName;
     Edit2.Text:=IntToStr(LineDelay);
 end;
 
 procedure TFormPortCfg.BtnOkClick(Sender: TObject);
 begin
-  CommPortName:=Edit1.Text;
+  CommPortName:='/dev/'+CBDeviceList.Items[CBDeviceList.ItemIndex];
   LineDelay:=StrToInt(Edit2.Text);
   Close;
 end;
@@ -61,10 +72,13 @@ procedure TFormPortCfg.BtnOkEnter(Sender: TObject);
 begin
 end;
 
+
+
 procedure TFormPortCfg.BtnCancelClick(Sender: TObject);
 begin
   Close;
 end;
+
 
 end.
 

@@ -1,13 +1,14 @@
 object FormMain: TFormMain
-  Left = 472
+  Left = 775
   Height = 567
-  Top = 362
+  Top = 350
   Width = 895
   Caption = 'eeProg'
   ClientHeight = 567
   ClientWidth = 895
   Menu = MainMenu1
   OnActivate = FormActivate
+  OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '3.0.0.3'
@@ -61,9 +62,10 @@ object FormMain: TFormMain
     Top = 11
     object MenuItem1: TMenuItem
       Caption = 'Files'
-      object MenuItem4: TMenuItem
-        Caption = 'Send text'
+      object MenuItemSendHex: TMenuItem
+        Caption = 'Send HEX file'
         Hint = 'Send text file to eeProg'
+        OnClick = MenuItemSendHexClick
       end
       object MenuItem5: TMenuItem
         Caption = 'Send binary'
@@ -98,5 +100,17 @@ object FormMain: TFormMain
     object MenuItem9: TMenuItem
       Caption = 'About'
     end
+  end
+  object OpenDialog: TOpenDialog
+    Title = 'Ouvrir un fichier'
+    FilterIndex = -1
+    InitialDir = '.'
+    Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
+    Left = 112
+    Top = 40
+  end
+  object SaveDialog: TSaveDialog
+    Left = 232
+    Top = 48
   end
 end
