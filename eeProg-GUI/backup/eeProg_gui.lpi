@@ -71,8 +71,16 @@
         <Filename Value="unitrange.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FormRange"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitRange"/>
+      </Unit>
+      <Unit>
+        <Filename Value="uniteepromsize.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormEeprom"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="UnitEepromSize"/>
       </Unit>
     </Units>
   </ProjectOptions>

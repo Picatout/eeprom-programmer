@@ -99,7 +99,9 @@ begin
       if (ComIn>0) then
       begin
             answer.lines.Append(s);
-            if (s[1]=#35) then ComIn:=0;
+            answer.InvalidateClientRectCache(false);
+            answer.Repaint;
+            if (s.length=1) and (s[1]=#35) then ComIn:=0;
 
       end;
     end;

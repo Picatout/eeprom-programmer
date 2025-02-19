@@ -2,10 +2,11 @@ object FormMain: TFormMain
   Left = 775
   Height = 567
   Top = 350
-  Width = 895
+  Width = 889
+  BorderStyle = bsNone
   Caption = 'eeProg'
   ClientHeight = 567
-  ClientWidth = 895
+  ClientWidth = 889
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
@@ -16,14 +17,14 @@ object FormMain: TFormMain
     Left = 0
     Height = 20
     Top = 547
-    Width = 895
+    Width = 889
     Panels = <>
   end
-  object Memo1: TMemo
+  object MemoConsole: TMemo
     Left = 0
     Height = 512
     Top = 35
-    Width = 895
+    Width = 889
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
     Font.Height = -20
@@ -31,8 +32,9 @@ object FormMain: TFormMain
     Font.Pitch = fpFixed
     Font.Quality = fqDraft
     ParentFont = False
+    ReadOnly = True
     TabOrder = 1
-    OnChange = Memo1Change
+    OnChange = MemoConsoleChange
   end
   object Label1: TLabel
     Left = 80
@@ -47,7 +49,7 @@ object FormMain: TFormMain
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 143
+    Left = 137
     Height = 35
     Top = 0
     Width = 752
@@ -97,6 +99,10 @@ object FormMain: TFormMain
         Caption = '&Port'
         Hint = 'configure serial port'
         OnClick = MItemPortCfgClick
+      end
+      object mItemEeprom: TMenuItem
+        Caption = 'eeprom'
+        OnClick = mItemEepromClick
       end
     end
     object mItemAbout: TMenuItem

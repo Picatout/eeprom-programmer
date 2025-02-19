@@ -99,6 +99,8 @@ begin
       if (ComIn>0) then
       begin
             answer.lines.Append(s);
+            answer.InvalidateClientRectCache(false);
+            answer.Update;
             if (s.length=1) and (s[1]=#35) then ComIn:=0;
 
       end;

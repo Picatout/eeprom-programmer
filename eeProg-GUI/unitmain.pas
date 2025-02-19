@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, ExtCtrls;
+  StdCtrls, ExtCtrls,UnitEepromSize;
 
 type
 
@@ -15,8 +15,9 @@ type
   TFormMain = class(TForm)
     EditCmd: TEdit;
     Label1: TLabel;
+    mItemEeprom: TMenuItem;
     mItemFiles: TMainMenu;
-    Memo1: TMemo;
+    MemoConsole: TMemo;
     MenuItem1: TMenuItem;
     mItemConfig: TMenuItem;
     mItemView: TMenuItem;
@@ -38,7 +39,8 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure Memo1Change(Sender: TObject);
+    procedure MemoConsoleChange(Sender: TObject);
+    procedure mItemEepromClick(Sender: TObject);
     procedure mItemViewClick(Sender: TObject);
     procedure MItemProgClick(Sender: TObject);
     procedure mItemDumpClick(Sender: TObject);
@@ -47,6 +49,7 @@ type
     procedure mItemEraseClick(Sender: TObject);
   private
   public
+    maxAddr:integer; // last address of eeprom
   end;
 
 var
@@ -77,7 +80,7 @@ begin
   with FormRange do
   begin
     cmd:=StartHex+'X'+EndHex;
-    eeProgCmd.eeProgCmd(cmd,memo1);
+    eeProgCmd.eeProgCmd(cmd,MemoConsole);
   end;
 
 end;
@@ -99,12 +102,12 @@ begin
        ShowModal;
        if length(CommPortName)>0 then
        begin
-            memo1.lines.append(DlgPortCfg.CommPortname);
+            MemoConsole.lines.append(DlgPortCfg.CommPortname);
             serhandle:=OpenComm(DlgPortCfg.CommPortname);
             if  serHandle<0 then FormCommError.show
             else
             begin
-                 memo1.lines.append(' opended');
+                 MemoConsole.lines.append(' opended');
             end;
 
        end;
@@ -128,10 +131,9 @@ end;
 
 procedure TFormMain.EditCmdExit(Sender: TObject);
 begin
-  memo1.lines.Clear;
-  eeProgCmd.eeProgCmd(EditCmd.Text,memo1);
-  memo1.SetFocus;
-  EditCmd.SetFocus;
+  MemoConsole.lines.Clear;
+  eeProgCmd.eeProgCmd(EditCmd.Text,MemoConsole);
+  MemoConsole.SetFocus;
 end;
 
 procedure TFormMain.EditCmdKeyPress(Sender: TObject; var Key: char);
@@ -152,16 +154,26 @@ end;
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
-  DlgPortCfg.CommPortName:='/dev/ttyACM0';
+  DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
+  MaxAddr:=8*1024; // default to 8KB EEPROM.
 end;
 
 procedure TFormMain.FormShow(Sender: TObject);
 begin
 end;
 
-procedure TFormMain.Memo1Change(Sender: TObject);
+procedure TFormMain.MemoConsoleChange(Sender: TObject);
 begin
 
+end;
+
+procedure TFormMain.mItemEepromClick(Sender: TObject);
+begin
+  with FormEeprom do
+  begin
+       ShowModal;
+       if confirm then MaxAddr:=EepromSize-1;
+  end;
 end;
 
 procedure TFormMain.mItemViewClick(Sender: TObject);
@@ -174,7 +186,8 @@ begin
        if Confirm then
        begin
            cmd:=StartHex+'.'+EndHex;
-           eeprogCmd.eeprogCmd(cmd,memo1);
+           MemoConsole.lines.Clear;
+           eeprogCmd.eeprogCmd(cmd,MemoConsole);
        end;
   end;
 end;
@@ -187,14 +200,14 @@ var
    hexFile:TextFile;
    line:string;
 begin
-  memo1.lines.append(FileName);
+  MemoConsole.lines.append(FileName);
   AssignFile(hexFile,FileName);
   try
     reset(hexFile);
     while not EOF(HexFile) do
     begin
          Readln(HexFile,line);
-         eeProgCmd.eeProgCmd(line,memo1);
+         eeProgCmd.eeProgCmd(line,MemoConsole);
     end;
   except
       ShowMessage('Error reading file');
@@ -205,7 +218,7 @@ begin
 end;
 
 begin
-  memo1.lines.Clear;
+  MemoConsole.lines.Clear;
   With OpenDialog do
   begin
   Title:='program hexadecimal file';

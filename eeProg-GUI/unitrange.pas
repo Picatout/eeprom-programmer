@@ -40,6 +40,8 @@ var
 
 implementation
 
+uses UnitMain;
+
 {$R *.lfm}
 
 function IntToHexStr(n:integer):string;
@@ -114,15 +116,15 @@ end;
 procedure TFormRange.BtnOkClick(Sender: TObject);
 begin
   SetRange;
-  if (StartAddr>0) and (EndAddr>=StartAddr) then
+  if (StartAddr>=0) and (EndAddr>=StartAddr) and (EndAddr<=FormMain.maxAddr) then
   begin
      FormRange.confirm:=true;
-     close;
   end
   else
   begin
        ShowMessage('Invalid range');
   end;
+  close;
 end;
 
 procedure TFormRange.EditEndKeyPress(Sender: TObject; var Key: char);

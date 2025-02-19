@@ -2,7 +2,11 @@
 
 ### 2025-02-19
 
-
+* Réorganisation du menu.
+* Création du dialogue **RANGE**.
+* Développer la fonction du menu **view range**
+* Création du dialogue EEPROM
+* Ajout du menu **eeprom** au menu **config**
 
 ### 2025-02-18
 
