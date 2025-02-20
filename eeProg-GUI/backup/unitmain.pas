@@ -147,28 +147,65 @@ var
   i,j:integer;
   BinFile:file of byte;
   buffer: array[0..15] of byte;
-  bufferIdx:integer;
+//  bufferIdx:integer;
   line:string;
 
 
-procedure ParseLine(const line:string);
+function is_hex_digit(h:char):boolean;
 var
-  k,i:integer;
+  b:byte;
+begin
+   result:=false;
+   b:=ord(h)-ord('0');
+   if b>9 then b:= b-7;
+   if (b<16) then result:=true;
+end;
+
+function scan(s:string;c:char; i:integer):integer;
+{scan s from indice i and stop at c if in s else at end.}
+begin
+   while (i<=length(s)) and (s[i]<>c) do inc(i);
+   result:=i;
+end;
+
+function skip(s:string;c:char;i:integer):integer;
+{scan s form indice i and stop after c or at end of string}
+begin
+   while (i<=length(s)) and (s[i]=c) do inc(i);
+   result:=i;
+end;
+
+function next_hex(s:string;i:integer):integer;
+{
+scan s from indice i stop at non hex digit
+return indice after hex token}
+begin
+   while (i<=length(s)) and is_hex_digit(s[i]) do inc(i);
+   result:=i;
+end;
+
+procedure ParseLine(const line:string);
+{
+ split line in token, each token should be a 2 letters HEX number string.
+}
+var
+  k,i,after:integer;
   token:string;
 begin
    k:=1;
    i:=0;
-   while k<=line.Length do
+   while k<line.Length do
    begin
-      token:='';
-      while ((line[k]>='0') and (line[k]<='9') or ((line[k]<='A') and (line[k]<='A'))) do
+      k:=skip(line,' ',k);
+      after:=next_hex(line,k);
+      if (after-k=2) then
       begin
-           token:=token+line[k];
-           inc(k);
+           token:=line[k..after-1];
+           buffer[i]:=byte(UnitRange.StrToHex(token));
+           inc(i);
       end;
-      buffer[i]:=byte(UnitRange.StrToHex(token));
-      inc(i);
-      inc(k);
+      if line[k]=';' then k:= line.length else k:=after+1;
+      k:=after+1;
    end;
 end;
 
@@ -178,9 +215,12 @@ begin
     rewrite(BinFile);
     for i:=1 to MemoConsole.Lines.count do
     begin
-         line:=memoConsole.lines[i][7..length(memoConsole.Lines[i])];
-         ParseLine(line);
-         for j:=0 to 15 do Write(BinFile,buffer[j]);
+         if length(line)>7 then
+         begin
+              line:=memoConsole.lines[i][7..length(memoConsole.Lines[i])];
+              ParseLine(line);
+              for j:=0 to 15 do Write(BinFile,buffer[j]);
+         end;
     end;
 
      CloseFile(BinFile);

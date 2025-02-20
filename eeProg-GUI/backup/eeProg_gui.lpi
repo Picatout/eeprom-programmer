@@ -79,6 +79,7 @@
         <Filename Value="uniteepromsize.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="FormEeprom"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UnitEepromSize"/>
       </Unit>

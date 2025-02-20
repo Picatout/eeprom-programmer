@@ -2,7 +2,7 @@
 
 ### 2025-02-20
 
-
+* Complété la fonction **dump as binary file**.
 
 ### 2025-02-19
 
