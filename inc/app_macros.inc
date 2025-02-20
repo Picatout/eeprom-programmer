@@ -18,8 +18,8 @@
 ;--------------------------------------
 	STACK_EMPTY=RAM_SIZE-1  
     STACK_SIZE=128 
-    PAD_SIZE=64
-    TIB_SIZE=128 ; input buffer size 
+    PAD_SIZE=64 ; size of EEPROM programming buffer 
+    TIB_SIZE=240 ; input buffer size, enough to accept 64 hex bytes for programming a complete EEPROM row.
     RX_QUEUE_SIZE==32 ; UART receive queue size 
 
     TIM2_CLK_FREQ=62500

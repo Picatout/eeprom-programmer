@@ -308,7 +308,7 @@ readln::
 ; append character to end of line 
 	ld a,(LN_LEN,sp)
 	cp a,#MAX_LEN 
-	jrmi 5$
+	jrult 5$
     jra 1$ 
 5$:
 	ld a,(CHAR,sp)

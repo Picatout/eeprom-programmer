@@ -1,3 +1,7 @@
+### 2025-02-20
+
+* Agrandir le **tib** à 240 octets. Permet de revecoir des commandes **:** contenant jusqu'à 64 octets ce qui est la taille des pages des EEPROM  AT27Cxxx
+
 ### 2025-02-16
 * Débuter le projet [eeProg-IDE](eeProg-IDE/eeProg_IDE.lpr), un enviromment graphique pour le programmeur eeProg conçu en free  Pascal en utilisant l'IDE [Lazarus](https://www.lazarus-ide.org/). La version 3.0 est disponible dans les dépôts de Ubuntu 24.04LTS.
 
