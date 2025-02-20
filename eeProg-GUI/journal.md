@@ -4,6 +4,9 @@
 
 * Complété la fonction **dump as binary file**.
 
+* Complété la fonction **Prog binary file**.
+
+
 ### 2025-02-19
 
 * Réorganisation du menu.

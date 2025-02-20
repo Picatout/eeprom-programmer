@@ -328,13 +328,65 @@ end;
 
 procedure TFormMain.MItemProgClick(Sender: TObject);
 
+var
+   fExt:string; // file extension
+
+procedure ProgBinFile(FileName:string);
+{program eeprom from raw binary file
+ start address take from range Dialog
+}
+var
+   BinFile:TFileStream;
+   row:array[0..15] of byte;
+   line:string;
+   count:integer;
+
+procedure convert;
+// convert row byte array in hexadecimal string
+var
+  i:integer;
+begin
+   line:=': ';
+   i:=0;
+   while i<count do
+   begin
+        line:= line+IntToHex(row[i],2)+' ';
+        inc(i);
+   end;
+end;
+
+begin
+   BinFile := TFileStream.Create(FileName,fmOpenRead);
+   try
+   try
+      BinFile.position:=0;
+      line:=FormRange.StartHex+':';
+      eeProgCmd.eeProgCmd(line,MemoConsole);
+      repeat
+      begin
+         count:=BinFile.Read(row[0],16);
+         if count>0 then
+         begin
+            convert;
+            eeProgCmd.eeProgCmd(line,MemoConsole);
+         end;
+      end;
+      until count=0;
+   finally
+           BinFile.free;
+   end;
+   except
+           on E: EInOutError do
+             ShowMessage('File error: '+ E.Message);
+
+   end;
+end;
 
 procedure ProgHexFile(FileName:string);
 var
    hexFile:TextFile;
    line:string;
 begin
-  MemoConsole.lines.append(FileName);
   AssignFile(hexFile,FileName);
   try
     reset(hexFile);
@@ -344,8 +396,8 @@ begin
          eeProgCmd.eeProgCmd(line,MemoConsole);
     end;
   except
-      ShowMessage('Error reading file');
-
+      on E: EInOutError do
+       ShowMessage('File error: '+ E.Message);
   end;
   CloseFile(HexFile);
 
@@ -355,17 +407,29 @@ begin
   MemoConsole.lines.Clear;
   With OpenDialog do
   begin
-  Title:='program hexadecimal file';
-  Filter:='.hex,.txt';
+  Title:='program file';
+  Filter:='.hex,.txt,.bin';
   FileName:='';
   InitialDir:='.';
   DefaultExt:='.hex';
   if Execute then
   begin
-       ProgHexFile(FileName);
+      MemoConsole.lines.append(FileName);
+      fext:=ExtractFileExt(FileName);
+       if (fext='.bin') then
+       begin
+          FormRange.RBBinaryFile.checked:=true;
+          FormRange.showModal;
+          if FormRange.Confirm then
+          begin
+             ProgBinFile(FileName);
+          end;
+       end
+       else
+           ProgHexFile(FileName);
+       end;
   end;
 
-  end;
 end;
 
 end.
