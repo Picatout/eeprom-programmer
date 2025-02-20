@@ -79,8 +79,11 @@ var
 begin
   with FormRange do
   begin
+    memoConsole.lines.clear;
     cmd:=StartHex+'X'+EndHex;
     eeProgCmd.eeProgCmd(cmd,MemoConsole);
+    cmd:=StartHex+'.'+EndHex;
+    eeProgCmd.eeProgCmd(cmd,memoConsole);
   end;
 
 end;
@@ -115,8 +118,99 @@ begin
 end;
 
 procedure TFormMain.mItemDumpClick(Sender: TObject);
-begin
+var
+  cmd:string;
 
+procedure DumpAsHexFile(FileName:string);
+var
+  i:integer;
+  hexFile:TextFile;
+begin
+   assignFile(HexFile,FileName);
+   try
+      rewrite(HexFile);
+     for i:=2 to MemoConsole.Lines.count do
+     begin
+          Writeln(HexFile,memoConsole.lines[i]);
+     end;
+     CloseFile(hexFile);
+   except
+       on E: EInOutError do
+        ShowMessage('File error: '+ E.Message);
+   end;
+
+end;
+
+procedure DumpAsBinFile(FileName:string);
+
+var
+  i,j:integer;
+  BinFile:file of byte;
+  buffer: array[0..15] of byte;
+  bufferIdx:integer;
+  line:string;
+
+
+procedure ParseLine(const line:string);
+var
+  k,i:integer;
+  token:string;
+begin
+   k:=1;
+   i:=0;
+   while k<=line.Length do
+   begin
+      token:='';
+      while ((line[k]>='0') and (line[k]<='9') or ((line[k]>='A') and (line[k]<='A'))) do
+      begin
+           token:=token+line[k];
+           inc(k);
+      end;
+      buffer[i]:=byte(UnitRange.StrToHex(token));
+      inc(i);
+      inc(k);
+   end;
+end;
+
+begin
+  assignFile(BinFile,FileName);
+  try
+    rewrite(BinFile);
+    for i:=1 to MemoConsole.Lines.count do
+    begin
+         line:=memoConsole.lines[i][7..length(memoConsole.Lines[i])];
+         ParseLine(line);
+         for j:=0 to 15 do Write(BinFile,buffer[j]);
+    end;
+
+     CloseFile(BinFile);
+  except
+      on E: EInOutError do
+      ShowMessage('Fie error: '+E.Message);
+  end;
+end;
+
+begin
+  with FormRange do
+  begin
+       RGFileFormat.Enabled:=true;
+       showModal;
+       if confirm then
+       begin
+            cmd:=StartHex+'.'+EndHex;
+            MemoConsole.lines.Clear;
+            eeprogCmd.eeprogCmd(cmd,MemoConsole);
+            if SaveDialog.Execute then
+              if RBHexFile.Checked then
+              begin
+                   DumpAsHexFile(SaveDialog.FileName);
+              end
+              else
+              begin
+                   DumpAsBinFile(SaveDialog.FileName);
+              end;
+       end;
+  end;
 end;
 
 procedure TFormMain.EditCmdChange(Sender: TObject);

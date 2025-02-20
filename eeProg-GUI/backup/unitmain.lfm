@@ -118,6 +118,7 @@ object FormMain: TFormMain
     Top = 40
   end
   object SaveDialog: TSaveDialog
+    InitialDir = '.'
     Left = 232
     Top = 48
   end

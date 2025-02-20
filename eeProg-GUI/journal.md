@@ -7,6 +7,7 @@
 * Développer la fonction du menu **view range**
 * Création du dialogue EEPROM
 * Ajout du menu **eeprom** au menu **config**
+* Modifié le Range dialog pour ajouter l'option type de fichier en sortie pour la fonction Dump.
 
 ### 2025-02-18
 

@@ -18,6 +18,9 @@ type
     EditEnd: TEdit;
     Label1: TLabel;
     Label2: TLabel;
+    RBHexFile: TRadioButton;
+    RBBinaryFile: TRadioButton;
+    RGFileFormat: TRadioGroup;
     RBDecimal: TRadioButton;
     RBHexadecimal: TRadioButton;
     RBbase: TRadioGroup;
@@ -35,6 +38,8 @@ type
      EndHex:string;
   end;
 
+  function StrToHex(s:string):integer;
+
 var
   FormRange: TFormRange;
 
@@ -44,25 +49,6 @@ uses UnitMain;
 
 {$R *.lfm}
 
-function IntToHexStr(n:integer):string;
-var
-   hexStr:string;
-   digit:integer;
-begin
-   hexStr:='';
-   While n>0 do
-   begin
-      digit:=n mod 16;
-      n:= n div 16;
-      digit:= digit+byte('0');
-      if digit>byte('9') then digit := digit+7;
-      hexStr := char(digit)+hexStr;
-   end;
-   if hexStr.length=0 then hexStr:='0';
-   result:=hexStr;
-end;
-
-
 function StrToHex(s:string):integer;
 var
   i,c:integer;
@@ -71,7 +57,7 @@ begin
   val:=0;
   for i:=1 to s.length do
   begin
-       c:=byte(s[i])-byte('0');
+       c:=ord(s[i])-ord('0');
        if c>9 then c:=c-7;
        if (c>15) or (c<0) then
        begin
@@ -106,8 +92,8 @@ begin
          StartAddr:=StrToHex(EditStart.text);
          EndAddr:=StrToHex(EditEnd.text);
     end;
-    StartHex:=IntToHexStr(startAddr);
-    Endhex:=IntToHexStr(EndAddr);
+    StartHex:=IntToHex(startAddr,4);
+    Endhex:=IntToHex(EndAddr,4);
   end;
 end;
 
