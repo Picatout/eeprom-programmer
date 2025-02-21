@@ -13,17 +13,10 @@ object FormMain: TFormMain
   OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '3.0.0.3'
-  object StatusBar1: TStatusBar
-    Left = 0
-    Height = 20
-    Top = 547
-    Width = 889
-    Panels = <>
-  end
   object MemoConsole: TMemo
     Left = 0
-    Height = 512
-    Top = 35
+    Height = 535
+    Top = 32
     Width = 889
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
@@ -33,7 +26,7 @@ object FormMain: TFormMain
     Font.Quality = fqDraft
     ParentFont = False
     ReadOnly = True
-    TabOrder = 1
+    TabOrder = 0
     OnChange = MemoConsoleChange
   end
   object Label1: TLabel
@@ -50,11 +43,11 @@ object FormMain: TFormMain
   end
   object EditCmd: TEdit
     Left = 137
-    Height = 35
+    Height = 32
     Top = 0
     Width = 752
     Align = alRight
-    TabOrder = 2
+    TabOrder = 1
     OnChange = EditCmdChange
     OnExit = EditCmdExit
     OnKeyPress = EditCmdKeyPress
@@ -107,6 +100,7 @@ object FormMain: TFormMain
     end
     object mItemAbout: TMenuItem
       Caption = 'About'
+      OnClick = mItemAboutClick
     end
   end
   object OpenDialog: TOpenDialog

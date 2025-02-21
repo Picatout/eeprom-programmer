@@ -10,7 +10,8 @@ uses
   athreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, unitMain, unitPortCfg, hello
+  Forms, unitMain, unitPortCfg, eeProgCmd, CommError, unitRange, UnitEepromSize,
+  unitAbout
   { you can add units after this };
 
 {$R *.res}
@@ -21,6 +22,10 @@ begin
   Application.Initialize;
   Application.CreateForm(TFormMain, FormMain);
   Application.CreateForm(TFormPortCfg, FormPortCfg);
+  Application.CreateForm(TFormCommError, FormCommError);
+  Application.CreateForm(TFormRange, FormRange);
+  Application.CreateForm(TFormEeprom, FormEeprom);
+  Application.CreateForm(TFormAbout, FormAbout);
   Application.Run;
 end.
 

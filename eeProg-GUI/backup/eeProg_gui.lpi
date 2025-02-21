@@ -83,6 +83,13 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UnitEepromSize"/>
       </Unit>
+      <Unit>
+        <Filename Value="unitabout.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormAbout"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="unitAbout"/>
+      </Unit>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -122,6 +129,9 @@
       </Item>
       <Item>
         <Name Value="EInOutError"/>
+      </Item>
+      <Item>
+        <Name Value="EClassNotFound"/>
       </Item>
     </Exceptions>
   </Debugging>

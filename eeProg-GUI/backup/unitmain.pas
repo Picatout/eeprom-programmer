@@ -40,6 +40,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MemoConsoleChange(Sender: TObject);
+    procedure mItemAboutClick(Sender: TObject);
     procedure mItemEepromClick(Sender: TObject);
     procedure mItemViewClick(Sender: TObject);
     procedure MItemProgClick(Sender: TObject);
@@ -57,7 +58,7 @@ var
 
 implementation
 uses
-  unitPortCfg, eeProgCmd,CommError,FileUtil,unitRange;
+  unitPortCfg, eeProgCmd,CommError,FileUtil,unitRange,unitAbout;
 
 var
 DlgPortCfg:TFormPortCfg;
@@ -278,6 +279,7 @@ end;
 
 procedure TFormMain.FormActivate(Sender: TObject);
 begin
+  MItemPortCfgClick(self);
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -299,6 +301,11 @@ end;
 procedure TFormMain.MemoConsoleChange(Sender: TObject);
 begin
 
+end;
+
+procedure TFormMain.mItemAboutClick(Sender: TObject);
+begin
+  FormAbout.showModal;
 end;
 
 procedure TFormMain.mItemEepromClick(Sender: TObject);
@@ -418,6 +425,7 @@ begin
       fext:=ExtractFileExt(FileName);
        if (fext='.bin') then
        begin
+          FormRange.RBBinaryFile.checked:=true;
           FormRange.showModal;
           if FormRange.Confirm then
           begin

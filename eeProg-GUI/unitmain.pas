@@ -30,7 +30,6 @@ type
     OpenDialog: TOpenDialog;
     SaveDialog: TSaveDialog;
     Separator1: TMenuItem;
-    StatusBar1: TStatusBar;
     procedure EditCmdChange(Sender: TObject);
     procedure EditCmdEditingDone(Sender: TObject);
     procedure EditCmdExit(Sender: TObject);
@@ -40,6 +39,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MemoConsoleChange(Sender: TObject);
+    procedure mItemAboutClick(Sender: TObject);
     procedure mItemEepromClick(Sender: TObject);
     procedure mItemViewClick(Sender: TObject);
     procedure MItemProgClick(Sender: TObject);
@@ -57,7 +57,7 @@ var
 
 implementation
 uses
-  unitPortCfg, eeProgCmd,CommError,FileUtil,unitRange;
+  unitPortCfg, eeProgCmd,CommError,FileUtil,unitRange,unitAbout;
 
 var
 DlgPortCfg:TFormPortCfg;
@@ -278,6 +278,7 @@ end;
 
 procedure TFormMain.FormActivate(Sender: TObject);
 begin
+
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -290,6 +291,7 @@ begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
   DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
   MaxAddr:=8*1024; // default to 8KB EEPROM.
+  MItemPortCfgClick(self);
 end;
 
 procedure TFormMain.FormShow(Sender: TObject);
@@ -299,6 +301,11 @@ end;
 procedure TFormMain.MemoConsoleChange(Sender: TObject);
 begin
 
+end;
+
+procedure TFormMain.mItemAboutClick(Sender: TObject);
+begin
+  FormAbout.showModal;
 end;
 
 procedure TFormMain.mItemEepromClick(Sender: TObject);

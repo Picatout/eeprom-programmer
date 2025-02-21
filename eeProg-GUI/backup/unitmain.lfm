@@ -107,6 +107,7 @@ object FormMain: TFormMain
     end
     object mItemAbout: TMenuItem
       Caption = 'About'
+      OnClick = mItemAboutClick
     end
   end
   object OpenDialog: TOpenDialog
