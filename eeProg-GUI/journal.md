@@ -8,6 +8,8 @@
 
 * Complété tous les menus. Version 1.0R0
 
+* Correction d'un bogue dans la fonction **dump** enn format hexadecimal, la première ligne n'était pas enregistrée dans le fichier.
+
 ### 2025-02-19
 
 * Réorganisation du menu.

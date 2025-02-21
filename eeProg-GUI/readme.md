@@ -13,3 +13,9 @@ Cet environnement offre des facilités supplémentaires. Par rapport à la ligne
 ### 2025-02-20
 
 La version 1.0R0 est complétée.
+
+### vidéo de démonstration
+
+J'ai créé un vidéo de démonstration du programme sur Youtube.
+
+[démontration de eeProg-gui](https://youtu.be/ZQuFBCbd9YM?si=Wmx8NIaezMBcxAin)

@@ -129,7 +129,7 @@ begin
    assignFile(HexFile,FileName);
    try
       rewrite(HexFile);
-     for i:=2 to MemoConsole.Lines.count do
+     for i:=1 to MemoConsole.Lines.count do
      begin
           Writeln(HexFile,memoConsole.lines[i]);
      end;

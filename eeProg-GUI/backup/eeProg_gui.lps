@@ -21,9 +21,11 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitMain"/>
         <IsVisibleTab Value="True"/>
-        <CursorPos Y="8"/>
+        <TopLine Value="118"/>
+        <CursorPos X="14" Y="132"/>
         <UsageCount Value="124"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="unitportcfg.pas"/>
@@ -92,6 +94,20 @@
         <EditorIndex Value="5"/>
         <CursorPos X="47" Y="20"/>
         <UsageCount Value="52"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit>
+      <Unit>
+        <Filename Value="unitabout.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="FormAbout"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="unitAbout"/>
+        <EditorIndex Value="1"/>
+        <TopLine Value="6"/>
+        <CursorPos X="3" Y="32"/>
+        <UsageCount Value="22"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -183,19 +199,6 @@
         <CursorPos X="56"/>
         <UsageCount Value="8"/>
         <DefaultSyntaxHighlighter Value="None"/>
-      </Unit>
-      <Unit>
-        <Filename Value="unitabout.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="FormAbout"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="unitAbout"/>
-        <EditorIndex Value="1"/>
-        <TopLine Value="6"/>
-        <CursorPos X="3" Y="32"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="..\..\..\..\..\usr\lib\lazarus\3.0\lcl\lresources.pp"/>
@@ -325,7 +328,7 @@
       </Position>
       <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="8" Column="22"/>
+        <Caret Line="8"/>
       </Position>
     </JumpHistory>
     <RunParams>

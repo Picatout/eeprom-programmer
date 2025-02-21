@@ -30,7 +30,6 @@ type
     OpenDialog: TOpenDialog;
     SaveDialog: TSaveDialog;
     Separator1: TMenuItem;
-    StatusBar1: TStatusBar;
     procedure EditCmdChange(Sender: TObject);
     procedure EditCmdEditingDone(Sender: TObject);
     procedure EditCmdExit(Sender: TObject);
@@ -130,7 +129,7 @@ begin
    assignFile(HexFile,FileName);
    try
       rewrite(HexFile);
-     for i:=2 to MemoConsole.Lines.count do
+     for i:=1 to MemoConsole.Lines.count do
      begin
           Writeln(HexFile,memoConsole.lines[i]);
      end;
@@ -279,7 +278,7 @@ end;
 
 procedure TFormMain.FormActivate(Sender: TObject);
 begin
-  MItemPortCfgClick(self);
+
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
@@ -292,6 +291,7 @@ begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
   DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
   MaxAddr:=8*1024; // default to 8KB EEPROM.
+  MItemPortCfgClick(self);
 end;
 
 procedure TFormMain.FormShow(Sender: TObject);

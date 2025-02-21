@@ -27,7 +27,7 @@ var
 implementation
 
 {$R *.lfm}
-const VERSTR='eeProg_GUI V1.0R0';
+const VERSTR='eeProg_GUI V1.0R1';
 const COPYRIGHT='Copyright Jacques Deschênes, 2025' ;
 
 { TFormAbout }
