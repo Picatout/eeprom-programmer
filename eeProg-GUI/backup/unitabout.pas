@@ -16,7 +16,6 @@ type
     MemoAbout: TMemo;
     procedure BtnCloseClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure FormActivate(Sender: TObject);
   private
   public
 
@@ -30,6 +29,7 @@ implementation
 {$R *.lfm}
 const VERSTR='eeProg_GUI V1.0R2';
 const COPYRIGHT='Copyright Jacques Deschênes, 2025' ;
+const LICENSE='LICENSE GPL V3';
 
 { TFormAbout }
 
@@ -39,7 +39,8 @@ begin
   close;
 end;
 
-procedure TFormAbout.FormActivate(Sender: TObject);
+
+procedure TFormAbout.FormShow(Sender: TObject);
 var
   tf:TextFile;
   line:string;
@@ -49,6 +50,8 @@ begin
     lines.clear;
     lines.append(VERSTR);
     lines.append(COPYRIGHT);
+    lines.append(LICENSE);
+{
     lines.append('');
     AssignFile(tf,'LICENSE.TXT');
     try
@@ -63,11 +66,9 @@ begin
     end;
     CaretPos := Point(0,0);
     end;
-end;
-
-procedure TFormAbout.FormShow(Sender: TObject);
-begin
-  BtnClose.SetFocus;
+}
+   end;
+    BtnClose.SetFocus;
 end;
 
 end.

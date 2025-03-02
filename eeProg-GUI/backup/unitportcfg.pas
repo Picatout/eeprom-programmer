@@ -19,7 +19,9 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnOkEnter(Sender: TObject);
+    procedure CBDeviceListSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
 
   public
@@ -52,6 +54,15 @@ begin
   FindClose(rst);
 end;
 
+procedure TFormPortCfg.FormShow(Sender: TObject);
+begin
+  with CBDeviceList do
+  begin
+       CBDeviceList.SetFocus;
+       if (ItemIndex<0) and (Items.Count>0) then ItemIndex:=1;
+  end;
+end;
+
 
 procedure TFormPortCfg.BtnOkClick(Sender: TObject);
 begin
@@ -61,6 +72,11 @@ end;
 
 procedure TFormPortCfg.BtnOkEnter(Sender: TObject);
 begin
+end;
+
+procedure TFormPortCfg.CBDeviceListSelect(Sender: TObject);
+begin
+   BtnOkClick(Sender);
 end;
 
 

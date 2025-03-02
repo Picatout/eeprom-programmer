@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="19"/>
-        <UsageCount Value="126"/>
+        <UsageCount Value="127"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -22,7 +22,7 @@
         <UnitName Value="unitMain"/>
         <TopLine Value="230"/>
         <CursorPos X="9" Y="249"/>
-        <UsageCount Value="126"/>
+        <UsageCount Value="127"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -33,10 +33,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitPortCfg"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="10"/>
         <TopLine Value="42"/>
-        <CursorPos X="23" Y="69"/>
-        <UsageCount Value="126"/>
+        <CursorPos X="44" Y="62"/>
+        <UsageCount Value="127"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -47,14 +48,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <CursorPos X="19" Y="43"/>
-        <UsageCount Value="126"/>
+        <UsageCount Value="127"/>
       </Unit>
       <Unit>
         <Filename Value="hello.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="69" Y="7"/>
-        <UsageCount Value="126"/>
+        <UsageCount Value="127"/>
       </Unit>
       <Unit>
         <Filename Value="commerror.pas"/>
@@ -65,7 +66,7 @@
         <UnitName Value="CommError"/>
         <EditorIndex Value="7"/>
         <CursorPos X="16" Y="25"/>
-        <UsageCount Value="123"/>
+        <UsageCount Value="124"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -79,7 +80,7 @@
         <EditorIndex Value="6"/>
         <TopLine Value="99"/>
         <CursorPos X="3" Y="129"/>
-        <UsageCount Value="59"/>
+        <UsageCount Value="60"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -93,7 +94,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="23"/>
         <CursorPos X="21" Y="59"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -104,11 +105,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitAbout"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <TopLine Value="33"/>
-        <CursorPos X="5" Y="66"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="13"/>
+        <CursorPos X="32" Y="30"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -213,26 +213,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="18" Column="50"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="123" Column="13" TopLine="130"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="254" Column="45" TopLine="221"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Column="14"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="99" Column="39" TopLine="81"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
       </Position>
       <Position>
         <Filename Value="unitmain.pas"/>
@@ -326,6 +306,26 @@
       <Position>
         <Filename Value="unitabout.pas"/>
         <Caret Line="67" TopLine="33"/>
+      </Position>
+      <Position>
+        <Filename Value="unitabout.pas"/>
+        <Caret Line="69" Column="2" TopLine="31"/>
+      </Position>
+      <Position>
+        <Filename Value="unitportcfg.pas"/>
+        <Caret Line="69" Column="23" TopLine="42"/>
+      </Position>
+      <Position>
+        <Filename Value="unitportcfg.pas"/>
+        <Caret Line="8" Column="66"/>
+      </Position>
+      <Position>
+        <Filename Value="unitportcfg.pas"/>
+        <Caret Line="60" Column="56" TopLine="48"/>
+      </Position>
+      <Position>
+        <Filename Value="unitportcfg.pas"/>
+        <Caret Line="62" Column="23" TopLine="36"/>
       </Position>
     </JumpHistory>
     <RunParams>

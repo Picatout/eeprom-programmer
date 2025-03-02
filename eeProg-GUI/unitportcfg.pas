@@ -21,6 +21,7 @@ type
     procedure BtnOkEnter(Sender: TObject);
     procedure CBDeviceListSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
+    procedure FormShow(Sender: TObject);
   private
 
   public
@@ -51,6 +52,15 @@ begin
        error:=FindNext(rst);
   end;
   FindClose(rst);
+end;
+
+procedure TFormPortCfg.FormShow(Sender: TObject);
+begin
+  with CBDeviceList do
+  begin
+       CBDeviceList.SetFocus;
+       if (ItemIndex<0) and (Items.Count>0) then ItemIndex:=0;
+  end;
 end;
 
 
