@@ -7,6 +7,7 @@ object FormAbout: TFormAbout
   Caption = 'About eeProg'
   ClientHeight = 350
   ClientWidth = 574
+  OnShow = FormShow
   LCLVersion = '3.0.0.3'
   object MemoAbout: TMemo
     Left = 0
@@ -17,7 +18,6 @@ object FormAbout: TFormAbout
     ReadOnly = True
     ScrollBars = ssAutoVertical
     TabOrder = 0
-    OnEnter = MemoAboutEnter
   end
   object BtnClose: TButton
     Left = 264

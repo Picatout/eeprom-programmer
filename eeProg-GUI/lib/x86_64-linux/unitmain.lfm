@@ -3,7 +3,7 @@ object FormMain: TFormMain
   Height = 619
   Top = 350
   Width = 889
-  BorderStyle = bsNone
+  BorderStyle = bsSingle
   Caption = 'eeProg'
   ClientHeight = 619
   ClientWidth = 889

@@ -73,6 +73,8 @@ end;
 
 procedure TFormMain.mItemEraseClick(Sender: TObject);
 
+var
+  cursorType:TCursor;
 procedure EraseRange;
 var
    cmd:string;
@@ -92,7 +94,10 @@ begin
   FormRange.ShowModal;
   if FormRange.confirm then
   begin
+       cursorType:=memoConsole.cursor;
+       memoConsole.cursor:=crHourGlass;
        EraseRange;
+       memoConsole.Cursor:=CursorType;
   end;
 end;
 
@@ -120,6 +125,7 @@ end;
 procedure TFormMain.mItemDumpClick(Sender: TObject);
 var
   cmd:string;
+  cursorType:tCursor;
 
 procedure DumpAsHexFile(FileName:string);
 var
@@ -237,6 +243,8 @@ begin
        showModal;
        if confirm then
        begin
+            cursorType:=MemoConsole.cursor;
+            memoConsole.cursor:=crHourGlass;
             cmd:=StartHex+'.'+EndHex;
             MemoConsole.lines.Clear;
             eeprogCmd.eeprogCmd(cmd,MemoConsole);
@@ -249,6 +257,7 @@ begin
               begin
                    DumpAsBinFile(SaveDialog.FileName);
               end;
+              memoConsole.cursor:=CursorType;
        end;
   end;
 end;
@@ -320,15 +329,19 @@ end;
 procedure TFormMain.mItemViewClick(Sender: TObject);
 var
     cmd:string;
+    cursorType:TCursor;
 begin
   with FormRange do
   begin
        ShowModal;
        if Confirm then
        begin
+           CursorType:=memoConsole.cursor;
+           memoConsole.cursor:=crHourGlass;
            cmd:=StartHex+'.'+EndHex;
            MemoConsole.lines.Clear;
            eeprogCmd.eeprogCmd(cmd,MemoConsole);
+           memoConsole.cursor:=CursorType;
        end;
   end;
 end;
@@ -337,6 +350,7 @@ procedure TFormMain.MItemProgClick(Sender: TObject);
 
 var
    fExt:string; // file extension
+   cursorShape:TCursor;
 
 procedure ProgBinFile(FileName:string);
 {program eeprom from raw binary file
@@ -422,6 +436,8 @@ begin
   if Execute then
   begin
       MemoConsole.lines.append(FileName);
+      cursorShape:=memoConsole.cursor;
+      memoConsole.cursor:=crHourGlass;
       fext:=ExtractFileExt(FileName);
        if (fext='.bin') then
        begin
@@ -435,7 +451,9 @@ begin
        else
            ProgHexFile(FileName);
        end;
-  end;
+       memoConsole.cursor:=cursorShape;
+
+end;
 
 end;
 

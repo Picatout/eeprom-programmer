@@ -15,7 +15,8 @@ type
     BtnClose: TButton;
     MemoAbout: TMemo;
     procedure BtnCloseClick(Sender: TObject);
-    procedure MemoAboutEnter(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure FormActivate(Sender: TObject);
   private
   public
 
@@ -27,12 +28,18 @@ var
 implementation
 
 {$R *.lfm}
-const VERSTR='eeProg_GUI V1.0R0';
+const VERSTR='eeProg_GUI V1.0R2';
 const COPYRIGHT='Copyright Jacques Deschênes, 2025' ;
 
 { TFormAbout }
 
-procedure TFormAbout.MemoAboutEnter(Sender: TObject);
+
+procedure TFormAbout.BtnCloseClick(Sender: TObject);
+begin
+  close;
+end;
+
+procedure TFormAbout.FormActivate(Sender: TObject);
 var
   tf:TextFile;
   line:string;
@@ -55,12 +62,12 @@ begin
       CloseFile(tf);
     end;
     CaretPos := Point(0,0);
-  end;
+    end;
 end;
 
-procedure TFormAbout.BtnCloseClick(Sender: TObject);
+procedure TFormAbout.FormShow(Sender: TObject);
 begin
-  close;
+  BtnClose.SetFocus;
 end;
 
 end.

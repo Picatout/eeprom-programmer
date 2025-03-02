@@ -1,5 +1,10 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-03-02
+* Version V1.0R2 
+* Modifié le style de la fenêtre principale.
+* Modififé l'action de certain dialogues.
+
 ### 2025-02-20
 
 * Complété la fonction **dump as binary file**.

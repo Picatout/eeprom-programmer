@@ -28,6 +28,7 @@ type
     procedure BtnOkClick(Sender: TObject);
     procedure EditEndKeyPress(Sender: TObject; var Key: char);
     procedure EditStartKeyPress(Sender: TObject; var Key: char);
+    procedure FormShow(Sender: TObject);
   private
 
   public
@@ -121,6 +122,11 @@ end;
 procedure TFormRange.EditStartKeyPress(Sender: TObject; var Key: char);
 begin
   key:=Upcase(key);
+end;
+
+procedure TFormRange.FormShow(Sender: TObject);
+begin
+  EditStart.setfocus;
 end;
 
 procedure TFormRange.BtnCancelClick(Sender: TObject);

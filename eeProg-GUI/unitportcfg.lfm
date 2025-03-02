@@ -47,5 +47,6 @@ object FormPortCfg: TFormPortCfg
     Width = 240
     ItemHeight = 0
     TabOrder = 2
+    OnSelect = CBDeviceListSelect
   end
 end

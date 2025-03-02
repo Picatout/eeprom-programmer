@@ -19,6 +19,7 @@ type
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnOkEnter(Sender: TObject);
+    procedure CBDeviceListSelect(Sender: TObject);
     procedure FormCreate(Sender: TObject);
   private
 
@@ -61,6 +62,11 @@ end;
 
 procedure TFormPortCfg.BtnOkEnter(Sender: TObject);
 begin
+end;
+
+procedure TFormPortCfg.CBDeviceListSelect(Sender: TObject);
+begin
+   BtnOkClick(Sender);
 end;
 
 

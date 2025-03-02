@@ -3,7 +3,7 @@ object FormMain: TFormMain
   Height = 619
   Top = 350
   Width = 889
-  BorderStyle = bsNone
+  BorderStyle = bsSingle
   Caption = 'eeProg'
   ClientHeight = 619
   ClientWidth = 889
@@ -15,8 +15,8 @@ object FormMain: TFormMain
   LCLVersion = '3.0.0.3'
   object MemoConsole: TMemo
     Left = 0
-    Height = 535
-    Top = 84
+    Height = 587
+    Top = 32
     Width = 889
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
@@ -43,7 +43,7 @@ object FormMain: TFormMain
   end
   object EditCmd: TEdit
     Left = 137
-    Height = 84
+    Height = 32
     Top = 0
     Width = 752
     Align = alRight

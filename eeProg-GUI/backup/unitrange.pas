@@ -38,6 +38,8 @@ type
      EndHex:string;
   end;
 
+  function StrToHex(s:string):integer;
+
 var
   FormRange: TFormRange;
 

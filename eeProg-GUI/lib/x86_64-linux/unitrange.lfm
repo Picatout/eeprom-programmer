@@ -7,6 +7,7 @@ object FormRange: TFormRange
   Caption = 'range'
   ClientHeight = 234
   ClientWidth = 387
+  OnShow = FormShow
   LCLVersion = '3.0.0.3'
   object Label1: TLabel
     Left = 16

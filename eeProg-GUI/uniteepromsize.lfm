@@ -7,6 +7,7 @@ object FormEeprom: TFormEeprom
   Caption = 'EEPROM'
   ClientHeight = 142
   ClientWidth = 263
+  OnShow = FormShow
   LCLVersion = '3.0.0.3'
   object Label1: TLabel
     Left = 24
@@ -22,6 +23,7 @@ object FormEeprom: TFormEeprom
     Width = 88
     TabOrder = 0
     Text = '8'
+    OnKeyPress = EditSizeKeyPress
   end
   object BtnOk: TButton
     Left = 56

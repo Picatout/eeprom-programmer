@@ -18,6 +18,8 @@ type
     Label1: TLabel;
     procedure BtnOkClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
+    procedure EditSizeKeyPress(Sender: TObject; var Key: char);
+    procedure FormShow(Sender: TObject);
   private
 
   public
@@ -45,6 +47,16 @@ procedure TFormEeprom.BtnCancelClick(Sender: TObject);
 begin
   confirm:=false;
   close;
+end;
+
+procedure TFormEeprom.EditSizeKeyPress(Sender: TObject; var Key: char);
+begin
+  if key=#13 then BtnOkClick(sender);
+end;
+
+procedure TFormEeprom.FormShow(Sender: TObject);
+begin
+  EditSize.SetFocus;
 end;
 
 end.
