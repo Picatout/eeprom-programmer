@@ -1,3 +1,7 @@
+### 2025-03-19
+
+* Modification du circuit pour acccomoder les EEPROM fonctionnant à 3.3 volts.
+
 ### 2025-02-20
 
 * Agrandir le **tib** à 240 octets. Permet de revecoir des commandes **:** contenant jusqu'à 64 octets ce qui est la taille des pages des EEPROM  AT27Cxxx
