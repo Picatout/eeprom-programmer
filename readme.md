@@ -102,5 +102,5 @@ J'ai créé une version améliorée du programmeur. Cette version ajoute une emb
 
 ![eeProg V2](docs/eeProg_V2.2.png)
 
-Les EEPROMS de type **SST39SF010A (128KO)/ SST39SF020A (256KO) / SST39SF040 (512KO)** de Microchip disponible au format **PLCC-32** pourront être programmées lorsque j'aurai modifié le logiciel, ce sera la prochaine étape.
+Les EEPROMS de type **SST39SF010A (128KO)/ SST39SF020A (256KO) / SST39SF040 (512KO)** de Microchip disponibles au format **PLCC-32** pourront être programmées lorsque j'aurai modifié le logiciel, ce sera la prochaine étape.
 
