@@ -3221,6 +3221,12 @@
 		(uuid "53d3b72b-ffd6-4042-9e02-ac627e46c78d")
 	)
 	(junction
+		(at 119.38 128.27)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "56d8ebf3-72a7-472a-8a8e-f1f6dfed38f9")
+	)
+	(junction
 		(at 191.77 80.01)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -3279,14 +3285,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "fd83636f-c63a-412a-ac69-84ddbc0e6806")
-	)
-	(no_connect
-		(at 227.33 130.81)
-		(uuid "0b37b5f1-4dc2-4b81-b242-a050efbd6123")
-	)
-	(no_connect
-		(at 227.33 133.35)
-		(uuid "2f1ab1b9-3703-425e-bcaf-24274201c1ae")
 	)
 	(bus_entry
 		(at 149.86 128.27)
@@ -3550,6 +3548,15 @@
 		(uuid "5f46f7a6-f154-4ee3-9ab9-f85bc3ec4048")
 	)
 	(bus_entry
+		(at 224.79 130.81)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "615b64e7-a03e-4d41-af1b-458c894195b4")
+	)
+	(bus_entry
 		(at 113.03 100.33)
 		(size 2.54 -2.54)
 		(stroke
@@ -3593,6 +3600,15 @@
 			(type default)
 		)
 		(uuid "6f08208f-997f-44a0-912f-8dc152c47d67")
+	)
+	(bus_entry
+		(at 224.79 128.27)
+		(size 2.54 2.54)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "72022430-c0eb-4eef-a88d-8c63dedd8b90")
 	)
 	(bus_entry
 		(at 224.79 120.65)
@@ -4158,6 +4174,16 @@
 	)
 	(bus
 		(pts
+			(xy 224.79 125.73) (xy 224.79 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "230f2260-6a04-4c03-b2e8-31fa881eadbc")
+	)
+	(bus
+		(pts
 			(xy 83.82 125.73) (xy 83.82 128.27)
 		)
 		(stroke
@@ -4168,7 +4194,7 @@
 	)
 	(bus
 		(pts
-			(xy 119.38 105.41) (xy 119.38 130.81)
+			(xy 119.38 105.41) (xy 119.38 128.27)
 		)
 		(stroke
 			(width 0)
@@ -4488,6 +4514,16 @@
 	)
 	(bus
 		(pts
+			(xy 224.79 128.27) (xy 224.79 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7316e0ac-5c72-4305-a867-6f1dbd24b313")
+	)
+	(bus
+		(pts
 			(xy 119.38 130.81) (xy 119.38 133.35)
 		)
 		(stroke
@@ -4766,6 +4802,16 @@
 		)
 		(uuid "b0565ea2-1c9f-417f-9f7d-3fbc658a2666")
 	)
+	(bus
+		(pts
+			(xy 119.38 128.27) (xy 119.38 130.81)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b21c791d-d2b5-4eda-8edc-42ba50ecd46f")
+	)
 	(wire
 		(pts
 			(xy 180.34 102.87) (xy 171.45 102.87)
@@ -4795,6 +4841,16 @@
 			(type default)
 		)
 		(uuid "bac354fe-843c-4d64-9bdf-84caa34b89c6")
+	)
+	(bus
+		(pts
+			(xy 115.57 128.27) (xy 119.38 128.27)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bb0c9080-a2d4-44d5-adb7-02cded59ca39")
 	)
 	(bus
 		(pts
@@ -5136,7 +5192,7 @@
 		)
 		(uuid "fed7034d-c498-4e30-8f19-ce5ba522dd01")
 	)
-	(text "eeprom programmer\nversion 2"
+	(text "eeprom programmer\nversion 2.2"
 		(exclude_from_sim no)
 		(at 178.562 171.958 0)
 		(effects
@@ -5167,16 +5223,6 @@
 		)
 		(uuid "25ee053d-e531-4ad6-9ed5-4fe1f1ee7e52")
 	)
-	(label "A16"
-		(at 113.03 123.19 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "2cab6174-a632-4718-b717-1bf1eb3693e0")
-	)
 	(label "A8"
 		(at 93.98 133.35 180)
 		(effects
@@ -5188,12 +5234,12 @@
 		(uuid "39d00db3-6871-41df-b195-6fe72cf9a54e")
 	)
 	(label "A19"
-		(at 95.25 102.87 180)
+		(at 113.03 138.43 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
 		(uuid "3c13e731-1eee-4cf4-8eac-844c8eddcc38")
 	)
@@ -5258,7 +5304,7 @@
 		(uuid "5b981ce5-0703-48b7-9d03-c6471164fa1e")
 	)
 	(label "A18"
-		(at 95.25 100.33 180)
+		(at 95.25 102.87 180)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -5276,6 +5322,16 @@
 			(justify left bottom)
 		)
 		(uuid "5d05e984-9063-4657-9d8e-dc5dc3652aea")
+	)
+	(label "A18"
+		(at 227.33 133.35 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "6c4471ff-1741-4960-811e-921e9196e757")
 	)
 	(label "A7"
 		(at 95.25 97.79 180)
@@ -5348,12 +5404,12 @@
 		(uuid "acb827da-d36f-4481-84a3-224e0c3f1489")
 	)
 	(label "A17"
-		(at 113.03 138.43 0)
+		(at 95.25 100.33 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
 		(uuid "ad260308-89c7-4624-a955-650a3e6cdc22")
 	)
@@ -5416,6 +5472,16 @@
 			(justify left bottom)
 		)
 		(uuid "db33e3ab-fb66-45ec-b469-6c18b7edb804")
+	)
+	(label "A17"
+		(at 227.33 130.81 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "e6d24a9d-4f14-44d1-b307-7b1e7fcf6b3b")
 	)
 	(label "D6"
 		(at 113.03 100.33 0)

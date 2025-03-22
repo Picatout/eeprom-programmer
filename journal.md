@@ -1,3 +1,7 @@
+### 2025-03-21
+
+* Création du hardware de la version 2.2 du eeprom-programmer.
+
 ### 2025-03-19
 
 * Modification du circuit pour acccomoder les EEPROM fonctionnant à 3.3 volts.
