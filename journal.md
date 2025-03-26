@@ -1,3 +1,7 @@
+### 2025-03-26
+
+* J'avais oublié de décommenté **call clr_screen** au début de la routine **eeProg**.
+
 ### 2025-03-25
 
 * Déboguer le firmware V2.0R0 de la carte NUCLEO_8S208RB 

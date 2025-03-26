@@ -95,6 +95,7 @@ begin
   if FormRange.confirm then
   begin
        cursorType:=memoConsole.cursor;
+       memoConsole.cursor:=crHourGlass;
        EraseRange;
        memoConsole.Cursor:=CursorType;
   end;
@@ -243,6 +244,7 @@ begin
        if confirm then
        begin
             cursorType:=MemoConsole.cursor;
+            memoConsole.cursor:=crHourGlass;
             cmd:=StartHex+'.'+EndHex;
             MemoConsole.lines.Clear;
             eeprogCmd.eeprogCmd(cmd,MemoConsole);
@@ -335,6 +337,7 @@ begin
        if Confirm then
        begin
            CursorType:=memoConsole.cursor;
+           memoConsole.cursor:=crHourGlass;
            cmd:=StartHex+'.'+EndHex;
            MemoConsole.lines.Clear;
            eeprogCmd.eeprogCmd(cmd,MemoConsole);

@@ -1,5 +1,9 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-03-26
+
+* Débuté le travail sur la version GUI_V2.0R0 
+
 ### 2025-03-02
 * Version GUI V1.0R2 
 * Modifié le style de la fenêtre principale.

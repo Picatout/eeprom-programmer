@@ -291,7 +291,7 @@ init_ports:
 EEPROG_INFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
 eeProg:
     mov base,#16 
-;    call clr_screen
+    call clr_screen
     ldw x,#EEPROG_INFO 
     call puts 
     ld a,#MAJOR
