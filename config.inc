@@ -2,9 +2,9 @@
 ;;  configuration parameters 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-    MAJOR=1
+    MAJOR=2
     MINOR=0
-    REV=7
+    REV=0
 
     FMSTR=16 ; master clock frequency in Mhz 
 

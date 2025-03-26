@@ -1,3 +1,26 @@
+### 2025-03-25
+
+* Déboguer le firmware V2.0R0 de la carte NUCLEO_8S208RB 
+
+### 2025-03-24
+
+* Travail sur eeProg.asm pour l'adapter à des mémoires de taille supérieure à 64Ko.
+
+* La nouvelle version  
+
+### 2025-03-23
+
+* Travail sur eeProg.asm pour l'adapter à des mémoires de taille supérieure à 64Ko.
+
+### 2025-03-22
+
+* Travail sur eeProg.asm pour l'adapter à des mémoires de taille supérieure à 64Ko.
+
+### 2025-03-21
+
+* Travail sur eeProg.asm pour l'adapter à des mémoires de taille supérieure à 64Ko.
+
+
 ### 2025-03-21
 
 * Création du hardware de la version 2.2 du eeprom-programmer.

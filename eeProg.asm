@@ -37,9 +37,15 @@
 
     .module EEPROG  
 
+; version 2 update 
+; can work with 19 bits PLCC-32 EEPROM
+; SST39SF010 (17 bits address) 128KO
+; SST39SF020 (18 bits address) 256KO 
+; SST39SF040 (19 bits address) 512KO 
 
-    ADDR_HIGH=PG_ODR 
-    ADDR_LOW=PD_ODR 
+    ADDR_UPPER=PE_ODR  ; bits 16..18
+    ADDR_HIGH=PG_ODR   ; bits 8..15
+    ADDR_LOW=PD_ODR    ; bits 0..7 
     DATA_ODR=PB_ODR
     DATA_IDR=PB_IDR 
     DATA_DDR=PB_DDR
@@ -50,8 +56,6 @@
     EEPROM_NOE=BIT2 ; eeprom output enable 
     EEPROM_NWE=BIT3 ; eeprom write enable 
 
-    EEPROM_PAGE_SIZE=64
-
 ;--------------------------------
 ;     MACROS 
 ;--------------------------------
@@ -60,7 +64,7 @@
     ; activate eeprom
     ; must be in this state 
     ; for read/prog operations  
-    .macro _eeprom_enable  
+    .macro _eeprom_nce_low  
         bres EEPROM_CTRL,#EEPROM_NCE 
     .endm 
 
@@ -68,34 +72,36 @@
     ; put eeprom in low power mode 
     ; data pin are in hi-z state 
     ; can't be read/prog in this state 
-    .macro _eeprom_disable 
+    .macro _eeprom_nce_high 
         bset EEPROM_CTRL,#EEPROM_NCE
     .endm 
 
     ; reset eeprom ~OE bit
     ; must be low to read eeprom  
-    .macro _eeprom_enabe_output 
-        bres EEPROM_CTRL,#EEPROM_NOE 
+    .macro _eeprom_noe_low 
+        bres EEPROM_CTRL,#EEPROM_NOE
+        nop  
     .endm 
 
     ; set eeprom ~OE bit
     ; must be high to program eeprom  
-    .macro _eeprom_disable_output 
+    .macro _eeprom_noe_high 
         bset EEPROM_CTRL,#EEPROM_NOE
+        nop 
     .endm 
 
     ; reset eeprom ~WE bit 
-    .macro _eeprom_we_low  
+    .macro _eeprom_nwe_low  
         bres EEPROM_CTRL,#EEPROM_NWE
     .endm 
 
     ; set eeprom ~WE bit 
-    .macro _eeprom_we_high 
+    .macro _eeprom_nwe_high 
         bset EEPROM_CTRL,#EEPROM_NWE
     .endm 
 
-    ; eeprom programming delay 
-    ; 11msec per 64 bytes page 
+    ; AT28C eeprom programming delay 
+    ; 10msec per 64 bytes page 
     .macro _prog_delay 
         ld a,#10
         _straz timer+1
@@ -120,33 +126,83 @@
     .endm 
 
     ;configure data port for output 
-    ; and enable eeprom ~OE bit.
+    ; and disable eeprom ~OE bit.
     .macro _config_write 
+        _eeprom_noe_high
         _data_output
-        _eeprom_disable_output
     .endm 
 
     ; configure data port for input 
-    ; and disable eeprom ~OE bit 
+    ; and enable eeprom ~OE bit 
     .macro _config_read 
+        _eeprom_nwe_high 
         _data_input
-        _eeprom_enabe_output
     .endm 
 
     ; data in A 
     .macro _eeprom_write  
-        _eeprom_we_low 
-        nop 
+        _eeprom_nwe_low 
         nop 
         ld DATA_ODR,a
         nop
-        nop 
-        _eeprom_we_high   
+        _eeprom_nwe_high
     .endm 
 
     ; read eeprom data in A 
     .macro _eeprom_read  
-        ld a,DATA_IDR  
+        _eeprom_noe_low 
+        ld a,DATA_IDR   
+        _eeprom_noe_high 
+    .endm 
+
+;-----------------------------
+;  24 bits variables operations
+;-----------------------------
+    ; increment 24 bits value 
+    ; value in A:X 
+    .macro _inc24
+    addw x,#1 
+    adc a,#0
+    .endm 
+
+    ; incremeent 24 bits variable 
+    .macro _inc_v24 v 
+    _ldaz v+2
+    add a,#1 
+    _straz v+2 
+    _ldaz v+1 
+    adc a,#0 
+    _straz v+1 
+    _ldaz v 
+    adc a,#0 
+    _straz v 
+    .endm 
+
+    ; load 24 bits variable in A:X 
+    .macro _ld24 addr 
+    _ldaz addr 
+    _ldxz addr+1
+    .endm 
+
+    ; store 24 bits variable from A:X 
+    .macro _str24 addr 
+    _straz addr 
+    _strxz addr+1
+    .endm 
+
+    ; move 24 bits variable dest src 
+    .macro _mov_v24 dest,src 
+    _ldaz src
+    _ldxz src+1 
+    _straz dest 
+    _strxz dest+1 
+    .endm 
+
+    .macro _cp_v24 v1 v2 
+    _ldaz v1 
+    _ldxz v1+1 
+    subw x,v2+1
+    sbc a,v2
     .endm 
 
 
@@ -162,13 +218,25 @@
 ;       hex_number.hex_number -> display bytes in that range 
 ;       hex_number: hex_byte [hex_byte]*  -> write to EEPROM data bytes  
 ;       hex_number"STRING   write string in EEPROM 
-;       hex_numberXhex_number  erase range filling eeprom with FF 
+;       hex_numberXhex_number  erase range filling eeprom with FF
+;       hex_numberS eeprom size in bytes   
+;       {0,1}T  set eeprom type  AT28 or SST39
 ;----------------------------------------------------
 ; operatiing modes 
     NOP=0
     READ=1 ; single address or block
     STORE=2 
     ERASE=3 ; fill range with 0xFF 
+
+; eeprom programming buffe size 
+    DEFAULT_PAGE_SIZE=64 ; AT28C(BV)64B and AT28C(BV)256 
+
+; eeprom types 
+    AT28=0   ; AT28Cxxx (Vcc=5v), AT28BVxxx (Vcc=3.3V)
+    SST39=1  ; SST39SFxxx (Vcc=5V), SST39LFxxx (Vcc=3.3V), SST39VFxxx (Vcc=3.3V)
+
+DEFAULT_LIMIT = 0x1FFF ; 8KO eeprom 
+
 
     ; get next character from input buffer 
     .macro _next_char 
@@ -180,12 +248,20 @@
 ;---------------------------
 ; initialize ports used 
 ; to interface to EEPROM 
+; PORT E  address bits 18:16 
 ; PORT G  address bits 15:8 
 ; PORT D  address bits 7:0 
 ; PORT B  data bits 
 ; PORT C  bits 1,2,3 as controls lines 
 ;----------------------------  
 init_ports:
+; PORT E (ADDR_UPPER) as output push-pull
+; only bits 0..2 
+   ld a, #7 
+   ld PE_DDR,a ; bits 0..2 as output
+   ld PE_CR1,a ; bits 0..2 push pull output 
+   ld PE_CR1,a ; bits 0..2 high speed 
+   clr ADDR_UPPER       
 ; PORT G (ADDR_HIGH) as output push-pull 
     ld a,#255 
     ld PG_DDR,a ; output 
@@ -203,7 +279,9 @@ init_ports:
     ld PC_CR1,a ; push-pull 
     ld PC_CR2,a ; high-speed 
     ld PC_DDR,a ; output 
-    _eeprom_enable 
+    _eeprom_nwe_high 
+    _eeprom_noe_high 
+    _eeprom_nce_low  
     _config_read
     ret 
 
@@ -213,7 +291,7 @@ init_ports:
 EEPROG_INFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
 eeProg:
     mov base,#16 
-    call clr_screen
+;    call clr_screen
     ldw x,#EEPROG_INFO 
     call puts 
     ld a,#MAJOR
@@ -228,10 +306,19 @@ eeProg:
     call print_dec
     call new_line 
     call init_ports 
+; set default limit for 8KB eeprom     
+    _clrz limit 
+    ldw x,#DEFAULT_LIMIT
+    _strxz limit+1
+    mov page_size, #DEFAULT_PAGE_SIZE
+; set eeprom type to AT28xxxx 
+    mov eeType,#AT28     
+; clear pointer variables 
     clr a 
-    _clrz xamadr 
-    _clrz storadr 
-    _clrz last    
+    clrw x 
+    _str24 xamadr 
+    _str24 storadr 
+    _str24 last 
 eeProg_1:
 	ldw x,#STACK_EMPTY ; in case CTRL_C was used 
 	ldw sp,x
@@ -242,6 +329,7 @@ cli:
     clr a
     clr tib
     call readln
+    jreq cli 
 ; analyze input line      
     ldw y,x  
     _clrz mode 
@@ -254,51 +342,83 @@ next_char:
      jreq cli 
     call exam_block 
     jra cli 
-parse01:
+parse01: 
+; write string test
     cp a,#'" 
-    jrne 1$ 
+    jrne 1$
+    _mov_v24 storadr, xamadr 
     call write_string
     jra cli 
-1$: 
+1$: ; erase range test
     cp a,#'X 
     jrne 2$ 
     ld a,#ERASE 
     _straz mode 
+    _mov_v24 storadr, xamadr
+;call print_adr
     jra next_char 
-2$:    
+2$: 
+; erase all test 
+    cp a,#'*
+    jrne 24$
+    call erase_all 
+    jra cli 
+24$:
+    cp a,#'S ; eeprom size in bytes   
+    jrne 3$
+;'limit' test     
+    _ldaz xamadr+2 
+    sub a,#1 
+    _straz limit+2
+    _ldaz xamadr+1 
+    sbc a,#0 
+    _straz limit+1
+    _ldaz xamadr 
+    sbc a,#0
+    _straz limit 
+    _clrz mode 
+    jra next_char 
+3$: 
+    cp a,#'T ; eeprom type: 0->AT28,1->SST39 
+    jrne 4$
+    _ldaz xamadr+2 
+    and a,#1
+    _straz eeType
+    _clrz mode
+    jra next_char
+4$:
     cp a,#':
     jrne 5$ 
     call write_eeprom 
-    jra cli     
+    jp cli     
 5$:
     cp a,#'. 
-    jrne 7$ 
+    jrne 6$ 
     ld a,#READ 
     _straz mode  
-;    tnz mode 
-;    jreq cli ; here mode should be set to 1 
     jra next_char 
-7$: 
+6$: 
     cp a,#SPACE 
     jreq next_char ; skip separator and invalids characters  
     call parse_hex ; maybe an hexadecimal number 
     tnz a ; unknown token ignore rest of line
-    jreq cli 
+    jrne 64$
+    jp next_char 
+64$: 
     tnz mode 
     jreq 9$
     ld a,#ERASE 
     cp a,mode 
     jrne 8$
     call erase_range 
-    jra cli
+    jp cli     
 8$:
     call exam_block
-    jra next_char
+    jp cli
 9$:
-    _strxz xamadr 
-    _strxz storadr
+    _mov_v24 xamadr, last  
     _incz mode
-    jra next_char 
+    jp next_char 
 
 
 ;-------------------------------------
@@ -311,9 +431,18 @@ parse01:
 ; if delay between _eeprom_write >150µSec 
 ; programming phase start.
 ;--------------------------------------
-    PAGE_CNTR=1
 write_eeprom:
-    push #EEPROM_PAGE_SIZE ; bytes per eeprom page 
+    _mov_v24 storadr, xamadr 
+    btjf eeType,#0,at28_write_eeprom
+    jp sst39sf0xx_store
+;--------------------------------
+; AT28 EEPROM type 
+; write bytes sequence 
+;--------------------------------
+    PAGE_CNTR=1
+at28_write_eeprom:
+    _ldaz page_size 
+    push a  ; bytes per eeprom page 
 ; load data in pad 
     ldw x,#pad 
     _strxz ptr16
@@ -322,8 +451,6 @@ write_eeprom:
     _next_char 
     cp a,#SPACE 
     jreq 1$
-    cp a,#'; 
-    jreq 9$  
     call parse_hex
     tnz a 
     jreq 9$
@@ -333,12 +460,11 @@ write_eeprom:
     dec (PAGE_CNTR,sp)
     jreq 9$ 
     jra 1$ 
-9$: ld a,#EEPROM_PAGE_SIZE 
+9$: _ldaz page_size  
     sub a,(PAGE_CNTR,sp)
     jreq 10$
     call prog_eeprom 
 10$:
-    _clrz mode 
     _drop 1 
     ret 
 
@@ -350,30 +476,34 @@ write_eeprom:
 exam_block:
     _vars VSIZE
     _config_read ; to read data from eeprom  
-    _ldxz xamadr
 new_row: 
     ld a,#16
     ld (ROW_SIZE,sp),a ; bytes per row 
+    _ldaz xamadr 
+    _ldxz xamadr+1
     call print_adr ; display address and first byte of row 
     ldw y,#tib 
 row:
+    _ldaz xamadr 
+    _ldxz xamadr+1
     call print_mem ; display byte at address  
-    cpw x,last 
-    jrult 2$
+    _cp_v24  xamadr last
+    jrult 2$   
 1$:
     call print_text 
     jra 9$ 
 2$:     
-    incw x 
-    jreq 1$ ; overflow 
+    _inc_v24 xamadr 
+    _cp_v24 limit xamadr 
+    jrult 1$
+3$:
     dec (ROW_SIZE,sp)
     jrne row
     call print_text 
     jra new_row 
-9$: incw x
-    _strxz xamadr
-    _strxz last 
-    _clrz mode 
+9$: 
+    _inc_v24 xamadr
+    _mov_v24 last xamadr 
     _drop VSIZE 
     ret  
 
@@ -399,12 +529,17 @@ print_text:
 ;    A   first character 
 ;    Y   pointer to TIB 
 ; output: 
-;    X     number 
+;    last parsed hexnumber if any
+;    A     number of digits  
 ;    Y     point after number 
 ;-----------------------------      
+    DIGITS_CNT=2 
+    UPPER_BYTE=1
+    VAR_SIZE=2
 parse_hex:
-    push #0 ; digits count 
-    clrw x
+    _vars VAR_SIZE
+    clrw x 
+    ldw (UPPER_BYTE,sp),x 
 1$:    
     cp a,#'G 
     jrpl 9$ 
@@ -415,41 +550,52 @@ parse_hex:
     cp a,#17 
     jrmi 9$ 
     sub a,#7 
-2$: ; shift hex digit in X 
-    push #4 ; bit count 
-    swap a ; bits in 7:4 
-3$:
-    sll a 
+2$: ; rotate A -> X ->  UPPER_BYTE 
+    swap a
+    sll a  
     rlcw x 
-    dec (1,sp)
-    jrne 3$
-    pop a
-    inc (1,sp) ; digits count  
+    rlc (UPPER_BYTE,sp)  
+    sll a  
+    rlcw x 
+    rlc (UPPER_BYTE,sp)  
+    sll a  
+    rlcw x 
+    rlc (UPPER_BYTE,sp)  
+    sll a  
+    rlcw x 
+    rlc (UPPER_BYTE,sp)  
+    inc (DIGITS_CNT,sp) ; digits count  
     _next_char 
     tnz a 
     jrne 1$
 9$: ; end of hex number
     decw y  ; put back last character  
-    pop a ; hex digits count
-    tnz a 
-    jreq 10$ ; no hex number 
-    _strxz last 
-10$:
+    ld a,(UPPER_BYTE,sp)
+    tnz (DIGITS_CNT,sp) ; hex digits count
+    jreq 10$
+    _str24 last
+10$: 
+    ld a,(DIGITS_CNT,sp)
+    _drop VAR_SIZE 
     ret 
 
 ;-----------------------------------
 ;  print address in xamadr variable
 ;  followed by ': '  
 ;  input: 
+;    A     upper byte 
 ;    X     address to print 
 ;  output:
-;   X      not modified 
+;   A:X      not modified 
 ;-------------------------------------
-print_adr: 
+print_adr:
+    push a 
+    call print_hex 
     callr print_word 
     ld a,#': 
     call putc 
     call space
+    pop a 
     ret 
 
 ;-------------------------------
@@ -470,11 +616,13 @@ print_word:
 ;  print byte at memory location 
 ;  pointed by X followed by ' ' 
 ;  input:
-;     X     memory address 
+;     A:X     memory address 
 ;  output:
-;    X      not modified 
+;    A:X      not modified 
 ;-------------------------------------
 print_mem:
+    push a 
+    pushw x 
     call eeprom_addr 
     _eeprom_read
     push a 
@@ -490,11 +638,14 @@ print_mem:
     pop a 
     call print_hex  
     call space 
+    popw x 
+    pop a 
     ret 
 
 
 ;------------------------------
-; program data in pad to eeprom 
+; program data in pad to AT28 eeprom 
+; limited to 64KB 
 ; input:
 ;    A     byte count 
 ;    pad   data 
@@ -504,8 +655,8 @@ prog_eeprom:
     push a ; bytes to program 
     _config_write
     ldw y,#pad 
-    _ldxz storadr 
-1$:
+    _ldxz storadr+1 
+1$: clr a 
     call eeprom_addr 
     incw x 
     ld a,(y)
@@ -513,25 +664,33 @@ prog_eeprom:
     _eeprom_write 
     dec (1,sp)
     jrne 1$ 
-    _strxz storadr 
+    _strxz storadr+1 
     _config_read 
+.if 0
+; delay
     _prog_delay
+.else
+    call toggle_polling
+.endif 
     _drop 1
     ret 
 
 ;---------------------------
 ; set eeprom address 
 ; input:
-;    X     address 
+;    A:X     address 
 ; output:
-;    X     preserved 
+;    A:X     preserved 
 ;---------------------------
 eeprom_addr:
     push a 
+    pushw x 
+    ld ADDR_UPPER,a  
     ld a,xh 
     ld ADDR_HIGH,a 
     ld a,xl 
     ld ADDR_LOW,a 
+    popw x 
     pop a
     ret 
 
@@ -543,28 +702,40 @@ eeprom_addr:
 ; string max length 63 char.
 ;-----------------------------
 write_string:
+    btjf eeType,#0,at28_write_string
+    jp sst39sf0xx_write_string 
+
+;--------------------------------
+; AT28 type EEPROM write string 
+; procedure 
+;--------------------------------
+at28_write_string: 
     _config_write 
     ldw x,y 
     call strlen
     tnz a 
     jreq 10$
     inc a 
-    cp a,#EEPROM_PAGE_SIZE
+    cp a,page_size 
     jrmi 1$ 
     ld a,#PAD_SIZE 
-1$: push a 
-    _ldxz storadr 
+1$: push a  
+    _ldxz storadr+1
 2$:
+    clr a 
+    call eeprom_addr 
+    incw x
     ld a,(y)
     incw y 
-    call eeprom_addr 
-    incw x 
     _eeprom_write 
+    cpw x,limit+1
+    jrugt 9$
     dec (1,sp)
     jrne 2$
-    _strxz storadr
-    _prog_delay
+    _strxz storadr+1
+9$:
     _config_read 
+    call toggle_polling
     _drop 1  
 10$:
     ret 
@@ -574,13 +745,19 @@ write_string:
 ;  filling with 0xFF value 
 ;  cmd format: addr1Xaddr2 
 ;----------------------------
-    COUNT=1
-    VSIZE=2
 erase_range:
+    btjf eeType,#0,at28_erase_range
+    jp sst39sf0xx_range_erase
+;------------------------------
+; AT28 type erase range 
+;------------------------------
+    COUNT=1 ; word 
+    VSIZE=2
+at28_erase_range:
     _vars VSIZE 
 ; fill pad with 0xFF
     clr (COUNT,sp)
-    ld a,#EEPROM_PAGE_SIZE
+    _ldaz page_size 
     ld (COUNT+1,sp),a
     ldw x,#pad 
     ld a,#0xff 
@@ -589,12 +766,14 @@ erase_range:
     incw x 
     dec (2,sp)
     jrne 1$ 
-    _ldxz last 
-    subw x,storadr 
+    _ldxz last+1 
+    subw x,storadr+1 
     incw x 
     ldw (COUNT,sp),x ; count to erase 
 2$:
-    ldw x,#EEPROM_PAGE_SIZE 
+    clrw x 
+    _ldaz page_size 
+    ld xl,a 
     cpw x,(COUNT,sp)
     jrmi 4$ 
     ldw x,(COUNT,sp)
@@ -609,6 +788,21 @@ erase_range:
     jrne 2$ 
     _drop VSIZE 
     ret 
+
+;-------------------------
+; erase all eeprom 
+;-------------------------
+erase_all:
+    btjt eeType,#0,1$
+; AT28 EEPROM type 
+    _clrz storadr 
+    _clrz storadr+1
+    _clrz storadr+2 
+    _mov_v24 last, limit 
+    jra erase_range 
+1$: ; 39SF0xx eeprom type 
+    jp sst39sf0xx_chip_erase
+
 
 ;--------------------------
 ; return lenght of string
@@ -629,3 +823,283 @@ strlen:
     jra 1$
 9$: popw x
     ret 
+
+;-----------------------------
+; bit toggle at each read 
+; while programming or erase 
+; loop until bit 6 stable 
+; NOTE:
+;  expect _config_read done 
+;  before call.
+;-----------------------------
+    B6_MASK=(1<<6)
+    LAST_READ=1
+toggle_polling:
+    push #0
+; set timemout limit 101msec
+; according to specs sst39sf* chip erase 
+; take 100msec maximum.
+    ldw x,#101 
+    ldw timer,x
+    bset flags,#FTIMER
+    _eeprom_read 
+    and a,#B6_MASK
+1$: 
+    ld (LAST_READ,sp),a 
+; ~ 1µSec delay 
+    ld a,#5 
+3$: dec a 
+    jrne 3$
+    btjt flags,#FTIMER,2$ 
+; if timeout 
+; print message 
+    ldw x,#timeout 
+    call puts 
+    jp eeProg_1 
+2$: ; 2 consecutive read must be equal 
+    _eeprom_read
+    and a,#B6_MASK 
+    cp a,(LAST_READ,sp)
+    jrne 1$ 
+    _eeprom_read
+    and a,#B6_MASK
+    cp a,(LAST_READ,sp)
+    jrne 1$ 
+9$:
+    _drop 1 
+    ret 
+timeout: .asciz "operation timeout"
+
+;---------------------------
+; substract 24 bits values
+; A:X with value on stack 
+; result= A:X-(3,SP)
+; input:
+;   A:X   v1 
+;   (3,SP) v2 
+; output:
+;   flags Z,N,C 
+;   A:X 
+;-------------------------
+    V2=3
+sub24:
+    subw x,(V2+1,sp)
+    sbc a,(V2,sp)
+    ret 
+
+
+;---------------------------------
+;---------------------------------
+;  SST39SF0XX eeprom procedures
+;
+; these eeprom can be programmed 
+; only one byte at a time 
+; 15 µSec delay between each byte
+; special sequences are required 
+; for:
+;   write byte 
+;   sector erase 
+;   chip erase.
+;---------------------------------
+;---------------------------------
+
+; sst39sf0xx commands bytes 
+SST39_KEY_ADDR=0x5555
+SST39_NKEY_ADDR=0x2AAA 
+SST39_KEY=0xAA 
+SST39_NKEY=0x55
+SST39_CMD_ADDR=SST39_KEY_ADDR  
+SST39_WRITE_CMD=0xA0
+SST39_ERASE_CMD=0x80 
+SST39_SECTOR_ERASE=0x30
+SST39_CHIP_ERASE=0x10
+SST39_ID_ENTER=0x90 
+SST39_ID_EXIT=0xFF 
+
+SST39_SECTOR_SIZE=4096 ; erase sector size in bytes 
+
+;--------------------------------
+; send  command byte to sst39sf0xx eeprom 
+; input:
+;    a    cmd byte 
+;    x    address (0x5555||0x2AAA) 
+;--------------------------------
+sst39sf0xx_send_cmd:
+    push a 
+    clr a 
+    call eeprom_addr 
+    pop a 
+    _eeprom_write 
+    ret 
+
+;--------------------------
+; write/erase unlock 
+; 5555 AA 2AAA 55
+;-------------------------- 
+sst39sf0xx_send_prefix:
+    ld a,#SST39_KEY 
+    ldw x,#SST39_KEY_ADDR 
+    call sst39sf0xx_send_cmd  
+    ld a,#SST39_NKEY 
+    ldw x,#SST39_NKEY_ADDR 
+    call sst39sf0xx_send_cmd 
+    ret 
+
+;-------------------------------
+; SST39SF0xx write byte 
+; input:
+;   storadr  byte address 
+;   A        data 
+;-------------------------------
+sst39sf0xx_write_byte:
+    push a 
+    _config_write
+    call sst39sf0xx_send_prefix 
+    ld a,#SST39_WRITE_CMD
+    ldw x,#SST39_CMD_ADDR
+    call sst39sf0xx_send_cmd    
+    _ldaz storadr 
+    _ldxz storadr+1
+    call eeprom_addr  
+    pop a 
+    _eeprom_write
+    _config_read 
+    call toggle_polling
+    ret 
+
+;-------------------------
+; 39SF0XX eeprom type 
+; write string procedure 
+;-------------------------
+    LAST_CHAR=1
+sst39sf0xx_write_string:
+    push #0  ; LAST_CHAR
+1$: ld a,(y)
+    incw y 
+    ld (LAST_CHAR,sp),a 
+    call sst39sf0xx_write_byte
+; increment store address 
+    _inc_v24 storadr     
+    _cp_v24 limit,storadr 
+    jrult 9$      
+    tnz (LAST_CHAR,sp)   
+    jrne 1$ 
+9$: _drop 1 
+    ret 
+
+;--------------------------------
+; parse hexadecimal from 
+; input line and store them 
+; in eeprom 
+;input:
+;   storadr   first address 
+;             auto increment 
+;--------------------------------
+sst39sf0xx_store:    
+1$:
+; skip spaces 
+    _next_char 
+    tnz a 
+    jreq 9$ ; end of line  
+    cp a,#SPACE 
+    jreq 1$
+    call parse_hex
+    tnz a 
+    jreq 9$
+    ld a,xl 
+    call sst39sf0xx_write_byte
+    _inc_v24 storadr
+    _cp_v24 limit, storadr 
+    jruge 1$     
+9$:    
+    ret 
+
+
+;---------------------------------
+; SST39SF0XX chip erase 
+; command sequence:
+; prefix 0x5555 0x80
+; prefix 0x5555 0x10 
+; erase time: 70msec 
+;---------------------------------
+sst39sf0xx_chip_erase:
+; save used registers 
+    push a 
+    pushw x 
+; send prefix  
+    _config_write 
+   call sst39sf0xx_send_prefix 
+; erase command first byte  
+    ld a,#SST39_ERASE_CMD
+    ldw x,#SST39_KEY_ADDR
+    call sst39sf0xx_send_cmd 
+; prefix sequence again 
+    call sst39sf0xx_send_prefix 
+; erase chip command 2d byte 
+    ld a,#SST39_CHIP_ERASE
+    ldw x,#SST39_KEY_ADDR
+    call sst39sf0xx_send_cmd 
+    _config_read 
+    ldw x,#100 
+    _strxz timer 
+    bset flags,#FTIMER 
+    btjt flags,#FTIMER,.
+;restore saved registers     
+    popw x 
+    pop a 
+    ret 
+
+
+;----------------------------
+; minimum erase is 4096 bytes 
+; sector  (0x1000)
+;----------------------------
+sst39sf0xx_range_erase:
+; sector align address 
+; clear storadr bits 11:0 
+    _clrz storadr+2
+    _ldaz storadr+1
+    and a,#0xf0 
+    _straz storadr+1
+1$:
+    call sst39sf0xx_sector_erase  
+    _ldxz storadr 
+    addw x,#SST39_SECTOR_SIZE 
+    _strxz storadr
+    cpw x,#last 
+    jrult 1$
+    ret 
+
+;-------------------------------
+; SST39SF0XX sector erase 
+; a sector is 4096 bytes 
+; command sequence:
+; prefix 0x5555 0x80 
+; prefix SA 0x30
+; SA is sector address
+; input:
+;    storadr+1 Ams=A12  
+;------------------------------
+sst39sf0xx_sector_erase:
+; send prefix  
+    _config_write 
+   call sst39sf0xx_send_prefix 
+; erase command  byte  
+    ld a,#SST39_ERASE_CMD
+    ldw x,#SST39_KEY_ADDR
+    call sst39sf0xx_send_cmd 
+; prefix sequence again 
+    call sst39sf0xx_send_prefix 
+; set sector address + 0x30 
+    _ldaz storadr 
+    ldw x,storadr+1
+    call eeprom_addr 
+    ld a,#SST39_SECTOR_ERASE
+    _eeprom_write 
+    _config_read 
+    ldw x,#25 ; maximum for sst39sf0xx 
+    _strxz timer 
+    bset flags,#FTIMER 
+    btjt flags,#FTIMER,.
+    ret 
+

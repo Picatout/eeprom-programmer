@@ -97,9 +97,13 @@ rx1_head::  .blkb 1 ; rx1_queue head pointer
 rx1_tail::   .blkb 1 ; rx1_queue tail pointer  
 rx1_queue:: .ds RX_QUEUE_SIZE ; UART receive circular queue 
 mode: .blkb 1 ; command mode 
-xamadr: .blkw 1 ; examine address 
-storadr: .blkw 1 ; store address 
-last: .blkw 1   ; last address parsed from input 
+; version 2 update these variable size to 24 bits 
+xamadr: .blkb 3 ; examine address 
+storadr: .blkb 3 ; store address 
+last: .blkb 3   ; last address parsed from input 
+limit: .blkb 3 ; eeprom last address 0x1fff for 8KO, 0x7fff for 32KO, etc 
+eeType: .blkb 1; programming type AT28 =0, 39SF = 1 
+page_size: .blkb 1 ;  how many bytes can be programmed in one shot.
 
 	.area CODE 
 

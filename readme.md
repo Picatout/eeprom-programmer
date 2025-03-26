@@ -104,3 +104,34 @@ J'ai créé une version améliorée du programmeur. Cette version ajoute une emb
 
 Les EEPROMS de type **SST39SF010A (128KO)/ SST39SF020A (256KO) / SST39SF040 (512KO)** de Microchip disponibles au format **PLCC-32** pourront être programmées lorsque j'aurai modifié le logiciel, ce sera la prochaine étape.
 
+### 2025-03-25
+
+La version **V2.0.0** du firmware de la carte NUCLEO_8S208RB est complétée. Trois nouvelles commandes ont étées ajoutées.
+
+* __*__  L'astérix seul permet d'effacer l'EEPROM au complet.
+
+* **0|1T**   Pour sélectionner le type de mémoire EEPROM utilisée. Il est nécessaire de spécifier cette valeur car la méthode de programmation est différente.
+    * **0**  Pour le type **AT28** .  Ce type de mémoire est disponible en 8KO ou 32KO et avec des variantes fonctionnant à +5 volts ou +3.3 volts.
+    * **1**  Pour le type **SST39**,  Ce type de mémoire est disponible en 128KO, 256KO et 512KO en format PLCC-32 avec des variantes fonctionnant à +5 volts ou +3.3 volts. 
+
+* *size*__S__ Pour sélectionner la capacité de la mémoire EEPROM, *size* est exprimé ent octets.
+    * 2000 = 8KO 
+    * 8000 = 32KO
+    * 20000 = 128KO 
+    * 40000 = 256KO 
+    * 80000 = 512KO
+
+Par défault **T** est initialisé à **0** pour les mémoire **AT28**  et **S** est initialisé à **2000** pour les mémoires de 8KO.
+
+Si ces valeurs par défaut ne sont pas adéquate pour l'EEPROM utilisée les commandes **T** et **S** doivent-être utilisées avant toute autre opération. Les 2 commandes peuvent-être concaténé comme suit:
+```
+eeProg, Copyright Jacques Deschenes, 2025
+version 2.0.0
+
+#1T20000S
+```
+
+### prochaine étape
+
+Il s'agit maintenant de modifier le programme [eeProg-gui](eeProg-GUI/eeProg_gui) vers la version 2.0.
+
