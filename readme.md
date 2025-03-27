@@ -135,3 +135,8 @@ version 2.0.0
 
 Il s'agit maintenant de modifier le programme [eeProg-gui](eeProg-GUI/eeProg_gui) vers la version 2.0.
 
+### 2025-03-26
+
+La version 2 de l'application est complétée. Voici le lien vers un vidéo de démonstration.
+
+[vidéo de démonstration](https://youtu.be/5XsjfRB1dvs)
