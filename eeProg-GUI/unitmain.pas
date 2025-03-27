@@ -169,6 +169,7 @@ var
   i,j:integer;
   BinFile:file of byte;
   buffer: array[0..15] of byte;
+
 //  bufferIdx:integer;
   line:string;
 
@@ -219,6 +220,7 @@ begin
    while k<line.Length do
    begin
       k:=skip(line,' ',k);
+      if line[k]=';' then k:= line.length;
       after:=next_hex(line,k);
       if (after-k=2) then
       begin

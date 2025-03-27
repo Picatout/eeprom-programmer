@@ -1,5 +1,10 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-03-27
+
+* Version GUI_V2.0R2 complétée.
+    * Correction d'un bogue dans la routine ParseLine, le charactère **;** était sauté et l'analyse continuait dans le commentaire provoquant un over run du buffer. 
+
 ### 2025-03-26
 
 * Débuté le travail sur la version GUI_V2.0R0 

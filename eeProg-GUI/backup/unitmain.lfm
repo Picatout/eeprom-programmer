@@ -3,6 +3,7 @@ object FormMain: TFormMain
   Height = 723
   Top = 294
   Width = 860
+  Align = alClient
   BorderStyle = bsSingle
   Caption = 'eeProg'
   ClientHeight = 723
