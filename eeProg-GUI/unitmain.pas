@@ -283,7 +283,6 @@ begin
 
 end;
 
-
 procedure TFormMain.EditCmdEditingDone(Sender: TObject);
 begin
 end;
@@ -293,7 +292,6 @@ var
   cursorShape:Tcursor;
 begin
   MemoConsole.lines.Clear;
-  MemoConsole.SetFocus;
   CursorShape:=MemoConsole.cursor;
   MemoConsole.cursor:=crHourGlass;
   eeProgCmd.eeProgCmd(EditCmd.Text,MemoConsole);

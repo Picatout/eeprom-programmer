@@ -297,7 +297,6 @@ begin
   MemoConsole.cursor:=crHourGlass;
   eeProgCmd.eeProgCmd(EditCmd.Text,MemoConsole);
   MemoConsole.Cursor:=cursorShape;
-//  MemoConsole.SetFocus;
 end;
 
 procedure TFormMain.EditCmdKeyPress(Sender: TObject; var Key: char);

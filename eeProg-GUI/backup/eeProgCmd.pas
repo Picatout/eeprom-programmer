@@ -17,7 +17,7 @@ procedure eeProgCmd(cmd:String;answer:Tmemo);
 
 implementation
 uses
-  unitMain,serial;
+  Forms,serial;
 
 var
   serialhandle : LongInt;
@@ -32,7 +32,7 @@ begin
   if (serialHandle>0) then
   begin
      Flags:= []; // none
-     SerSetParams(serialhandle, 115200, 8, NoneParity, 1,Flags);
+     SerSetParams(serialhandle, 460800, 8, NoneParity, 1,Flags);
   end;
   result:= serialHandle;
 end;
@@ -72,6 +72,7 @@ begin
     ReadCount:=SerRead(serialHandle,c,1);
     if (ReadCount>0) then
     begin
+         answer.Add(char(c));
          if ((c[0]>31) and (c[0]<127) and (llen<127)) then
          begin
               s := s + char(c[0]);
@@ -101,7 +102,7 @@ begin
             answer.lines.Append(s);
             answer.InvalidateClientRectCache(false);
             answer.Update;
-            Owner.Application.ProcessMessages;
+            Application.ProcessMessages;
             if (s.length=1) and (s[1]=#35) then ComIn:=0;
 
       end;

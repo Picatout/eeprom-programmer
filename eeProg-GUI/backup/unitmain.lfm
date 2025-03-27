@@ -1,11 +1,11 @@
 object FormMain: TFormMain
   Left = 734
-  Height = 671
-  Top = 296
+  Height = 723
+  Top = 294
   Width = 860
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 671
+  ClientHeight = 723
   ClientWidth = 860
   Menu = mItemFiles
   OnActivate = FormActivate
@@ -15,7 +15,7 @@ object FormMain: TFormMain
   LCLVersion = '3.8.0.0'
   object MemoConsole: TMemo
     Left = 0
-    Height = 639
+    Height = 691
     Top = 32
     Width = 860
     Align = alBottom
