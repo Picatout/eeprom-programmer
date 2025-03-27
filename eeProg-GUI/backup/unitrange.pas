@@ -28,6 +28,7 @@ type
     procedure BtnOkClick(Sender: TObject);
     procedure EditEndKeyPress(Sender: TObject; var Key: char);
     procedure EditStartKeyPress(Sender: TObject; var Key: char);
+    procedure FormShow(Sender: TObject);
   private
 
   public
@@ -105,22 +106,29 @@ begin
   if (StartAddr>=0) and (EndAddr>=StartAddr) and (EndAddr<=FormMain.maxAddr) then
   begin
      FormRange.confirm:=true;
+     close;
   end
   else
   begin
        ShowMessage('Invalid range');
   end;
-  close;
 end;
 
 procedure TFormRange.EditEndKeyPress(Sender: TObject; var Key: char);
 begin
   Key:=Upcase(key);
+  if KEY=char(13) then BtnOkClick(Sender);
+
 end;
 
 procedure TFormRange.EditStartKeyPress(Sender: TObject; var Key: char);
 begin
   key:=Upcase(key);
+end;
+
+procedure TFormRange.FormShow(Sender: TObject);
+begin
+  EditStart.setfocus;
 end;
 
 procedure TFormRange.BtnCancelClick(Sender: TObject);

@@ -106,17 +106,20 @@ begin
   if (StartAddr>=0) and (EndAddr>=StartAddr) and (EndAddr<=FormMain.maxAddr) then
   begin
      FormRange.confirm:=true;
+     close;
   end
   else
   begin
        ShowMessage('Invalid range');
+       EditEnd.setFocus;
   end;
-  close;
 end;
 
 procedure TFormRange.EditEndKeyPress(Sender: TObject; var Key: char);
 begin
   Key:=Upcase(key);
+  if KEY=char(13) then BtnOkClick(Sender);
+
 end;
 
 procedure TFormRange.EditStartKeyPress(Sender: TObject; var Key: char);

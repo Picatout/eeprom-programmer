@@ -17,7 +17,7 @@ procedure eeProgCmd(cmd:String;answer:Tmemo);
 
 implementation
 uses
-  serial;
+  Forms,serial;
 
 var
   serialhandle : LongInt;
@@ -101,6 +101,7 @@ begin
             answer.lines.Append(s);
             answer.InvalidateClientRectCache(false);
             answer.Update;
+            Application.ProcessMessages;
             if (s.length=1) and (s[1]=#35) then ComIn:=0;
 
       end;

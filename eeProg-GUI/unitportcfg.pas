@@ -35,14 +35,17 @@ implementation
 
 {$R *.lfm}
 
+uses serial;
 
 
 { TFormPortCfg }
 
 procedure TFormPortCfg.FormCreate(Sender: TObject);
+{$IFDEF LINUX}
 var
   rst: TSearchRec;
   error: LongInt ;
+
 begin
   CBDeviceList.Items.Clear;
   error:= FindFirst('/dev/ttyACM*',faAnyFile,rst);
@@ -53,6 +56,15 @@ begin
   end;
   FindClose(rst);
 end;
+{$ENDIF}
+{$IFDEF WINDOWS}
+// code from: https://patotech.blogspot.com/2012/04/enumerate-com-ports-in-windows-with.html
+var
+
+begin
+
+end;
+{$ENDIF}
 
 procedure TFormPortCfg.FormShow(Sender: TObject);
 begin

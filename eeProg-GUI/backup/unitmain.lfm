@@ -1,7 +1,7 @@
 object FormMain: TFormMain
-  Left = 501
+  Left = 734
   Height = 671
-  Top = 254
+  Top = 296
   Width = 860
   BorderStyle = bsSingle
   Caption = 'eeProg'
@@ -26,6 +26,7 @@ object FormMain: TFormMain
     Font.Quality = fqDraft
     ParentFont = False
     ReadOnly = True
+    ScrollBars = ssVertical
     TabOrder = 0
     OnChange = MemoConsoleChange
   end
@@ -72,6 +73,10 @@ object FormMain: TFormMain
         Caption = '&Erase range'
         Hint = 'erase EEPROM range'
         OnClick = mItemEraseClick
+      end
+      object MtemEraseAll: TMenuItem
+        Caption = 'Erase &All'
+        OnClick = MtemEraseAllClick
       end
       object MItemProg: TMenuItem
         Caption = '&Program EEPROM'

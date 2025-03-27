@@ -15,6 +15,7 @@ type
   TFormMain = class(TForm)
     EditCmd: TEdit;
     Label1: TLabel;
+    MtemEraseAll: TMenuItem;
     mItemEeprom: TMenuItem;
     mItemFiles: TMainMenu;
     MemoConsole: TMemo;
@@ -47,6 +48,7 @@ type
     procedure MItemPortCfgClick(Sender: TObject);
     procedure MItemQuitClick(Sender: TObject);
     procedure mItemEraseClick(Sender: TObject);
+    procedure MtemEraseAllClick(Sender: TObject);
   private
   public
     maxAddr:integer; // last address of eeprom
@@ -99,6 +101,20 @@ begin
        EraseRange;
        memoConsole.Cursor:=CursorType;
   end;
+end;
+
+procedure TFormMain.MtemEraseAllClick(Sender: TObject);
+var
+   cmd:string;
+   cursorShape:TCursor;
+
+begin
+  memoConsole.lines.clear;
+  cursorShape:=memoConsole.cursor;
+  memoConsole.cursor:=crHourGlass;
+  cmd:='*';
+  eeProgCmd.eeProgCmd(cmd,MemoConsole);
+  memoConsole.cursor:=cursorShape;
 end;
 
 procedure TFormMain.MItemPortCfgClick(Sender: TObject);
@@ -273,10 +289,15 @@ begin
 end;
 
 procedure TFormMain.EditCmdExit(Sender: TObject);
+var
+  cursorShape:Tcursor;
 begin
   MemoConsole.lines.Clear;
-  eeProgCmd.eeProgCmd(EditCmd.Text,MemoConsole);
   MemoConsole.SetFocus;
+  CursorShape:=MemoConsole.cursor;
+  MemoConsole.cursor:=crHourGlass;
+  eeProgCmd.eeProgCmd(EditCmd.Text,MemoConsole);
+  MemoConsole.Cursor:=cursorShape;
 end;
 
 procedure TFormMain.EditCmdKeyPress(Sender: TObject; var Key: char);
@@ -337,7 +358,7 @@ begin
        if Confirm then
        begin
            CursorType:=memoConsole.cursor;
-           memoConsole.cursor:=crHourGlass;
+           MemoConsole.cursor:=crHourGlass;
            cmd:=StartHex+'.'+EndHex;
            MemoConsole.lines.Clear;
            eeprogCmd.eeprogCmd(cmd,MemoConsole);

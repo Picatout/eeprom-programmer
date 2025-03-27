@@ -1,14 +1,14 @@
 object FormRange: TFormRange
-  Left = 712
+  Left = 1214
   Height = 234
-  Top = 464
+  Top = 440
   Width = 387
   BorderStyle = bsDialog
   Caption = 'range'
   ClientHeight = 234
   ClientWidth = 387
   OnShow = FormShow
-  LCLVersion = '3.0.0.3'
+  LCLVersion = '3.8.0.0'
   object Label1: TLabel
     Left = 16
     Height = 18
