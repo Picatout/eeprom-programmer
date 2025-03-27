@@ -1,3 +1,7 @@
+### 2025-03-27 
+
+* Modifié le firmware de la carte NUCLEO pour augmenter la vitesse de communication du port sériel à 460800 BAUD.
+
 ### 2025-03-26
 
 * J'avais oublié de décommenté **call clr_screen** au début de la routine **eeProg**.

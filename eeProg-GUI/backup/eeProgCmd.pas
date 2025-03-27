@@ -52,6 +52,7 @@ end;
 procedure eeProgCmd(cmd:String;answer:Tmemo);
 var
   s : AnsiString;
+  b: array [0..1] of byte;
   ComIn        : integer;
   writecount   : Integer;
   readCount    : Integer;
@@ -72,7 +73,6 @@ begin
     ReadCount:=SerRead(serialHandle,c,1);
     if (ReadCount>0) then
     begin
-         answer.Add(char(c));
          if ((c[0]>31) and (c[0]<127) and (llen<127)) then
          begin
               s := s + char(c[0]);
@@ -100,18 +100,16 @@ begin
       if (ComIn>0) then
       begin
             answer.lines.Append(s);
-            answer.InvalidateClientRectCache(false);
-            answer.Update;
+            //answer.InvalidateClientRectCache(false);
+            //answer.Update;
             Application.ProcessMessages;
             if (s.length=1) and (s[1]=#35) then ComIn:=0;
 
       end;
-    end;
+      end;
   end
   else
     writeln('Error: unable to send');
-
   end;
-
 end.
 

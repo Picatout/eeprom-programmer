@@ -82,10 +82,10 @@ UartRxHandler: ; console receive char
 ; output:
 ;   none
 ;---------------------------------------------
-BAUD_RATE=115200
-; BRR value = 16Mhz/115200 = 0x8B  
-BRR1_VAL=8 
-BRR2_VAL=0xB
+BAUD_RATE=460800
+; BRR value = 16Mhz/460800 = 0x23  
+BRR1_VAL=2 
+BRR2_VAL=0x3
 uart_init:
 	ld a,#BRR2_VAL
 	ld UART_BRR2,a 
