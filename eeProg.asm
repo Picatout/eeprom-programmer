@@ -256,19 +256,21 @@ DEFAULT_LIMIT = 0x1FFF ; 8KO eeprom
 ;----------------------------  
 init_ports:
 ; PORT E (ADDR_UPPER) as output push-pull
-; only bits 0..2 
-   ld a, #7 
+; bits 18:16 
+   _ldaz limit
    ld PE_DDR,a ; bits 0..2 as output
    ld PE_CR1,a ; bits 0..2 push pull output 
    ld PE_CR1,a ; bits 0..2 high speed 
    clr ADDR_UPPER       
 ; PORT G (ADDR_HIGH) as output push-pull 
-    ld a,#255 
+; bits 15:8 
+    _ldaz limit+1  
     ld PG_DDR,a ; output 
     ld PG_CR1,a ; push-pull 
     ld PG_CR2,a ; high speed 
     clr ADDR_HIGH     
 ; PORT D (ADDR_LOW) as outpout push-pull 
+; bits 7:0 
     ld PD_DDR,a ; output 
     ld PD_CR1,a ; push-pull 
     ld PD_CR2,a ; high speed 
@@ -305,11 +307,11 @@ eeProg:
     ld a,#REV 
     call print_dec
     call new_line 
-    call init_ports 
-; set default limit for 8KB eeprom     
     _clrz limit 
     ldw x,#DEFAULT_LIMIT
     _strxz limit+1
+    call init_ports 
+; set default limit for 8KB eeprom     
     mov page_size, #DEFAULT_PAGE_SIZE
 ; set eeprom type to AT28xxxx 
     mov eeType,#AT28     
@@ -375,7 +377,8 @@ parse01:
     _straz limit+1
     _ldaz xamadr 
     sbc a,#0
-    _straz limit 
+    _straz limit
+    call init_ports ; adjust address bits to eeprom size 
     _clrz mode 
     jra next_char 
 3$: 
@@ -399,7 +402,9 @@ parse01:
     jra next_char 
 6$: 
     cp a,#SPACE 
-    jreq next_char ; skip separator and invalids characters  
+    jrne 7$
+    jp  next_char ; skip separator and invalids characters  
+7$:
     call parse_hex ; maybe an hexadecimal number 
     tnz a ; unknown token ignore rest of line
     jrne 64$

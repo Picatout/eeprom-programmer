@@ -2,6 +2,8 @@
 
 * Modifié le firmware de la carte NUCLEO pour augmenter la vitesse de communication du port sériel à 460800 BAUD.
 
+* Modifié le firmware de la carte NUCLEO pour ne configurer en sortie seulement les bits d'adresses utilisés par l'EEPROM, i.e. bits 11:0 pour 8K, 13:0 pour 32K, 16:0 pour 128K, 17:0 pour 256K et 18:0 pour 512K. 
+
 ### 2025-03-26
 
 * J'avais oublié de décommenté **call clr_screen** au début de la routine **eeProg**.
