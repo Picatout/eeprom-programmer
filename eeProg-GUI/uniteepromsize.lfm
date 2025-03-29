@@ -24,8 +24,6 @@ object FormEeprom: TFormEeprom
     Width = 88
     ReadOnly = True
     TabOrder = 0
-    Text = '8'
-    OnKeyPress = EditSizeKeyPress
   end
   object BtnOk: TButton
     Left = 136
@@ -83,7 +81,6 @@ object FormEeprom: TFormEeprom
     Width = 305
     ItemHeight = 0
     TabOrder = 4
-    Text = 'AT28C64B -   8K 5V EEPROM'
     OnChange = CBeepromChange
   end
   object Label2: TLabel

@@ -36,7 +36,7 @@ object FormMain: TFormMain
     Left = 0
     Height = 32
     Top = 0
-    Width = 69
+    Width = 77
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET

@@ -271,6 +271,7 @@ init_ports:
     clr ADDR_HIGH     
 ; PORT D (ADDR_LOW) as outpout push-pull 
 ; bits 7:0 
+    _ldaz limit+2 
     ld PD_DDR,a ; output 
     ld PD_CR1,a ; push-pull 
     ld PD_CR2,a ; high speed 
@@ -324,6 +325,7 @@ eeProg:
 eeProg_1:
 	ldw x,#STACK_EMPTY ; in case CTRL_C was used 
 	ldw sp,x
+    bset flags,#FUPPER ; commands all upper case 
 cli: 
     call new_line
     ld a,#'# 
@@ -360,13 +362,6 @@ parse01:
 ;call print_adr
     jra next_char 
 2$:
-; change baud rate command 
-    cp a,#'! 
-    jrne 22$
-    _ldaz xamadr+2
-    call uart_baud_rate
-    jra cli 
-22$:    
 ; erase all test 
     cp a,#'*
     jrne 24$
@@ -677,7 +672,7 @@ prog_eeprom:
     dec (1,sp)
     jrne 1$ 
     _strxz storadr+1 
-    _config_read 
+    _config_read
 .if 0
 ; delay
     _prog_delay

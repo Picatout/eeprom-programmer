@@ -37,7 +37,6 @@ type
     procedure CBeepromChange(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnCancelClick(Sender: TObject);
-    procedure EditSizeKeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
   private
@@ -105,10 +104,6 @@ begin
   close;
 end;
 
-procedure TFormEeprom.EditSizeKeyPress(Sender: TObject; var Key: char);
-begin
-  if key=#13 then BtnOkClick(sender);
-end;
 
 procedure TFormEeprom.FormCreate(Sender: TObject);
 var
@@ -121,10 +116,6 @@ begin
   begin
      items.Add(eeprom_list[i].name);
   end;
-  itemindex:=3;
-  EditSize.text:=IntToStr(eeprom_list[i].size);
-  RGJP3.itemIndex:=1;
-  EditEEtype.text:=EETypeName[0];
   end;
 end;
 

@@ -128,16 +128,11 @@ begin
        if length(CommPortName)>0 then
        begin
             MemoConsole.lines.append(DlgPortCfg.CommPortname);
-            serhandle:=OpenComm(DlgPortCfg.CommPortname,INIT_BAUD);
+            serhandle:=OpenComm(DlgPortCfg.CommPortname);
             if  serHandle<0 then FormCommError.show
             else
             begin
-                //set user select BAUD RATE
-                cmdStr:=intToHex(DlgPortCfg.BaudRate,1)+'!';
-                eeProgCmd.eeProgCmd(cmdStr,MemoConsole);
-                serHandle:=OpenComm(DlgPortCfg.CommPortname,DlgPortCfg.BaudRate);
-
-                MemoConsole.lines.append(' opended at'+BAUD_RATE[DlgPortCfg.BaudRate]);
+                MemoConsole.lines.append(' opended');
             end;
 
        end;
@@ -325,6 +320,7 @@ procedure TFormMain.FormCreate(Sender: TObject);
 begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
   DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
+  eeProgCmd.serialhandle:=-1;
   MaxAddr:=8*1024; // default to 8KB EEPROM.
   MItemPortCfgClick(self);
 end;
@@ -394,6 +390,7 @@ var
   i:integer;
 begin
    line:=': ';
+   row[0]:=0;
    i:=0;
    while i<count do
    begin

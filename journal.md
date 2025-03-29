@@ -1,3 +1,11 @@
+### 2025-03-29
+
+* retour en arrière annulé la commande **!** créée hier dans le firmware.
+
+* Ajoute contrôle de flux **XON|XOFF**. Ajout de la variable **FXOFF=2** dans **flags**.
+
+* Ajout de **CTRL+R** pour redémarrer le programmeur avec un software reset.
+
 ### 2025-03-28
 
 * version du firmware FW_2.0.R4

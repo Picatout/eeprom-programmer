@@ -7,19 +7,6 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
-const
-  B9600=0;
-  B19200=1;
-  B38400=2;
-  B57600=3;
-  B115200=4; // default BAUD RATE
-  B230400=5;
-  B460800=6;
-  BAUD_RATE:array[0..6] of string=('9600','19200','38400','57600',
-                                        '115200','230400','460800');
-
-  intBaudValue: array [0..6] of integer=(9600,19200,38400,57600,
-                                        115200,230400,460800);
 type
 
   { TFormPortCfg }
@@ -28,9 +15,7 @@ type
     BtnOk: TButton;
     BtnCancel: TButton;
     CBDeviceList: TComboBox;
-    CBBaudRate: TComboBox;
     Label1: TLabel;
-    LblBaud: TLabel;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnOkEnter(Sender: TObject);
@@ -41,7 +26,6 @@ type
 
   public
     CommPortName:AnsiString;
-    BaudRate:integer;
   end;
 
 var
@@ -103,11 +87,6 @@ begin
       l.Free;
     end;
 {$ENDIF}
-     for i:=0 to length(BAUD_RATE)-1 do
-     begin
-          CBBaudRate.items.append(BAUD_RATE[i]);
-          CBBaudRate.itemIndex:=B115200;
-     end;
 end;
 
 procedure TFormPortCfg.FormShow(Sender: TObject);
@@ -128,7 +107,6 @@ begin
 {$IFDEF WINDOWS}
   CommPortName:=CBDeviceList.Items[CBDeviceList.ItemIndex];
 {$ENDIF}
- BaudRate:=CBBaudRate.ItemIndex;
  Close;
 end;
 

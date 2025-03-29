@@ -9,20 +9,19 @@ interface
 uses
   Classes, SysUtils,StdCtrls,UnitPortCfg;
 
-const
 
-     INIT_BAUD:integer=B9600;
+var
+     serialhandle : LongInt;
 
 {
-function OpenComm(ComPortName:String;baud:integer):LongInt;
+function OpenComm(ComPortName:String):LongInt;
 Open serial port
 input:
    ComPortName is serial port name
-   baud is constant (B9600..B460800) defined in UnitPortCfg
 output:
    serial port handle
 }
-function OpenComm(ComPortName:String;baud:integer):LongInt;
+function OpenComm(ComPortName:String):LongInt;
 
 {
 procedure CloseComm;
@@ -44,8 +43,6 @@ implementation
 uses
   Forms,serial;
 
-var
-  serialhandle : LongInt;
 
 
 
@@ -58,7 +55,7 @@ function OpenComm(ComPortName:String;baud:integer):LongInt;
  output:
     serial port handle
 }
-function OpenComm(ComPortName:String;baud:integer):LongInt;
+function OpenComm(ComPortName:String):LongInt;
 var
   Flags        : TSerialFlags; { set of (RtsCtsFlowControl); }
 
@@ -68,7 +65,7 @@ begin
   if (serialHandle>0) then
   begin
      Flags:= []; // none
-     SerSetParams(serialhandle, IntBaudValue[baud], 8, NoneParity, 1,Flags);
+     SerSetParams(serialhandle, 460800, 8, NoneParity, 1,Flags);
   end;
   result:= serialHandle;
 end;

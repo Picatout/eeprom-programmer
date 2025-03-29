@@ -54,6 +54,18 @@ UartRxHandler: ; console receive char
 	ld a,UART_DR 
 	cp a,#CTRL_C 
 	jreq 6$
+	cp a,#CTRL_R 
+	jrne 0$
+	_swreset ; reboot
+0$:	
+	cp a,#XOFF 
+	jrne 1$
+	bset flags,#FTX_OFF ; block transmission
+1$:
+	cp a,#XON 
+	jrne 2$ 
+	bres flags,#FTX_OFF ; restart transmission
+2$:	
 	push a 
 	ld a,#rx1_queue 
 	add a,rx1_tail 
@@ -65,6 +77,22 @@ UartRxHandler: ; console receive char
 	inc a 
 	and a,#RX_QUEUE_SIZE-1
 	ld rx1_tail,a 
+; flow control 
+; send XOFF if queue 75% full 	
+	sub a,rx1_head
+	jrpl 3$
+	neg a 
+	cp a,#RX_QUEUE_SIZE/4 
+	jrpl 5$
+	jra 4$ 
+3$:
+	cp a,#RX_QUEUE_SIZE*3/4 
+	jrmi 5$
+4$:
+	ld a,#XOFF
+	btjf UART_SR,#UART_SR_TXE,. 
+	ld UART_DR,a
+	bset flags,#FRX_OFF  
 5$:	
 	iret 
 6$:
@@ -77,13 +105,13 @@ UartRxHandler: ; console receive char
 ; baud rate constants table 
 ;--------------------------------
 bauds:  ; byte  BRR2,BRR1 
-		.byte 0x3,0x68 ; 9600
-		.byte 0x1,0x34 ; 19200
-		.byte 0x1,0x1A ; 38400
-		.byte 0x6,0x11 ; 57600
-		.byte 0xB,0x8  ; 115200
-		.byte 0x5,0x4  ; 230400
-		.byte 0x3,0x2  ; 460800
+		.byte 0x3,0x68 ; 0 -> 9600
+		.byte 0x1,0x34 ; 1 -> 19200
+		.byte 0x1,0x1A ; 2 -> 38400
+		.byte 0x6,0x11 ; 3 -> 57600
+		.byte 0xB,0x8  ; 4 -> 115200
+		.byte 0x5,0x4  ; 5 -> 230400
+		.byte 0x3,0x2  ; 6 -> 460800
 
 ;---------------------------------------------
 ; initialize UART, 115200 8N1
@@ -95,15 +123,8 @@ bauds:  ; byte  BRR2,BRR1
 ;---------------------------------------------
 uart_init:
 ; default to 115200 BAUD 
-	ld a ,#4
-	sll a 
-	clrw x 
-	ld xl,a 
-	ld a,(bauds,x)
-	ld UART_BRR2,a 
-	incw x 
-	ld a,(bauds,x)   
-	ld UART_BRR1,a
+	ld a ,#6
+	call uart_baud_rate
     clr UART_DR
 	mov UART_CR2,#((1<<UART_CR2_TEN)|(1<<UART_CR2_REN)|(1<<UART_CR2_RIEN));
 	bset UART_CR2,#UART_CR2_SBK
@@ -117,6 +138,7 @@ uart_init:
 ;    A   index in bauds table 
 ;----------------------------
 uart_baud_rate:
+; disable UART before changing BAUD 
 	bres UART_CR2,#UART_CR2_TEN 
 	bres UART_CR2,#UART_CR2_REN 
 	sll a ; index*2 
@@ -128,8 +150,6 @@ uart_baud_rate:
 	ld a,(bauds,x)
 	ld UART_BRR1,a
 	call clear_queue 
-	bset UART_CR2,#UART_CR2_TEN 
-	bset UART_CR2,#UART_CR2_REN 
 	ret 
 
 ;---------------------------
@@ -149,6 +169,7 @@ clear_queue:
 ;---------------------------------
 putc::
 uart_putc:: 
+	btjt flags,#FTX_OFF,. ; waiting for XON character 
 	btjf UART_SR,#UART_SR_TXE,.
 	ld UART_DR,a 
 	ret 
@@ -191,14 +212,28 @@ uart_getc::
 	inc a 
 	and a,#RX_QUEUE_SIZE-1
 	_straz rx1_head 
+; flow control
+; enable rx if queue less than half full   
+	btjf flags,#FRX_OFF, 4$ 
+	ld a,rx1_tail 
+	sub a,rx1_head 
+	jrpl 1$
+	neg a
+	cp a,#RX_QUEUE_SIZE/2
+	jrpl 3$ 
+	jra 4$  
+1$: cp a,#RX_QUEUE_SIZE/2 	 
+	jrpl 4$
+3$: ; authorize terminal to send 
+	ld a,#XON 
+	btjf UART_SR,#UART_SR_TXE,.
+	ld UART_DR,a 
+	bres flags,#FRX_OFF 
+4$:
 	pop a 
-	btjf flags,#FUPPER,1$
-	cp a,#'a 
-	jrmi 1$
-	cp a,#'z+1 
-	jrmi 1$ 
-	and a,#0xDF  
-1$: 
+	btjf flags,#FUPPER,9$
+	call to_upper 
+9$: 
 	popw x
 	ret 
 
@@ -317,7 +352,6 @@ readln::
 	addw x,(HI_LL,sp)
 1$:
 	call uart_getc
-	call to_upper
 	ld (CHAR,sp),a 
 	cp a,#SPACE 
 	jruge 4$
