@@ -73,6 +73,17 @@ UartRxHandler: ; console receive char
 	iret 
  
 
+;--------------------------------
+; baud rate constants table 
+;--------------------------------
+bauds:  ; byte  BRR2,BRR1 
+		.byte 0x3,0x68 ; 9600
+		.byte 0x1,0x34 ; 19200
+		.byte 0x1,0x1A ; 38400
+		.byte 0x6,0x11 ; 57600
+		.byte 0xB,0x8  ; 115200
+		.byte 0x5,0x4  ; 230400
+		.byte 0x3,0x2  ; 460800
 
 ;---------------------------------------------
 ; initialize UART, 115200 8N1
@@ -82,14 +93,16 @@ UartRxHandler: ; console receive char
 ; output:
 ;   none
 ;---------------------------------------------
-BAUD_RATE=460800
-; BRR value = 16Mhz/460800 = 0x23  
-BRR1_VAL=2 
-BRR2_VAL=0x3
 uart_init:
-	ld a,#BRR2_VAL
+; default to 115200 BAUD 
+	ld a ,#4
+	sll a 
+	clrw x 
+	ld xl,a 
+	ld a,(bauds,x)
 	ld UART_BRR2,a 
-	ld a,#BRR1_VAL  
+	incw x 
+	ld a,(bauds,x)   
 	ld UART_BRR1,a
     clr UART_DR
 	mov UART_CR2,#((1<<UART_CR2_TEN)|(1<<UART_CR2_REN)|(1<<UART_CR2_RIEN));
@@ -97,6 +110,27 @@ uart_init:
     btjf UART_SR,#UART_SR_TC,.
 	call clear_queue
 	ret
+
+;-----------------------------
+; change uart baud rate 
+; input:
+;    A   index in bauds table 
+;----------------------------
+uart_baud_rate:
+	bres UART_CR2,#UART_CR2_TEN 
+	bres UART_CR2,#UART_CR2_REN 
+	sll a ; index*2 
+	clrw x 
+	ld xl,a 
+	ld a,(bauds,x)
+	ld UART_BRR2,A 
+	incw x 
+	ld a,(bauds,x)
+	ld UART_BRR1,a
+	call clear_queue 
+	bset UART_CR2,#UART_CR2_TEN 
+	bset UART_CR2,#UART_CR2_REN 
+	ret 
 
 ;---------------------------
 ;  clear rx1_queue 

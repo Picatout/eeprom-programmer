@@ -359,7 +359,14 @@ parse01:
     _mov_v24 storadr, xamadr
 ;call print_adr
     jra next_char 
-2$: 
+2$:
+; change baud rate command 
+    cp a,#'! 
+    jrne 22$
+    _ldaz xamadr+2
+    call uart_baud_rate
+    jra cli 
+22$:    
 ; erase all test 
     cp a,#'*
     jrne 24$
@@ -399,7 +406,7 @@ parse01:
     jrne 6$ 
     ld a,#READ 
     _straz mode  
-    jra next_char 
+    jp next_char 
 6$: 
     cp a,#SPACE 
     jrne 7$

@@ -1,3 +1,22 @@
+### 2025-03-28
+
+* version du firmware FW_2.0.R4
+* Modifié le firware pour ajouter la command **!** qui permet de modifier le BAUD rate du port sériel.
+    * __n!__   ou n est dans {0..6} ce qui correspond à la table suivante.
+
+
+| n | baud rate|
+|---|----------| 
+0 | 9600
+1 | 19200
+2 | 38400
+3 | 57600
+4 | 115200 
+5 | 230400
+6 | 460800
+
+La valeur d'initialiation et **4** soit **115200** BAUD.
+
 ### 2025-03-27 
 
 * Modifié le firmware de la carte NUCLEO pour augmenter la vitesse de communication du port sériel à 460800 BAUD.
