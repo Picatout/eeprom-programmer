@@ -1,0 +1,69 @@
+object FormPortCfg: TFormPortCfg
+  Left = 871
+  Height = 209
+  Top = 292
+  Width = 353
+  BorderStyle = bsDialog
+  Caption = 'serial port selection'
+  ClientHeight = 209
+  ClientWidth = 353
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '3.8.0.0'
+  object BtnOk: TButton
+    Left = 88
+    Height = 25
+    Top = 160
+    Width = 75
+    Caption = '&Ok'
+    TabOrder = 0
+    OnClick = BtnOkClick
+    OnEnter = BtnOkEnter
+  end
+  object BtnCancel: TButton
+    Left = 208
+    Height = 25
+    Top = 160
+    Width = 75
+    Caption = '&Cancel'
+    TabOrder = 1
+    OnClick = BtnCancelClick
+  end
+  object Label1: TLabel
+    Left = 24
+    Height = 17
+    Top = 32
+    Width = 60
+    Caption = 'serial port'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object CBDeviceList: TComboBox
+    Left = 96
+    Height = 23
+    Top = 32
+    Width = 240
+    ItemHeight = 15
+    TabOrder = 2
+    OnSelect = CBDeviceListSelect
+  end
+  object CBBaudRate: TComboBox
+    Left = 96
+    Height = 23
+    Top = 80
+    Width = 100
+    ItemHeight = 15
+    TabOrder = 3
+    Text = '460800'
+  end
+  object LblBaud: TLabel
+    Left = 23
+    Height = 15
+    Top = 88
+    Width = 61
+    Caption = 'BAUD RATE'
+  end
+end

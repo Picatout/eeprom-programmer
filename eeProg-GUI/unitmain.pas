@@ -120,6 +120,7 @@ end;
 procedure TFormMain.MItemPortCfgClick(Sender: TObject);
 var
  serHandle:longInt;
+ cmdStr:string;
 begin
   with DlgPortCfg do
   begin
@@ -127,11 +128,16 @@ begin
        if length(CommPortName)>0 then
        begin
             MemoConsole.lines.append(DlgPortCfg.CommPortname);
-            serhandle:=OpenComm(DlgPortCfg.CommPortname);
+            serhandle:=OpenComm(DlgPortCfg.CommPortname,INIT_BAUD);
             if  serHandle<0 then FormCommError.show
             else
             begin
-                 MemoConsole.lines.append(' opended');
+                //set user select BAUD RATE
+                cmdStr:=intToHex(DlgPortCfg.BaudRate,1)+'!';
+                eeProgCmd.eeProgCmd(cmdStr,MemoConsole);
+                serHandle:=OpenComm(DlgPortCfg.CommPortname,DlgPortCfg.BaudRate);
+
+                MemoConsole.lines.append(' opended at'+BAUD_RATE[DlgPortCfg.BaudRate]);
             end;
 
        end;
@@ -246,8 +252,7 @@ begin
               for j:=0 to 15 do Write(BinFile,buffer[j]);
          end;
     end;
-
-     CloseFile(BinFile);
+    CloseFile(BinFile);
   except
       on E: EInOutError do
       ShowMessage('Fie error: '+E.Message);

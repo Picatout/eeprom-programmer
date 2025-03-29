@@ -1,0 +1,132 @@
+object FormMain: TFormMain
+  Left = 600
+  Height = 723
+  Top = 249
+  Width = 860
+  Align = alClient
+  Anchors = []
+  BorderStyle = bsSingle
+  Caption = 'eeProg'
+  ClientHeight = 723
+  ClientWidth = 860
+  Menu = mItemFiles
+  OnActivate = FormActivate
+  OnClose = FormClose
+  OnCreate = FormCreate
+  OnShow = FormShow
+  LCLVersion = '3.8.0.0'
+  object MemoConsole: TMemo
+    Left = 0
+    Height = 691
+    Top = 32
+    Width = 860
+    Align = alBottom
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -16
+    Font.Name = 'Courier New'
+    Font.Pitch = fpFixed
+    Font.Quality = fqDraft
+    ParentFont = False
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 0
+    OnChange = MemoConsoleChange
+  end
+  object Label1: TLabel
+    Left = 0
+    Height = 32
+    Top = 0
+    Width = 69
+    Align = alLeft
+    Caption = 'command'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -16
+    Font.Name = 'Sans'
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object EditCmd: TEdit
+    Left = 72
+    Height = 32
+    Top = 0
+    Width = 788
+    Align = alRight
+    Anchors = [akTop, akRight]
+    Font.Height = -16
+    Font.Name = 'Sans'
+    ParentFont = False
+    TabOrder = 1
+    OnChange = EditCmdChange
+    OnExit = EditCmdExit
+    OnKeyPress = EditCmdKeyPress
+  end
+  object mItemFiles: TMainMenu
+    Left = 8
+    Top = 64
+    object MenuItem1: TMenuItem
+      Caption = '&Files'
+      object mItemView: TMenuItem
+        Caption = '&View range'
+        Hint = 'view eeprom range'
+        OnClick = mItemViewClick
+      end
+      object mItemErase: TMenuItem
+        Caption = '&Erase range'
+        Hint = 'erase EEPROM range'
+        OnClick = mItemEraseClick
+      end
+      object MtemEraseAll: TMenuItem
+        Caption = 'Erase &All'
+        OnClick = MtemEraseAllClick
+      end
+      object MItemProg: TMenuItem
+        Caption = '&Program EEPROM'
+        Hint = 'program EEPROM from file'
+        OnClick = MItemProgClick
+      end
+      object mItemDump: TMenuItem
+        Caption = '&Dump range'
+        Hint = 'Dump eeprom range to file'
+        OnClick = mItemDumpClick
+      end
+      object Separator1: TMenuItem
+        Caption = '-'
+      end
+      object MItemQuit: TMenuItem
+        Caption = '&Quit'
+        Hint = 'Leave eeProg IDE'
+        OnClick = MItemQuitClick
+      end
+    end
+    object mItemConfig: TMenuItem
+      Caption = '&Config'
+      object MItemPortCfg: TMenuItem
+        Caption = '&Port'
+        Hint = 'configure serial port'
+        OnClick = MItemPortCfgClick
+      end
+      object mItemEeprom: TMenuItem
+        Caption = 'eeprom'
+        OnClick = mItemEepromClick
+      end
+    end
+    object mItemAbout: TMenuItem
+      Caption = 'About'
+      OnClick = mItemAboutClick
+    end
+  end
+  object OpenDialog: TOpenDialog
+    Title = 'Ouvrir un fichier'
+    FilterIndex = -1
+    InitialDir = '.'
+    Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
+    Left = 88
+    Top = 32
+  end
+  object SaveDialog: TSaveDialog
+    InitialDir = '.'
+    Left = 48
+    Top = 80
+  end
+end

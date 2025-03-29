@@ -111,6 +111,7 @@ begin
   else
   begin
        ShowMessage('Invalid range');
+       EditEnd.setFocus;
   end;
 end;
 

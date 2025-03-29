@@ -1,7 +1,7 @@
 object FormPortCfg: TFormPortCfg
-  Left = 842
+  Left = 871
   Height = 209
-  Top = 314
+  Top = 292
   Width = 353
   BorderStyle = bsDialog
   Caption = 'serial port selection'
@@ -9,11 +9,11 @@ object FormPortCfg: TFormPortCfg
   ClientWidth = 353
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '3.0.0.3'
+  LCLVersion = '3.8.0.0'
   object BtnOk: TButton
-    Left = 136
+    Left = 88
     Height = 25
-    Top = 96
+    Top = 160
     Width = 75
     Caption = '&Ok'
     TabOrder = 0
@@ -21,9 +21,9 @@ object FormPortCfg: TFormPortCfg
     OnEnter = BtnOkEnter
   end
   object BtnCancel: TButton
-    Left = 136
+    Left = 208
     Height = 25
-    Top = 152
+    Top = 160
     Width = 75
     Caption = '&Cancel'
     TabOrder = 1
@@ -43,11 +43,27 @@ object FormPortCfg: TFormPortCfg
   end
   object CBDeviceList: TComboBox
     Left = 96
-    Height = 35
+    Height = 23
     Top = 32
     Width = 240
-    ItemHeight = 0
+    ItemHeight = 15
     TabOrder = 2
     OnSelect = CBDeviceListSelect
+  end
+  object CBBaudRate: TComboBox
+    Left = 96
+    Height = 23
+    Top = 80
+    Width = 100
+    ItemHeight = 15
+    TabOrder = 3
+    Text = '460800'
+  end
+  object LblBaud: TLabel
+    Left = 23
+    Height = 15
+    Top = 88
+    Width = 61
+    Caption = 'BAUD RATE'
   end
 end

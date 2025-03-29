@@ -7,12 +7,37 @@ unit eeProgCmd;
 
 interface
 uses
-  Classes, SysUtils,StdCtrls;
+  Classes, SysUtils,StdCtrls,UnitPortCfg;
 
-function OpenComm(ComPortName:String):LongInt;
+const
 
+     INIT_BAUD:integer=B9600;
+
+{
+function OpenComm(ComPortName:String;baud:integer):LongInt;
+Open serial port
+input:
+   ComPortName is serial port name
+   baud is constant (B9600..B460800) defined in UnitPortCfg
+output:
+   serial port handle
+}
+function OpenComm(ComPortName:String;baud:integer):LongInt;
+
+{
+procedure CloseComm;
+Close opened serial port
+use: serialHandle local variable
+}
 procedure CloseComm();
 
+{
+procedure eeProgCmd(cmd:String;answer:Tmemo);
+Send command to programmer and wait for answer.
+input:
+      cmd:  command string
+      answer: Tmemo control collecting programmer answer.
+}
 procedure eeProgCmd(cmd:String;answer:Tmemo);
 
 implementation
@@ -22,7 +47,18 @@ uses
 var
   serialhandle : LongInt;
 
-function OpenComm(ComPortName:String):LongInt;
+
+
+{
+function OpenComm(ComPortName:String;baud:integer):LongInt;
+ Open serial port
+ input:
+    ComPortName is serial port name
+    baud is constant (B9600..B460800) defined in UnitPortCfg
+ output:
+    serial port handle
+}
+function OpenComm(ComPortName:String;baud:integer):LongInt;
 var
   Flags        : TSerialFlags; { set of (RtsCtsFlowControl); }
 
@@ -32,11 +68,16 @@ begin
   if (serialHandle>0) then
   begin
      Flags:= []; // none
-     SerSetParams(serialhandle, 460800, 8, NoneParity, 1,Flags);
+     SerSetParams(serialhandle, IntBaudValue[baud], 8, NoneParity, 1,Flags);
   end;
   result:= serialHandle;
 end;
 
+{
+procedure CloseComm;
+Close opened serial port
+use: serialHandle local variable
+}
 procedure CloseComm;
 begin
   if (serialHandle>0) then
@@ -48,7 +89,13 @@ begin
   end;
 end;
 
-
+{
+procedure eeProgCmd(cmd:String;answer:Tmemo);
+Send command to programmer and wait for answer.
+input:
+      cmd:  command string
+      answer: Tmemo control collecting programmer answer.
+}
 procedure eeProgCmd(cmd:String;answer:Tmemo);
 var
   s : AnsiString;
@@ -59,7 +106,10 @@ var
   status       : LongInt;
   ErrorCode    : Integer;
 
-
+{
+function SerReadLn:integer;
+read caracters from serial port until it receive CR character.
+}
 function SerReadLn:integer;
 var
   c : array[0..2] of byte;

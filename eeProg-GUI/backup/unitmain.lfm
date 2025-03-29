@@ -1,9 +1,10 @@
 object FormMain: TFormMain
-  Left = 734
+  Left = 600
   Height = 723
-  Top = 294
+  Top = 249
   Width = 860
   Align = alClient
+  Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
   ClientHeight = 723
@@ -35,7 +36,7 @@ object FormMain: TFormMain
     Left = 0
     Height = 32
     Top = 0
-    Width = 77
+    Width = 69
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET
@@ -46,10 +47,10 @@ object FormMain: TFormMain
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 77
+    Left = 69
     Height = 32
     Top = 0
-    Width = 812
+    Width = 820
     Align = alLeft
     Anchors = [akTop, akRight]
     Font.Height = -16

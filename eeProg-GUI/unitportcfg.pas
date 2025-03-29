@@ -7,6 +7,19 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
+const
+  B9600=0;
+  B19200=1;
+  B38400=2;
+  B57600=3;
+  B115200=4; // default BAUD RATE
+  B230400=5;
+  B460800=6;
+  BAUD_RATE:array[0..6] of string=('9600','19200','38400','57600',
+                                        '115200','230400','460800');
+
+  intBaudValue: array [0..6] of integer=(9600,19200,38400,57600,
+                                        115200,230400,460800);
 type
 
   { TFormPortCfg }
@@ -15,7 +28,9 @@ type
     BtnOk: TButton;
     BtnCancel: TButton;
     CBDeviceList: TComboBox;
+    CBBaudRate: TComboBox;
     Label1: TLabel;
+    LblBaud: TLabel;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnOkEnter(Sender: TObject);
@@ -26,6 +41,7 @@ type
 
   public
     CommPortName:AnsiString;
+    BaudRate:integer;
   end;
 
 var
@@ -35,14 +51,23 @@ implementation
 
 {$R *.lfm}
 
-uses serial;
+
+uses serial
+{$IFDEF LINUX}
+;
+{$ENDIF}
+{$IFDEF WINDOWS}
+,registry;
+{$ENDIF}
+
 
 
 { TFormPortCfg }
 
 procedure TFormPortCfg.FormCreate(Sender: TObject);
-{$IFDEF LINUX}
 var
+   i:integer;
+{$IFDEF LINUX}
   rst: TSearchRec;
   error: LongInt ;
 
@@ -55,16 +80,35 @@ begin
        error:=FindNext(rst);
   end;
   FindClose(rst);
-end;
 {$ENDIF}
 {$IFDEF WINDOWS}
 // code from: https://patotech.blogspot.com/2012/04/enumerate-com-ports-in-windows-with.html
-var
-
+  reg: TRegistry;
+  l, v: TStringList;
+  n: integer;
 begin
-
-end;
+    l := TStringList.Create;
+    reg := TRegistry.Create;
+    try
+  {$IFNDEF VER100}
+      reg.Access := KEY_READ;
+  {$ENDIF}
+      reg.RootKey := HKEY_LOCAL_MACHINE;
+      reg.OpenKeyReadOnly('HARDWARE\DEVICEMAP\SERIALCOMM');//, false);
+      reg.GetValueNames(l);
+      for n := 0 to l.Count - 1 do
+        CBDeviceList.Items.Append(reg.ReadString(l[n]));
+    finally
+      reg.Free;
+      l.Free;
+    end;
 {$ENDIF}
+     for i:=0 to length(BAUD_RATE)-1 do
+     begin
+          CBBaudRate.items.append(BAUD_RATE[i]);
+          CBBaudRate.itemIndex:=B115200;
+     end;
+end;
 
 procedure TFormPortCfg.FormShow(Sender: TObject);
 begin
@@ -78,8 +122,14 @@ end;
 
 procedure TFormPortCfg.BtnOkClick(Sender: TObject);
 begin
+{$IFDEF LINUX}
   CommPortName:='/dev/'+CBDeviceList.Items[CBDeviceList.ItemIndex];
-  Close;
+{$ENDIF}
+{$IFDEF WINDOWS}
+  CommPortName:=CBDeviceList.Items[CBDeviceList.ItemIndex];
+{$ENDIF}
+ BaudRate:=CBBaudRate.ItemIndex;
+ Close;
 end;
 
 procedure TFormPortCfg.BtnOkEnter(Sender: TObject);
