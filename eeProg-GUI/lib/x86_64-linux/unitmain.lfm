@@ -47,10 +47,10 @@ object FormMain: TFormMain
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 72
+    Left = 88
     Height = 32
     Top = 0
-    Width = 788
+    Width = 772
     Align = alRight
     Anchors = [akTop, akRight]
     Font.Height = -16

@@ -9,9 +9,6 @@ interface
 uses
   Classes, SysUtils,StdCtrls,UnitPortCfg;
 
-const
-
-     INIT_BAUD:integer=B115200;
 
 var
      serialhandle : LongInt;
@@ -67,7 +64,7 @@ begin
   serialhandle := SerOpen(ComPortName);
   if (serialHandle>0) then
   begin
-     Flags:= []; // none
+     Flags:= [RtsCtsFlowControl[0]]; // none
      SerSetParams(serialhandle, 460800, 8, NoneParity, 1,Flags);
   end;
   result:= serialHandle;

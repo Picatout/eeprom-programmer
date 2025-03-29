@@ -128,9 +128,7 @@ begin
        if length(CommPortName)>0 then
        begin
             MemoConsole.lines.append(DlgPortCfg.CommPortname);
-            if eeProgCmd.serialhandle=-1 then
-               serhandle:=OpenComm(DlgPortCfg.CommPortname);
-
+            serhandle:=OpenComm(DlgPortCfg.CommPortname);
             if  serHandle<0 then FormCommError.show
             else
             begin
