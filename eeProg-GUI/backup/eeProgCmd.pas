@@ -10,9 +10,6 @@ uses
   Classes, SysUtils,StdCtrls,UnitPortCfg;
 
 
-var
-     serialhandle : LongInt;
-
 {
 function OpenComm(ComPortName:String):LongInt;
 Open serial port
@@ -31,21 +28,32 @@ use: serialHandle local variable
 procedure CloseComm();
 
 {
-procedure eeProgCmd(cmd:String;answer:Tmemo);
+procedure eeProgCmd(cmd:String);
 Send command to programmer and wait for answer.
 input:
       cmd:  command string
-      answer: Tmemo control collecting programmer answer.
 }
-procedure eeProgCmd(cmd:String;answer:Tmemo);
+procedure eeProgCmd(cmd:String);
+
+{
+procedure receiveData(answer:Tmemo);
+Receive data from programmer after
+sending a command.
+}
+procedure receiveData(answer:Tmemo);
 
 implementation
 uses
   Forms,serial;
 
+const
+     HASH:byte=35;   // programmer command line prompt
+     CTRL_C:byte=3;  // used to cancel operation
+     CTRL_R:byte=18; //used to reboot programmer
+     CR:byte=13;    // carriage return (end of line).
 
-
-
+var
+   serHandle:longint;
 {
 function OpenComm(ComPortName:String;baud:integer):LongInt;
  Open serial port
@@ -58,16 +66,20 @@ function OpenComm(ComPortName:String;baud:integer):LongInt;
 function OpenComm(ComPortName:String):LongInt;
 var
   Flags        : TSerialFlags; { set of (RtsCtsFlowControl); }
+  s: array[0..1] of byte;
 
 begin
   CloseComm; // in case a port is already open
-  serialhandle := SerOpen(ComPortName);
-  if (serialHandle>0) then
+  serhandle := SerOpen(ComPortName);
+  if (serHandle>0) then
   begin
-     Flags:= [RtsCtsFlowControl[0]]; // none
-     SerSetParams(serialhandle, 460800, 8, NoneParity, 1,Flags);
+     Flags:= []; // none
+     SerSetParams(serhandle, 460800, 8, NoneParity, 1,Flags);
+     s[1]:=CTRL_X; //CTRL_X reboot programmer
+     SerWrite(serHandle,s[1],1);
+     SerDrain(serhandle);
   end;
-  result:= serialHandle;
+  result:= serHandle;
 end;
 
 {
@@ -77,84 +89,90 @@ use: serialHandle local variable
 }
 procedure CloseComm;
 begin
-  if (serialHandle>0) then
+  if (serHandle>0) then
   begin
-  SerSync(serialhandle); // flush out any remaining before closure
-  SerFlushOutput(serialhandle); // discard any remaining output
-  SerClose(serialhandle);
-  serialHandle:=-1;
+  SerDrain(serhandle); // flush out any remaining before closure
+  SerFlushOutput(serhandle); // discard any remaining output
+  SerClose(serhandle);
+  serHandle:=-1;
   end;
 end;
 
 {
-procedure eeProgCmd(cmd:String;answer:Tmemo);
+procedure eeProgCmd(cmd:String);
 Send command to programmer and wait for answer.
 input:
       cmd:  command string
-      answer: Tmemo control collecting programmer answer.
 }
-procedure eeProgCmd(cmd:String;answer:Tmemo);
+procedure eeProgCmd(cmd:String);
 var
   s : AnsiString;
-  b: array [0..1] of byte;
-  ComIn        : integer;
   writecount   : Integer;
-  readCount    : Integer;
   status       : LongInt;
-  ErrorCode    : Integer;
+
+
+begin
+  if serHandle<=0 then exit;
+  s:= cmd; // use the input text
+  s:= s+char(CR);
+  writecount:= s.length;
+  status:= SerWrite(serhandle, s[1], writecount);
+  SerDrain(serhandle);
+  end;
 
 {
-function SerReadLn:integer;
-read caracters from serial port until it receive CR character.
+procedure receiveData(answer:Tmemo);
+Receive data from programmer after
+sending a command.
 }
-function SerReadLn:integer;
+procedure receiveData(answer:Tmemo);
 var
-  c : array[0..2] of byte;
-  llen:integer;
-begin
-  c[0]:=0;
-  s:='';
-  llen:=0;
-  while (c[0]<>13) do
-  begin
-    ReadCount:=SerRead(serialHandle,c,1);
-    if (ReadCount>0) then
-    begin
-         if ((c[0]>31) and (c[0]<127) and (llen<127)) then
-         begin
-              s := s + char(c[0]);
-              inc(llen);
-         end;
-    end;
+   s:ansiString;
+   rxCount: integer;
 
-  end;
-  result:=llen;
+   {
+   function SerReadLn:integer;
+   read caracters from serial port until it receive CR or '#' character.
+   }
+   function SerReadLn:integer;
+   var
+    // c : array[0..1] of byte;
+      c: array[0..1] of byte;
+      readCount,
+     llen:integer;
+   begin
+     c[0]:=0;
+     s:='';
+     llen:=0;
+     while (c[0]<>CR) do
+     begin
+       ReadCount:=SerRead(serHandle,c,1);
+       if (ReadCount>0) then
+       begin
+            if ((c[0]>31) and (c[0]<127) and (llen<127)) then
+            begin
+                 s := s + char(c[0]);
+                inc(llen);
+            end;
+            if c[0]=HASH then c[0]:=CR;
+       end;
+
+     end;
+     result:=llen;
+   end;
+
+begin
+    rxCount:=serReadln;
+    while rxCount > 0 do
+    begin
+        answer.lines.Append(s);
+        Application.ProcessMessages;
+        if (s.length=1) and (s[1]=char(HASH)) then break;
+        rxCount:=serReadLn;
+    end;
 end;
 
-begin
-  if serialHandle<=0 then exit;
-  s:= cmd; // use the input text
-  s:= s+#13; // CR
-  writecount:= s.length;
-  status:= SerWrite(serialhandle, s[1], writecount);
-  SerSync(serialhandle);
-  ComIn := WriteCount;
-  if ComIn > 0 then
-  begin
-    while (ComIn>0)do
-    begin
-      ComIn:=serReadLn;
-      if (ComIn>0) then
-      begin
-            answer.lines.Append(s);
-            Application.ProcessMessages;
-            if (s.length=1) and (s[1]=#35) then ComIn:=0;
 
-      end;
-      end;
-  end
-  else
-    writeln('Error: unable to send');
-  end;
 end.
+
 

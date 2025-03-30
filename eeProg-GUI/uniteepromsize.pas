@@ -94,7 +94,8 @@ begin
     confirm:=true;
     cmdStr:=IntToHex(integer(eeprom_list[CBEeprom.itemIndex].eeType),1)+
     'T'+IntToHex(eepromSize,5)+'S';
-    eeProgCmd.eeProgCmd(cmdStr,FormMain.memoConsole);
+    eeProgCmd.eeProgCmd(cmdStr);
+    eeProgCmd.receiveData(FormMain.memoConsole);
     close;
 end;
 

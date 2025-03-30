@@ -116,9 +116,6 @@ begin
   begin
      items.Add(eeprom_list[i].name);
   end;
-//  EditSize.text:=IntToStr(eeprom_list[i].size);
-//  RGJP3.itemIndex:=1;
-//  EditEEtype.text:=EETypeName[0];
   end;
 end;
 

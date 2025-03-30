@@ -8,9 +8,9 @@
       <Unit>
         <Filename Value="eeProg_gui.lpr"/>
         <IsPartOfProject Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <CursorPos Y="19"/>
-        <UsageCount Value="173"/>
+        <UsageCount Value="176"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -20,9 +20,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitMain"/>
-        <IsVisibleTab Value="True"/>
-        <CursorPos Y="128"/>
-        <UsageCount Value="173"/>
+        <TopLine Value="129"/>
+        <CursorPos X="113" Y="134"/>
+        <ComponentState Value="1"/>
+        <UsageCount Value="176"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -33,9 +34,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitPortCfg"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="8"/>
         <CursorPos Y="9"/>
-        <UsageCount Value="173"/>
+        <UsageCount Value="176"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -45,14 +46,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <CursorPos X="19" Y="43"/>
-        <UsageCount Value="173"/>
+        <UsageCount Value="176"/>
       </Unit>
       <Unit>
         <Filename Value="hello.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="69" Y="7"/>
-        <UsageCount Value="173"/>
+        <UsageCount Value="176"/>
       </Unit>
       <Unit>
         <Filename Value="commerror.pas"/>
@@ -61,9 +62,9 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="CommError"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <CursorPos X="16" Y="25"/>
-        <UsageCount Value="170"/>
+        <UsageCount Value="173"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -73,10 +74,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitRange"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <TopLine Value="87"/>
         <CursorPos X="25" Y="114"/>
-        <UsageCount Value="106"/>
+        <UsageCount Value="109"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -86,11 +87,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UnitEepromSize"/>
-        <EditorIndex Value="4"/>
-        <TopLine Value="73"/>
-        <CursorPos X="4" Y="111"/>
-        <UsageCount Value="101"/>
+        <EditorIndex Value="3"/>
+        <TopLine Value="75"/>
+        <CursorPos X="49" Y="98"/>
+        <ComponentState Value="1"/>
+        <UsageCount Value="104"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="unitabout.pas"/>
@@ -99,27 +102,28 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitAbout"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <TopLine Value="11"/>
         <CursorPos X="44" Y="26"/>
-        <UsageCount Value="71"/>
+        <UsageCount Value="74"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="eeProgCmd.pas"/>
-        <EditorIndex Value="7"/>
-        <TopLine Value="47"/>
-        <CursorPos X="15" Y="67"/>
-        <UsageCount Value="86"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+        <TopLine Value="66"/>
+        <CursorPos X="28" Y="78"/>
+        <UsageCount Value="88"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
         <UnitName Value="Serial"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="79"/>
-        <CursorPos X="26" Y="13"/>
-        <UsageCount Value="72"/>
+        <TopLine Value="199"/>
+        <CursorPos X="52" Y="23"/>
+        <UsageCount Value="12"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\lib\lazarus\3.0\lcl\include\customform.inc"/>
@@ -131,9 +135,9 @@
       <Unit>
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\unix\sysutils.pp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="39"/>
-        <CursorPos X="5" Y="59"/>
-        <UsageCount Value="20"/>
+        <TopLine Value="22"/>
+        <CursorPos X="20" Y="50"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\lib\lazarus\3.0\components\lazutils\laztracer.pas"/>
@@ -176,22 +180,20 @@
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\unix\baseunix.pp"/>
         <UnitName Value="BaseUnix"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="61"/>
-        <UsageCount Value="8"/>
+        <CursorPos X="14" Y="20"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\linux\termio.pp"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="26"/>
-        <UsageCount Value="8"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\unix\unix.pp"/>
         <UnitName Value="Unix"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="526"/>
-        <CursorPos X="42" Y="553"/>
-        <UsageCount Value="8"/>
+        <TopLine Value="52"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\unix\bunxh.inc"/>
@@ -203,196 +205,160 @@
       <Unit>
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\rtl-extra\src\win\serial.pp"/>
         <UnitName Value="Serial"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="431"/>
-        <CursorPos Y="473"/>
-        <UsageCount Value="9"/>
+        <EditorIndex Value="7"/>
+        <TopLine Value="31"/>
+        <CursorPos Y="31"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\lazarus\3.8.0\components\lazutils\textstrings.pas"/>
+        <Filename Value="C:\usr\share\lazarus\3.8.0\components\lazutils\textstrings.pas"/>
         <UnitName Value="TextStrings"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="712"/>
         <CursorPos Y="732"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit>
       <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <UnitName Value="Serial"/>
-        <EditorIndex Value="8"/>
-        <TopLine Value="199"/>
-        <CursorPos X="52" Y="23"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\linux\termio.pp"/>
+        <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\unix\unixtype.pp"/>
         <EditorIndex Value="-1"/>
         <UsageCount Value="10"/>
       </Unit>
       <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\unix\unix.pp"/>
-        <UnitName Value="Unix"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="52"/>
-        <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\unix\baseunix.pp"/>
-        <UnitName Value="BaseUnix"/>
-        <EditorIndex Value="-1"/>
-        <CursorPos X="14" Y="20"/>
-        <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\unix\unixtype.pp"/>
-        <EditorIndex Value="-1"/>
-        <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\unix\sysutils.pp"/>
-        <EditorIndex Value="-1"/>
-        <TopLine Value="22"/>
-        <CursorPos X="20" Y="50"/>
-        <UsageCount Value="10"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\linux\linux.pp"/>
+        <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\linux\linux.pp"/>
         <UnitName Value="Linux"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="71" Y="389"/>
         <UsageCount Value="10"/>
       </Unit>
       <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\rtl\linux\termios.inc"/>
-        <EditorIndex Value="9"/>
+        <Filename Value="C:\usr\share\fpcsrc\3.2.2\rtl\linux\termios.inc"/>
+        <EditorIndex Value="-1"/>
         <TopLine Value="1218"/>
         <CursorPos X="55" Y="1362"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="147" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="149" TopLine="132"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="159" Column="55" TopLine="151"/>
+      </Position>
+      <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="131" TopLine="118"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="62" TopLine="52"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="63" TopLine="52"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="79" TopLine="52"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="80" TopLine="52"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="87" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="64" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="65" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="67" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="68" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="70" TopLine="54"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="71" TopLine="54"/>
+        <Caret Line="130" TopLine="115"/>
       </Position>
       <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="132" TopLine="118"/>
+        <Caret Line="131" TopLine="115"/>
       </Position>
       <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="135" TopLine="118"/>
+        <Caret Line="134" TopLine="115"/>
       </Position>
       <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="140" TopLine="118"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="326" TopLine="306"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="70" Column="22" TopLine="46"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="21" Column="43"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="21" Column="43"/>
+        <Caret Line="135" TopLine="115"/>
       </Position>
       <Position>
         <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="67" Column="31" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="22" Column="56"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="68" Column="23" TopLine="38"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="168" Column="16" TopLine="161"/>
+        <Caret Line="80" Column="14" TopLine="55"/>
       </Position>
       <Position>
         <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="67" Column="19" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="23" Column="66"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="68" Column="23" TopLine="35"/>
+        <Caret Line="94" Column="11" TopLine="59"/>
       </Position>
       <Position>
         <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="67" Column="19" TopLine="47"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="215" Column="121" TopLine="198"/>
-      </Position>
-      <Position>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <Caret Line="217" Column="6" TopLine="198"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="67" Column="34" TopLine="47"/>
+        <Caret Line="52" Column="20" TopLine="30"/>
       </Position>
     </JumpHistory>
     <RunParams>

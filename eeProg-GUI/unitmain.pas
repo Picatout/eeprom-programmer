@@ -85,9 +85,8 @@ begin
   begin
     memoConsole.lines.clear;
     cmd:=StartHex+'X'+EndHex;
-    eeProgCmd.eeProgCmd(cmd,MemoConsole);
-    cmd:=StartHex+'.'+EndHex;
-    eeProgCmd.eeProgCmd(cmd,memoConsole);
+    eeProgCmd.eeProgCmd(cmd);
+    receiveData(memoConsole);
   end;
 
 end;
@@ -113,7 +112,8 @@ begin
   cursorShape:=memoConsole.cursor;
   memoConsole.cursor:=crHourGlass;
   cmd:='*';
-  eeProgCmd.eeProgCmd(cmd,MemoConsole);
+  eeProgCmd.eeProgCmd(cmd);
+  receiveData(memoConsole);
   memoConsole.cursor:=cursorShape;
 end;
 
@@ -127,12 +127,12 @@ begin
        ShowModal;
        if length(CommPortName)>0 then
        begin
-            MemoConsole.lines.append(DlgPortCfg.CommPortname);
             serhandle:=OpenComm(DlgPortCfg.CommPortname);
             if  serHandle<0 then FormCommError.show
             else
             begin
-                MemoConsole.lines.append(' opended');
+                MemoConsole.lines.Clear;
+                ReceiveData(MemoConsole);
             end;
 
        end;
@@ -265,7 +265,8 @@ begin
             memoConsole.cursor:=crHourGlass;
             cmd:=StartHex+'.'+EndHex;
             MemoConsole.lines.Clear;
-            eeprogCmd.eeprogCmd(cmd,MemoConsole);
+            eeprogCmd.eeprogCmd(cmd);
+            receiveData(memoConsole);
             if SaveDialog.Execute then
               if RBHexFile.Checked then
               begin
@@ -296,7 +297,8 @@ begin
   MemoConsole.lines.Clear;
   CursorShape:=MemoConsole.cursor;
   MemoConsole.cursor:=crHourGlass;
-  eeProgCmd.eeProgCmd(EditCmd.Text,MemoConsole);
+  eeProgCmd.eeProgCmd(EditCmd.Text);
+  receiveData(memoConsole);
   MemoConsole.Cursor:=cursorShape;
 end;
 
@@ -320,7 +322,6 @@ procedure TFormMain.FormCreate(Sender: TObject);
 begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
   DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
-  eeProgCmd.serialhandle:=-1;
   MaxAddr:=8*1024; // default to 8KB EEPROM.
   MItemPortCfgClick(self);
 end;
@@ -362,7 +363,8 @@ begin
            MemoConsole.cursor:=crHourGlass;
            cmd:=StartHex+'.'+EndHex;
            MemoConsole.lines.Clear;
-           eeprogCmd.eeprogCmd(cmd,MemoConsole);
+           eeprogCmd.eeprogCmd(cmd);
+           receiveData(memoConsole);
            memoConsole.cursor:=CursorType;
        end;
   end;
@@ -405,14 +407,16 @@ begin
    try
       BinFile.position:=0;
       line:=FormRange.StartHex+':';
-      eeProgCmd.eeProgCmd(line,MemoConsole);
+      eeProgCmd.eeProgCmd(line);
+      receiveData(memoConsole);
       repeat
       begin
          count:=BinFile.Read(row[0],16);
          if count>0 then
          begin
             convert;
-            eeProgCmd.eeProgCmd(line,MemoConsole);
+            eeProgCmd.eeProgCmd(line);
+            receiveData(memoConsole);
          end;
       end;
       until count=0;
@@ -437,7 +441,8 @@ begin
     while not EOF(HexFile) do
     begin
          Readln(HexFile,line);
-         eeProgCmd.eeProgCmd(line,MemoConsole);
+         eeProgCmd.eeProgCmd(line);
+         receiveData(memoConsole);
     end;
   except
       on E: EInOutError do

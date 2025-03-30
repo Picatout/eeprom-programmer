@@ -7,8 +7,8 @@ object FormMain: TFormMain
   Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 723
-  ClientWidth = 860
+  ClientHeight = 0
+  ClientWidth = 0
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
@@ -36,7 +36,7 @@ object FormMain: TFormMain
     Left = 0
     Height = 32
     Top = 0
-    Width = 77
+    Width = 69
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET
@@ -47,10 +47,10 @@ object FormMain: TFormMain
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 72
+    Left = 88
     Height = 32
     Top = 0
-    Width = 788
+    Width = 772
     Align = alRight
     Anchors = [akTop, akRight]
     Font.Height = -16
