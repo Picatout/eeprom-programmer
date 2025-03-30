@@ -1,14 +1,14 @@
 object FormMain: TFormMain
   Left = 600
-  Height = 723
-  Top = 249
-  Width = 860
-  Align = alClient
+  Height = 904
+  Top = 0
+  Width = 1075
   Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 723
-  ClientWidth = 860
+  ClientHeight = 904
+  ClientWidth = 1075
+  DesignTimePPI = 120
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
@@ -17,12 +17,12 @@ object FormMain: TFormMain
   LCLVersion = '3.8.0.0'
   object MemoConsole: TMemo
     Left = 0
-    Height = 691
-    Top = 32
-    Width = 860
+    Height = 864
+    Top = 40
+    Width = 1075
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
     Font.Quality = fqDraft
@@ -34,26 +34,26 @@ object FormMain: TFormMain
   end
   object Label1: TLabel
     Left = 0
-    Height = 32
+    Height = 40
     Top = 0
-    Width = 69
+    Width = 85
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Sans'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 88
-    Height = 32
+    Left = 110
+    Height = 40
     Top = 0
-    Width = 772
+    Width = 965
     Align = alRight
     Anchors = [akTop, akRight]
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Sans'
     ParentFont = False
     TabOrder = 1
@@ -62,8 +62,8 @@ object FormMain: TFormMain
     OnKeyPress = EditCmdKeyPress
   end
   object mItemFiles: TMainMenu
-    Left = 8
-    Top = 64
+    Left = 10
+    Top = 80
     object MenuItem1: TMenuItem
       Caption = '&Files'
       object mItemView: TMenuItem
@@ -125,12 +125,12 @@ object FormMain: TFormMain
     FilterIndex = -1
     InitialDir = '.'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    Left = 88
-    Top = 32
+    Left = 110
+    Top = 40
   end
   object SaveDialog: TSaveDialog
     InitialDir = '.'
-    Left = 48
-    Top = 80
+    Left = 60
+    Top = 100
   end
 end

@@ -48,6 +48,7 @@ type
 
 var
   FormEeprom: TFormEeprom;
+
   const eeprom_list: array [0..12] of Teeprom=(
   (name:'AT28BV256 - 32K 3.3V EEPROM';vcc:JP3_3V;size:32;eeType:AT28),
   (name:'AT28BV64B - 8K 3.3V EEPROM';vcc:JP3_3V;size:8;eeType:AT28),
@@ -117,7 +118,12 @@ begin
   begin
      items.Add(eeprom_list[i].name);
   end;
-  end;
+  end;//with CBeeprom
+  EditSize.text:='8';
+  EditeeType.text:='AT28';
+  RGJP3.ItemIndex:=1;
+  CBeeprom.ItemIndex:=3;
+
 end;
 
 procedure TFormEeprom.FormShow(Sender: TObject);

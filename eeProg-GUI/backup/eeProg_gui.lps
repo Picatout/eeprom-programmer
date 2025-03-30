@@ -10,7 +10,7 @@
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="2"/>
         <CursorPos Y="19"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="179"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -21,9 +21,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitMain"/>
         <IsVisibleTab Value="True"/>
-        <TopLine Value="333"/>
-        <CursorPos X="10" Y="346"/>
-        <UsageCount Value="177"/>
+        <TopLine Value="315"/>
+        <CursorPos Y="328"/>
+        <UsageCount Value="179"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -35,8 +35,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitPortCfg"/>
         <EditorIndex Value="8"/>
+        <TopLine Value="19"/>
         <CursorPos Y="9"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="179"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -46,14 +47,14 @@
         <EditorIndex Value="-1"/>
         <TopLine Value="26"/>
         <CursorPos X="19" Y="43"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="179"/>
       </Unit>
       <Unit>
         <Filename Value="hello.pas"/>
         <IsPartOfProject Value="True"/>
         <EditorIndex Value="-1"/>
         <CursorPos X="69" Y="7"/>
-        <UsageCount Value="177"/>
+        <UsageCount Value="179"/>
       </Unit>
       <Unit>
         <Filename Value="commerror.pas"/>
@@ -64,7 +65,7 @@
         <UnitName Value="CommError"/>
         <EditorIndex Value="5"/>
         <CursorPos X="16" Y="25"/>
-        <UsageCount Value="174"/>
+        <UsageCount Value="176"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -77,7 +78,7 @@
         <EditorIndex Value="4"/>
         <TopLine Value="87"/>
         <CursorPos X="25" Y="114"/>
-        <UsageCount Value="110"/>
+        <UsageCount Value="112"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -88,9 +89,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UnitEepromSize"/>
         <EditorIndex Value="3"/>
-        <TopLine Value="75"/>
-        <CursorPos X="49" Y="98"/>
-        <UsageCount Value="105"/>
+        <TopLine Value="107"/>
+        <CursorPos Y="125"/>
+        <UsageCount Value="107"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit>
@@ -104,15 +105,15 @@
         <EditorIndex Value="1"/>
         <TopLine Value="11"/>
         <CursorPos X="44" Y="26"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="77"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="eeProgCmd.pas"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="105"/>
-        <CursorPos X="47" Y="105"/>
-        <UsageCount Value="88"/>
+        <TopLine Value="143"/>
+        <CursorPos X="77" Y="150"/>
+        <UsageCount Value="89"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -204,9 +205,9 @@
         <Filename Value="C:\lazarus\fpc\3.2.2\source\packages\rtl-extra\src\win\serial.pp"/>
         <UnitName Value="Serial"/>
         <EditorIndex Value="7"/>
-        <TopLine Value="104"/>
-        <CursorPos Y="127"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="262"/>
+        <CursorPos X="6" Y="114"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -238,58 +239,6 @@
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="149" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="150" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="147" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="149" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="150" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="147" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="149" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="150" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="147" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="149" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="150" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="147" TopLine="132"/>
-      </Position>
-      <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="149" TopLine="132"/>
-      </Position>
       <Position>
         <Filename Value="eeProgCmd.pas"/>
         <Caret Line="150" TopLine="132"/>
@@ -357,6 +306,58 @@
       <Position>
         <Filename Value="unitmain.pas"/>
         <Caret Line="346" Column="36" TopLine="332"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="120" Column="10" TopLine="149"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="111" Column="3" TopLine="99"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="150" Column="47" TopLine="141"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="329" Column="32" TopLine="317"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="328" Column="27" TopLine="316"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="332" Column="27" TopLine="316"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="64" Column="31" TopLine="56"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="9" Column="21"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="327" Column="7" TopLine="315"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="329" Column="46" TopLine="315"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="331" Column="5" TopLine="315"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="336" Column="27" TopLine="321"/>
+      </Position>
+      <Position>
+        <Filename Value="uniteepromsize.pas"/>
+        <Caret Line="50" Column="13" TopLine="34"/>
       </Position>
     </JumpHistory>
     <RunParams>

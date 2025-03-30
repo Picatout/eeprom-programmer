@@ -75,9 +75,9 @@ begin
   begin
      Flags:= []; // none
      SerSetParams(serhandle, 460800, 8, NoneParity, 1,Flags);
-     s[1]:=CTRL_X; //CTRL_X reboot programmer
-     SerWrite(serHandle,s[1],1);
-     SerDrain(serhandle);
+     s[0]:=CTRL_X; //CTRL_X reboot programmer
+     SerWrite(serHandle,s[0],1);
+     //SerSync(serhandle);
   end;
   result:= serHandle;
 end;
@@ -116,8 +116,8 @@ begin
   s:= cmd; // use the input text
   s:= s+char(CR);
   writecount:= s.length;
-  status:= SerWrite(serhandle, s[1], writecount);
-  SerDrain(serhandle);
+  WriteCount:= SerWrite(serhandle, s[1], writecount);
+  //SerSync(serhandle);
   end;
 
 {
@@ -128,7 +128,7 @@ sending a command.
 procedure receiveData(answer:Tmemo);
 var
    s:ansiString;
-   rxCount: integer;
+   readCount: integer;
 
    {
    function SerReadLn:integer;
@@ -136,39 +136,37 @@ var
    }
    function SerReadLn:integer;
    var
-    // c : array[0..1] of byte;
-      c: array[0..1] of byte;
-      readCount,
+     c: array[0..2] of byte;
      llen:integer;
    begin
      c[0]:=0;
      s:='';
      llen:=0;
-     while (c[0]<>CR) do
+     while true do
      begin
        ReadCount:=SerRead(serHandle,c,1);
        if (ReadCount>0) then
        begin
-            if ((c[0]>31) and (c[0]<127) and (llen<127)) then
-            begin
+//            if ({(c[0]>31) and (c[0]<127) and} (llen<127)) then
+//            begin
                  s := s + char(c[0]);
                 inc(llen);
-            end;
-            if c[0]=HASH then c[0]:=CR;
+//            end;
+            if (c[0]=HASH) or (c[0]=CR) then break;
        end;
 
-     end;
+     end; //while
      result:=llen;
    end;
 
 begin
-    rxCount:=serReadln;
-    while rxCount > 0 do
+    readCount:=serReadln;
+    while readCount > 0 do
     begin
         answer.lines.Append(s);
         Application.ProcessMessages;
         if (s.length=1) and (s[1]=char(HASH)) then break;
-        rxCount:=serReadLn;
+        readCount:=serReadLn;
     end;
 end;
 

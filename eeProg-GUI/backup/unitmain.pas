@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, Menus, ComCtrls,
-  StdCtrls, ExtCtrls,UnitEepromSize;
+  StdCtrls, ExtCtrls;
 
 type
 
@@ -61,7 +61,7 @@ var
 
 implementation
 uses
-  unitPortCfg, eeProgCmd,CommError,FileUtil,unitRange,unitAbout;
+  unitPortCfg, UnitEepromSize, eeProgCmd,CommError,FileUtil,unitRange,unitAbout;
 
 var
 DlgPortCfg:TFormPortCfg;
@@ -324,6 +324,7 @@ procedure TFormMain.FormCreate(Sender: TObject);
 begin
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
   DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
+  FormEeprom:=TFormEeprom.Create(FormMain);
   MaxAddr:=8*1024; // default to 8KB EEPROM.
   MItemPortCfgClick(self);
 end;
@@ -341,9 +342,8 @@ procedure TFormMain.mItemRebootClick(Sender: TObject);
 var
    s:AnsiString;
 begin
-   S:='  ';
+   S:=' ';
    s[1]:=char(CTRL_X);
-   s[2]:=char(CR);
    eeProgCmd.eeProgCmd(s);
    memoConsole.lines.clear;
    receiveData(memoConsole);

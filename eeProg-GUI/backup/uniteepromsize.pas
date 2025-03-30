@@ -48,6 +48,7 @@ type
 
 var
   FormEeprom: TFormEeprom;
+
   const eeprom_list: array [0..12] of Teeprom=(
   (name:'AT28BV256 - 32K 3.3V EEPROM';vcc:JP3_3V;size:32;eeType:AT28),
   (name:'AT28BV64B - 8K 3.3V EEPROM';vcc:JP3_3V;size:8;eeType:AT28),
@@ -94,7 +95,8 @@ begin
     confirm:=true;
     cmdStr:=IntToHex(integer(eeprom_list[CBEeprom.itemIndex].eeType),1)+
     'T'+IntToHex(eepromSize,5)+'S';
-    eeProgCmd.eeProgCmd(cmdStr,FormMain.memoConsole);
+    eeProgCmd.eeProgCmd(cmdStr);
+    eeProgCmd.receiveData(FormMain.memoConsole);
     close;
 end;
 
