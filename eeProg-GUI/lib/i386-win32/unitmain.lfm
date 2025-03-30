@@ -7,8 +7,8 @@ object FormMain: TFormMain
   Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 0
-  ClientWidth = 0
+  ClientHeight = 723
+  ClientWidth = 860
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
@@ -89,6 +89,10 @@ object FormMain: TFormMain
         Caption = '&Dump range'
         Hint = 'Dump eeprom range to file'
         OnClick = mItemDumpClick
+      end
+      object mItemReboot: TMenuItem
+        Caption = '&Reboot'
+        OnClick = mItemRebootClick
       end
       object Separator1: TMenuItem
         Caption = '-'

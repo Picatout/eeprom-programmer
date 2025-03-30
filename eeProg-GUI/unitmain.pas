@@ -15,6 +15,7 @@ type
   TFormMain = class(TForm)
     EditCmd: TEdit;
     Label1: TLabel;
+    mItemReboot: TMenuItem;
     MtemEraseAll: TMenuItem;
     mItemEeprom: TMenuItem;
     mItemFiles: TMainMenu;
@@ -40,6 +41,7 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure MemoConsoleChange(Sender: TObject);
+    procedure mItemRebootClick(Sender: TObject);
     procedure mItemAboutClick(Sender: TObject);
     procedure mItemEepromClick(Sender: TObject);
     procedure mItemViewClick(Sender: TObject);
@@ -335,6 +337,17 @@ begin
 
 end;
 
+procedure TFormMain.mItemRebootClick(Sender: TObject);
+var
+   s:AnsiString;
+begin
+   S:=' ';
+   s[1]:=char(CTRL_X);
+   eeProgCmd.eeProgCmd(s);
+   memoConsole.lines.clear;
+   receiveData(memoConsole);
+end;
+
 procedure TFormMain.mItemAboutClick(Sender: TObject);
 begin
   FormAbout.showModal;
@@ -351,7 +364,7 @@ end;
 
 procedure TFormMain.mItemViewClick(Sender: TObject);
 var
-    cmd:string;
+    cmd:Ansistring;
     cursorType:TCursor;
 begin
   with FormRange do

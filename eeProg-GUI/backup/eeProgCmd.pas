@@ -9,6 +9,11 @@ interface
 uses
   Classes, SysUtils,StdCtrls,UnitPortCfg;
 
+const
+     HASH:byte=35;   // programmer command line prompt
+     CTRL_C:byte=3;  // used to cancel operation
+     CTRL_X:byte=24; //used to reboot programmer
+     CR:byte=13;    // carriage return (end of line).
 
 {
 function OpenComm(ComPortName:String):LongInt;
@@ -33,7 +38,7 @@ Send command to programmer and wait for answer.
 input:
       cmd:  command string
 }
-procedure eeProgCmd(cmd:String);
+procedure eeProgCmd(cmd:AnsiString);
 
 {
 procedure receiveData(answer:Tmemo);
@@ -46,11 +51,6 @@ implementation
 uses
   Forms,serial;
 
-const
-     HASH:byte=35;   // programmer command line prompt
-     CTRL_C:byte=3;  // used to cancel operation
-     CTRL_R:byte=18; //used to reboot programmer
-     CR:byte=13;    // carriage return (end of line).
 
 var
    serHandle:longint;
@@ -104,7 +104,7 @@ Send command to programmer and wait for answer.
 input:
       cmd:  command string
 }
-procedure eeProgCmd(cmd:String);
+procedure eeProgCmd(cmd:AnsiString);
 var
   s : AnsiString;
   writecount   : Integer;
