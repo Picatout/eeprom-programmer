@@ -1,29 +1,30 @@
 object FormAbout: TFormAbout
   Left = 784
-  Height = 191
+  Height = 239
   Top = 401
-  Width = 386
+  Width = 482
   BorderStyle = bsDialog
   Caption = 'About eeProg'
-  ClientHeight = 191
-  ClientWidth = 386
+  ClientHeight = 239
+  ClientWidth = 482
+  DesignTimePPI = 120
   OnShow = FormShow
   LCLVersion = '3.8.0.0'
   object MemoAbout: TMemo
     Left = 0
-    Height = 136
+    Height = 170
     Top = 0
-    Width = 386
+    Width = 482
     Align = alTop
     ReadOnly = True
     ScrollBars = ssAutoVertical
     TabOrder = 0
   end
   object BtnClose: TButton
-    Left = 160
-    Height = 25
-    Top = 152
-    Width = 75
+    Left = 200
+    Height = 31
+    Top = 190
+    Width = 94
     Caption = '&Close'
     TabOrder = 1
     OnClick = BtnCloseClick
