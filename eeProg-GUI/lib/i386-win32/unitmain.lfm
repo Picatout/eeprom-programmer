@@ -1,13 +1,13 @@
 object FormMain: TFormMain
-  Left = 600
-  Height = 689
-  Top = 0
-  Width = 860
+  Left = 629
+  Height = 746
+  Top = 218
+  Width = 1036
   Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 689
-  ClientWidth = 860
+  ClientHeight = 746
+  ClientWidth = 1036
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
@@ -16,9 +16,9 @@ object FormMain: TFormMain
   LCLVersion = '3.8.0.0'
   object MemoConsole: TMemo
     Left = 0
-    Height = 691
-    Top = -2
-    Width = 860
+    Height = 714
+    Top = 32
+    Width = 1036
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
     Font.Height = -16
@@ -33,7 +33,7 @@ object FormMain: TFormMain
   end
   object Label1: TLabel
     Left = 0
-    Height = 0
+    Height = 32
     Top = 0
     Width = 69
     Align = alLeft
@@ -46,11 +46,11 @@ object FormMain: TFormMain
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 88
-    Height = 0
+    Left = 69
+    Height = 32
     Top = 0
-    Width = 772
-    Align = alRight
+    Width = 967
+    Align = alLeft
     Anchors = [akTop, akRight]
     Font.Height = -16
     Font.Name = 'Sans'

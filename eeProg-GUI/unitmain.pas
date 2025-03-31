@@ -139,7 +139,6 @@ begin
                 eeProgCmd.eeProgCmd(cmdStr);
                 ReceiveData(MemoConsole);
             end;
-
        end;
   end;
 end;

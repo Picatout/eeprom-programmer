@@ -35,7 +35,7 @@ object FormMain: TFormMain
     Left = 0
     Height = 32
     Top = 0
-    Width = 77
+    Width = 69
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET
@@ -46,17 +46,16 @@ object FormMain: TFormMain
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 77
+    Left = 69
     Height = 32
     Top = 0
-    Width = 959
+    Width = 967
     Align = alLeft
     Anchors = [akTop, akRight]
     Font.Height = -16
     Font.Name = 'Sans'
     ParentFont = False
     TabOrder = 1
-    Text = 'test'
     OnChange = EditCmdChange
     OnExit = EditCmdExit
     OnKeyPress = EditCmdKeyPress

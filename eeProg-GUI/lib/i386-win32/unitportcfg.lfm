@@ -44,10 +44,10 @@ object FormPortCfg: TFormPortCfg
   end
   object CBDeviceList: TComboBox
     Left = 96
-    Height = 23
+    Height = 35
     Top = 32
     Width = 240
-    ItemHeight = 15
+    ItemHeight = 0
     TabOrder = 2
     OnSelect = CBDeviceListSelect
   end
@@ -56,7 +56,7 @@ object FormPortCfg: TFormPortCfg
     Height = 17
     Hint = 'programmer send row  delay'
     Top = 88
-    Width = 99
+    Width = 98
     Caption = 'row delay (msec)'
     Font.CharSet = ANSI_CHARSET
     Font.Height = -13
@@ -66,10 +66,11 @@ object FormPortCfg: TFormPortCfg
   end
   object EditDelay: TEdit
     Left = 128
-    Height = 23
+    Height = 24
     Top = 88
     Width = 27
+    AutoSize = False
     TabOrder = 3
-    Text = '0'
+    Text = '4'
   end
 end
