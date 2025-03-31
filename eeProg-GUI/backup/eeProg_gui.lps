@@ -22,7 +22,7 @@
         <UnitName Value="unitMain"/>
         <IsVisibleTab Value="True"/>
         <TopLine Value="122"/>
-        <CursorPos Y="136"/>
+        <CursorPos Y="142"/>
         <UsageCount Value="182"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -36,7 +36,7 @@
         <UnitName Value="unitPortCfg"/>
         <EditorIndex Value="7"/>
         <TopLine Value="20"/>
-        <CursorPos X="48" Y="32"/>
+        <CursorPos Y="32"/>
         <UsageCount Value="182"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -104,7 +104,7 @@
         <UnitName Value="unitAbout"/>
         <EditorIndex Value="1"/>
         <TopLine Value="11"/>
-        <CursorPos X="42" Y="20"/>
+        <CursorPos X="9" Y="20"/>
         <UsageCount Value="80"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -240,10 +240,6 @@
     </Units>
     <JumpHistory HistoryIndex="29">
       <Position>
-        <Filename Value="eeProgCmd.pas"/>
-        <Caret Line="52" Column="20" TopLine="33"/>
-      </Position>
-      <Position>
         <Filename Value="unitmain.pas"/>
         <Caret Line="134" Column="113" TopLine="129"/>
       </Position>
@@ -358,6 +354,10 @@
       <Position>
         <Filename Value="unitabout.pas"/>
         <Caret Line="20" Column="42" TopLine="11"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="136" TopLine="122"/>
       </Position>
     </JumpHistory>
     <RunParams>
