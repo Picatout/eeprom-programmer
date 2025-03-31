@@ -2,7 +2,7 @@
 
 ### 2025-03-31
 
-* GUI_V2.0.R5, Correction mineures
+* Correction mineures
   * le contrôle EditCmd cachait le contrôle LblCmd.
   * Renommé l'exécutable simplement eeProg au lieu de eeProg-gui.
 

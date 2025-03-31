@@ -1,4 +1,4 @@
-# eeProg
+# eeProg-gui
 
 Il s'agit d'un environnement avec interface utilisateur graphique pour le programmeur **eeProg**. Ce projet est réalisé en Free Pascal en utilisant l'environnement [Lazarus 3.0](https://www.lazarus-ide.org/) disponible dans les dépôts d'Ubuntu 24.04LTS.
 

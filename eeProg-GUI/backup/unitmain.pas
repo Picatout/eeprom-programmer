@@ -14,7 +14,7 @@ type
 
   TFormMain = class(TForm)
     EditCmd: TEdit;
-    Label1: TLabel;
+    LblCmd: TLabel;
     mItemReboot: TMenuItem;
     MtemEraseAll: TMenuItem;
     mItemEeprom: TMenuItem;

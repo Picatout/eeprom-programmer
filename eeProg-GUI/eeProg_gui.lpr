@@ -11,13 +11,14 @@ uses
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, unitMain, unitPortCfg, eeProgCmd, CommError, unitRange, UnitEepromSize,
-  unitAbout
+  unitAbout,vinfo
   { you can add units after this };
 
 {$R *.res}
 
 begin
   RequireDerivedFormResource:=True;
+  Application.Title:='eeProg';
   Application.Scaled:=True;
   Application.Initialize;
   Application.CreateForm(TFormMain, FormMain);
