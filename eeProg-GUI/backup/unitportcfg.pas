@@ -7,19 +7,6 @@ interface
 uses
   Classes, SysUtils, Forms, Controls, Graphics, Dialogs, StdCtrls;
 
-const
-  B9600=0;
-  B19200=1;
-  B38400=2;
-  B57600=3;
-  B115200=4; // default BAUD RATE
-  B230400=5;
-  B460800=6;
-  BAUD_RATE:array[0..6] of string=('9600','19200','38400','57600',
-                                        '115200','230400','460800');
-
-  intBaudValue: array [0..6] of integer=(9600,19200,38400,57600,
-                                        115200,230400,460800);
 type
 
   { TFormPortCfg }

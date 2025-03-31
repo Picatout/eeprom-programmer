@@ -1,7 +1,7 @@
 object FormMain: TFormMain
   Left = 600
   Height = 904
-  Top = 249
+  Top = 0
   Width = 1075
   Anchors = []
   BorderStyle = bsSingle
