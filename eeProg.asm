@@ -291,7 +291,7 @@ init_ports:
 ;----------------------
 ;  eeProg entry point 
 ;---------------------
-EEPROG_INFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\nversion "
+EEPROG_INFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\rversion "
 eeProg:
     mov base,#16 
     call clr_screen
@@ -506,7 +506,11 @@ row:
 3$:
     dec (ROW_SIZE,sp)
     jrne row
-    call print_text 
+    call print_text
+; 2 msec delay between lines     
+    mov timer+1,#2
+    bset flags,#FTIMER 
+    btjt flags,#FTIMER,. 
     jra new_row 
 9$: 
     _inc_v24 xamadr

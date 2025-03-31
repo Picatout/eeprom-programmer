@@ -54,7 +54,7 @@ UartRxHandler: ; console receive char
 	ld a,UART_DR 
 	cp a,#CTRL_C 
 	jreq 6$
-	cp a,#CTRL_R 
+	cp a,#CTRL_X 
 	jrne 0$
 	_swreset ; reboot
 0$:	

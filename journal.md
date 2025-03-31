@@ -1,3 +1,9 @@
+### 2025-03-30
+
+* Dans la routine **exam_block** ajout d'un délais de 2msec entre chaque ligne.
+
+* Remplacement de **CTRL+R** par **CTRL+X dans le firware du programmeur. FW_V2.0R5
+
 ### 2025-03-29
 
 * retour en arrière annulé la commande **!** créée hier dans le firmware.
