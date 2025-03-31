@@ -508,7 +508,7 @@ row:
     jrne row
     call print_text
 ; 2 msec delay between lines     
-    mov timer+1,#2
+    mov timer+1,#5
     bset flags,#FTIMER 
     btjt flags,#FTIMER,. 
     jra new_row 
