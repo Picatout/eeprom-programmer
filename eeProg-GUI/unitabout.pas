@@ -27,7 +27,7 @@ var
 implementation
 
 {$R *.lfm}
-const VERSTR='eeProg_GUI V2.0R3';
+const VERSTR='eeProg_GUI V2.0R4';
 const COPYRIGHT='Copyright Jacques Deschênes, 2025' ;
 const LICENSE='LICENSE GPL V3';
 

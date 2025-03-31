@@ -103,6 +103,7 @@ last: .blkb 3   ; last address parsed from input
 limit: .blkb 3 ; eeprom last address 0x1fff for 8KO, 0x7fff for 32KO, etc 
 eeType: .blkb 1; programming type AT28 =0, 39SF = 1 
 page_size: .blkb 1 ;  how many bytes can be programmed in one shot.
+RowDelay: .blkb 1 ; delay msec between row send in exam_block
 
 	.org 0x80 
 rx1_queue:: .ds RX_QUEUE_SIZE ; UART receive circular queue 

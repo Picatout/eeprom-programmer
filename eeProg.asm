@@ -291,7 +291,7 @@ init_ports:
 ;----------------------
 ;  eeProg entry point 
 ;---------------------
-EEPROG_INFO: .asciz "eeProg, Copyright Jacques Deschenes, 2025\rversion "
+EEPROG_INFO: .asciz "\reeProg, Copyright Jacques Deschenes, 2025\rversion "
 eeProg:
     mov base,#16 
     call clr_screen
@@ -314,6 +314,8 @@ eeProg:
     call init_ports 
 ; set default limit for 8KB eeprom     
     mov page_size, #DEFAULT_PAGE_SIZE
+; row delay default to 4 msec 
+    mov RowDelay,#4     
 ; set eeprom type to AT28xxxx 
     mov eeType,#AT28     
 ; clear pointer variables 
@@ -384,6 +386,13 @@ parse01:
     _clrz mode 
     jra next_char 
 3$: 
+    cp a,#'M ; row delay msec 
+    jrne 34$
+    _ldaz xamadr+2 
+    and a,#15 
+    _straz RowDelay
+    jra cli 
+34$:
     cp a,#'T ; eeprom type: 0->AT28,1->SST39 
     jrne 4$
     _ldaz xamadr+2 
@@ -508,7 +517,9 @@ row:
     jrne row
     call print_text
 ; 2 msec delay between lines     
-    mov timer+1,#5
+    _ldaz RowDelay
+    jreq new_row 
+    _straz timer+1
     bset flags,#FTIMER 
     btjt flags,#FTIMER,. 
     jra new_row 

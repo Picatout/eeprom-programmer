@@ -135,6 +135,9 @@ begin
             begin
                 MemoConsole.lines.Clear;
                 ReceiveData(MemoConsole);
+                cmdStr:=DlgPortCfg.EditDelay.text+'M';
+                eeProgCmd.eeProgCmd(cmdStr);
+                ReceiveData(MemoConsole);
             end;
 
        end;

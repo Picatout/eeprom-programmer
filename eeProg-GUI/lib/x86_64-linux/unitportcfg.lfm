@@ -1,6 +1,7 @@
 object FormPortCfg: TFormPortCfg
   Left = 871
   Height = 209
+  Hint = 'programmer may insert send delay between row'
   Top = 292
   Width = 353
   BorderStyle = bsDialog
@@ -49,5 +50,27 @@ object FormPortCfg: TFormPortCfg
     ItemHeight = 0
     TabOrder = 2
     OnSelect = CBDeviceListSelect
+  end
+  object lblDelay: TLabel
+    Left = 24
+    Height = 17
+    Hint = 'programmer send row  delay'
+    Top = 88
+    Width = 98
+    Caption = 'row delay (msec)'
+    Font.CharSet = ANSI_CHARSET
+    Font.Height = -13
+    Font.Pitch = fpVariable
+    Font.Quality = fqDraft
+    ParentFont = False
+  end
+  object EditDelay: TEdit
+    Left = 128
+    Height = 24
+    Top = 88
+    Width = 27
+    AutoSize = False
+    TabOrder = 3
+    Text = '4'
   end
 end

@@ -1,5 +1,7 @@
 ### 2025-03-30
 
+* FW_2.0R6  l'ajout d'un délais entre les lignes semble avoir réglé le problème de perte de données.
+
 * Dans la routine **exam_block** ajout d'un délais de 2msec entre chaque ligne.
 
 * Remplacement de **CTRL+R** par **CTRL+X dans le firware du programmeur. FW_V2.0R5

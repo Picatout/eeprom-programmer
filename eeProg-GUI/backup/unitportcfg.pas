@@ -15,7 +15,9 @@ type
     BtnOk: TButton;
     BtnCancel: TButton;
     CBDeviceList: TComboBox;
+    EditDelay: TEdit;
     Label1: TLabel;
+    lblDelay: TLabel;
     procedure BtnCancelClick(Sender: TObject);
     procedure BtnOkClick(Sender: TObject);
     procedure BtnOkEnter(Sender: TObject);

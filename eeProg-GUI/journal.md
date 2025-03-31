@@ -1,5 +1,9 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-03-30
+
+* GUI_V2.0R4   Le problème de perte de données semble réglé.
+
 ### 2025-03-27
 
 * Version GUI_V2.0R2 complétée.

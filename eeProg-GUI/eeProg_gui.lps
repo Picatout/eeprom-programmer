@@ -20,11 +20,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitMain"/>
-        <IsVisibleTab Value="True"/>
         <TopLine Value="122"/>
         <CursorPos Y="136"/>
         <UsageCount Value="181"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="unitportcfg.pas"/>
@@ -38,6 +38,7 @@
         <CursorPos X="48" Y="32"/>
         <UsageCount Value="181"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="enumserial.pas"/>
@@ -100,11 +101,13 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitAbout"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <TopLine Value="11"/>
-        <CursorPos X="44" Y="26"/>
+        <CursorPos X="32" Y="30"/>
         <UsageCount Value="79"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="eeProgCmd.pas"/>
@@ -345,10 +348,6 @@
         <Caret Line="328" TopLine="315"/>
       </Position>
       <Position>
-        <Filename Value="unitportcfg.pas"/>
-        <Caret Line="9" TopLine="19"/>
-      </Position>
-      <Position>
         <Filename Value="unitmain.pas"/>
         <Caret Line="345" Column="64" TopLine="341"/>
       </Position>
@@ -356,21 +355,14 @@
         <Filename Value="unitmain.pas"/>
         <Caret Line="338" Column="3" TopLine="336"/>
       </Position>
+      <Position>
+        <Filename Value="unitportcfg.pas"/>
+        <Caret Line="32" Column="48" TopLine="20"/>
+      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
       <Modes ActiveMode=""/>
     </RunParams>
   </ProjectSession>
-  <Debugging>
-    <BreakPoints>
-      <Item>
-        <Kind Value="bpkSource"/>
-        <WatchScope Value="wpsLocal"/>
-        <WatchKind Value="wpkWrite"/>
-        <Source Value="unitmain.pas"/>
-        <Line Value="136"/>
-      </Item>
-    </BreakPoints>
-  </Debugging>
 </CONFIG>
