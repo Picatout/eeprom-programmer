@@ -1,8 +1,8 @@
 object FormPortCfg: TFormPortCfg
-  Left = 871
+  Left = 1217
   Height = 209
   Hint = 'programmer may insert send delay between row'
-  Top = 292
+  Top = 492
   Width = 353
   BorderStyle = bsDialog
   Caption = 'serial port selection'

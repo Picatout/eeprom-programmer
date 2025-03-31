@@ -66,9 +66,10 @@ object FormPortCfg: TFormPortCfg
   end
   object EditDelay: TEdit
     Left = 128
-    Height = 35
+    Height = 24
     Top = 88
     Width = 27
+    AutoSize = False
     TabOrder = 3
     Text = '4'
   end

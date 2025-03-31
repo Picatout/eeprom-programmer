@@ -140,3 +140,9 @@ Il s'agit maintenant de modifier le programme [eeProg-gui](eeProg-GUI/eeProg_gui
 La version 2 de l'application est complétée. Voici le lien vers un vidéo de démonstration.
 
 [vidéo de démonstration](https://youtu.be/5XsjfRB1dvs)
+
+### 2025-03-31
+
+La version 2.0R5 de l'application est complétée en pré-release  le vidéo suivant fait le tour de toutes les fonctionnalités.
+
+[démonstration V2.0R5](https://youtu.be/IvOhWJ9nTF0)

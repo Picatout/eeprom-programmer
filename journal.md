@@ -1,3 +1,8 @@
+### 2025-03-31
+
+* Modification de l'application. Création des exécutables pour Windows et Ubuntu/Linux. 
+
+
 ### 2025-03-30
 
 * FW_2.0R6  l'ajout d'un délais entre les lignes semble avoir réglé le problème de perte de données.
