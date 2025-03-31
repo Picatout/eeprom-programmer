@@ -14,7 +14,8 @@ const
      CTRL_C:byte=3;  // used to cancel operation
      CTRL_X:byte=24; //used to reboot programmer
      CR:byte=13;    // carriage return (end of line).
-
+     XON:byte=17;
+     XOFF:byte=19;
 {
 function OpenComm(ComPortName:String):LongInt;
 Open serial port
@@ -127,7 +128,7 @@ sending a command.
 }
 procedure receiveData(answer:Tmemo);
 var
-   s:ansiString;
+   s,flowCtrl:ansiString;
    readCount: integer;
 
    {
@@ -147,12 +148,9 @@ var
        ReadCount:=SerRead(serHandle,c,1);
        if (ReadCount>0) then
        begin
-//            if ({(c[0]>31) and (c[0]<127) and} (llen<127)) then
-//            begin
-                 s := s + char(c[0]);
-                inc(llen);
-//            end;
-            if (c[0]=HASH) or (c[0]=CR) then break;
+          s := s + char(c[0]);
+          inc(llen);
+          if (c[0]=HASH) or (c[0]=CR) then break;
        end;
 
      end; //while
@@ -160,11 +158,18 @@ var
    end;
 
 begin
+    flowCtrl:=' ';
     readCount:=serReadln;
     while readCount > 0 do
     begin
+//        flowCtrl[1]:=char(XOFF);
+//        eeProgCmd(flowCtrl);
+//        serDrain(serhandle);
         answer.lines.Append(s);
-        Application.ProcessMessages;
+//        Application.ProcessMessages;
+//        flowCtrl[1]:=char(XON);
+//        eeProgCmd(flowCtrl);
+//        serDrain(serHandle);
         if (s.length=1) and (s[1]=char(HASH)) then break;
         readCount:=serReadLn;
     end;
