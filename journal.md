@@ -1,3 +1,10 @@
+### 2025-04-01
+
+* Modification de la schématique. 
+	* Ajout d'un switch reset sur la cape.
+	* Ajout d'un commutateur 3.3V/5V sur la cape. 
+  Ces modifications ont pour but d'un montage dans un boitier et ne change rien à l'utilisation. 
+
 ### 2025-03-31
 
 * Modification de l'application. Création des exécutables pour Windows et Ubuntu/Linux. 
