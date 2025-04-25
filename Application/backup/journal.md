@@ -1,8 +1,12 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-04-25
+
+* Version 2.0.6 de l'application. Corrigé bogue dans la programmation des fichiers binaire.
+
 ### 2025-03-31
 
-* Correction mineures
+* GUI_V2.0.R5, Correction mineures
   * le contrôle EditCmd cachait le contrôle LblCmd.
   * Renommé l'exécutable simplement eeProg au lieu de eeProg-gui.
 

@@ -401,14 +401,14 @@ var
    row:array[0..15] of byte;
    line:string;
    count:integer;
+   addr:integer;
 
 procedure convert;
 // convert row byte array in hexadecimal string
 var
   i:integer;
 begin
-   line:=': ';
-   row[0]:=0;
+   line:=IntToHex(addr,2)+': ';
    i:=0;
    while i<count do
    begin
@@ -418,11 +418,11 @@ begin
 end;
 
 begin
+   addr:=FormRange.StartAddr;
    BinFile := TFileStream.Create(FileName,fmOpenRead);
    try
    try
       BinFile.position:=0;
-      line:=FormRange.StartHex+':';
       eeProgCmd.eeProgCmd(line);
       receiveData(memoConsole);
       repeat
@@ -434,6 +434,7 @@ begin
             eeProgCmd.eeProgCmd(line);
             receiveData(memoConsole);
          end;
+         addr := addr+count;
       end;
       until count=0;
    finally

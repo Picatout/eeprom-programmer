@@ -1,15 +1,14 @@
 object FormMain: TFormMain
   Left = 410
-  Height = 932
-  Top = 22
-  Width = 1171
+  Height = 746
+  Top = 32
+  Width = 802
   Align = alTop
   Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 0
-  ClientWidth = 0
-  DesignTimePPI = 120
+  ClientHeight = 746
+  ClientWidth = 802
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
@@ -18,12 +17,12 @@ object FormMain: TFormMain
   LCLVersion = '3.8.0.0'
   object MemoConsole: TMemo
     Left = 0
-    Height = 900
-    Top = 32
-    Width = 1171
+    Height = 720
+    Top = 26
+    Width = 802
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -20
+    Font.Height = -16
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
     Font.Quality = fqDraft
@@ -35,25 +34,26 @@ object FormMain: TFormMain
   end
   object LblCmd: TLabel
     Left = 0
-    Height = 32
+    Height = 26
     Top = 0
-    Width = 85
+    Width = 77
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -20
+    Font.Height = -16
     Font.Name = 'Sans'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = -28
-    Height = 31
+    Left = 80
+    Height = 26
     Top = 0
-    Width = 1199
-    Anchors = [akTop, akRight]
-    Font.Height = -20
+    Width = 722
+    Align = alRight
+    Anchors = []
+    Font.Height = -16
     Font.Name = 'Sans'
     ParentFont = False
     TabOrder = 1
@@ -62,8 +62,8 @@ object FormMain: TFormMain
     OnKeyPress = EditCmdKeyPress
   end
   object mItemFiles: TMainMenu
-    Left = 10
-    Top = 80
+    Left = 8
+    Top = 64
     object MenuItem1: TMenuItem
       Caption = '&Files'
       object mItemView: TMenuItem
@@ -125,12 +125,12 @@ object FormMain: TFormMain
     FilterIndex = -1
     InitialDir = '.'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    Left = 110
-    Top = 40
+    Left = 88
+    Top = 32
   end
   object SaveDialog: TSaveDialog
     InitialDir = '.'
-    Left = 60
-    Top = 100
+    Left = 48
+    Top = 80
   end
 end
