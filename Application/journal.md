@@ -1,5 +1,8 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-05-04
+* Version 2.1.0 de l'application. Adaptation pour la mouvelle commande 0|1V du firwmare.
+
 ### 2025-04-25
 
 * Version 2.0.6 de l'application. Corrigé bogue dans la programmation des fichiers binaires.

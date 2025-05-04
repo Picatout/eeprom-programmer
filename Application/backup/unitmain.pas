@@ -32,6 +32,7 @@ type
     OpenDialog: TOpenDialog;
     SaveDialog: TSaveDialog;
     Separator1: TMenuItem;
+    Timer1: TTimer;
     procedure EditCmdChange(Sender: TObject);
     procedure EditCmdEditingDone(Sender: TObject);
     procedure EditCmdExit(Sender: TObject);
@@ -51,6 +52,7 @@ type
     procedure MItemQuitClick(Sender: TObject);
     procedure mItemEraseClick(Sender: TObject);
     procedure MtemEraseAllClick(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
   public
     maxAddr:integer; // last address of eeprom
@@ -79,9 +81,9 @@ procedure TFormMain.mItemEraseClick(Sender: TObject);
 
 var
   cursorType:TCursor;
+  cmd:string;
+
 procedure EraseRange;
-var
-   cmd:string;
 begin
   with FormRange do
   begin
@@ -97,12 +99,20 @@ begin
   FormRange.ShowModal;
   if FormRange.confirm then
   begin
+       cmd:='1V';
+       eeprogcmd.eeprogcmd(cmd);
+       eeprogcmd.receivedata(memoConsole);
        cursorType:=memoConsole.cursor;
        memoConsole.cursor:=crHourGlass;
        EraseRange;
        memoConsole.Cursor:=CursorType;
+       cmd:='0V';
+       eeprogcmd.eeprogcmd(cmd);
+       eeprogcmd.receivedata(memoConsole);
   end;
 end;
+
+
 
 procedure TFormMain.MtemEraseAllClick(Sender: TObject);
 var
@@ -110,6 +120,9 @@ var
    cursorShape:TCursor;
 
 begin
+  cmd:='1V';
+  eeprogcmd.eeprogcmd(cmd);
+  eeprogcmd.receivedata(memoConsole);
   memoConsole.lines.clear;
   cursorShape:=memoConsole.cursor;
   memoConsole.cursor:=crHourGlass;
@@ -117,6 +130,16 @@ begin
   eeProgCmd.eeProgCmd(cmd);
   receiveData(memoConsole);
   memoConsole.cursor:=cursorShape;
+  timer1.enabled:=true;
+end;
+
+procedure TFormMain.Timer1Timer(Sender: TObject);
+var cmd:string;
+begin
+  timer1.enabled:=false;
+  cmd:='0V';
+  eeprogcmd.eeprogcmd(cmd);
+  eeprogcmd.receivedata(memoConsole);
 end;
 
 procedure TFormMain.MItemPortCfgClick(Sender: TObject);
@@ -265,6 +288,9 @@ begin
        showModal;
        if confirm then
        begin
+            cmd:='1V';
+            eeprogcmd.eeprogcmd(cmd);
+            eeprogcmd.receiveData(memoConsole);
             cursorType:=MemoConsole.cursor;
             memoConsole.cursor:=crHourGlass;
             cmd:=StartHex+'.'+EndHex;
@@ -281,6 +307,9 @@ begin
                    DumpAsBinFile(SaveDialog.FileName);
               end;
               memoConsole.cursor:=CursorType;
+              cmd:='0V';
+              eeprogcmd.eeprogcmd(cmd);
+              eeprogcmd.receiveData(memoConsole);
        end;
   end;
 end;
@@ -318,7 +347,13 @@ begin
 end;
 
 procedure TFormMain.FormClose(Sender: TObject; var CloseAction: TCloseAction);
+var
+   cmd:string;
+
 begin
+  cmd:='0V' ;
+  eeProgCmd.eeProgCmd(cmd);
+  eeProgCmd.receiveData(memoConsole);
   CloseComm;
 end;
 
@@ -375,6 +410,9 @@ begin
        ShowModal;
        if Confirm then
        begin
+           cmd:='1V' ;
+           eeProgCmd.eeProgCmd(cmd);
+           eeProgCmd.receiveData(memoConsole);
            CursorType:=memoConsole.cursor;
            MemoConsole.cursor:=crHourGlass;
            cmd:=StartHex+'.'+EndHex;
@@ -382,6 +420,9 @@ begin
            eeprogCmd.eeprogCmd(cmd);
            receiveData(memoConsole);
            memoConsole.cursor:=CursorType;
+           cmd:='0V' ;
+           eeProgCmd.eeProgCmd(cmd);
+           eeProgCmd.receiveData(memoConsole);
        end;
   end;
 end;
@@ -389,7 +430,7 @@ end;
 procedure TFormMain.MItemProgClick(Sender: TObject);
 
 var
-   fExt:string; // file extension
+   cmd,fExt:string; // file extension
    cursorShape:TCursor;
 
 procedure ProgBinFile(FileName:string);
@@ -401,7 +442,7 @@ var
    row:array[0..15] of byte;
    line:string;
    count:integer;
-   addr:integer;
+   addr,endAddr:integer;
 
 procedure convert;
 // convert row byte array in hexadecimal string
@@ -419,12 +460,11 @@ end;
 
 begin
    addr:=FormRange.StartAddr;
+   endAddr:=FormRange.endAddr;
    BinFile := TFileStream.Create(FileName,fmOpenRead);
    try
    try
       BinFile.position:=0;
-      eeProgCmd.eeProgCmd(line);
-      receiveData(memoConsole);
       repeat
       begin
          count:=BinFile.Read(row[0],16);
@@ -436,7 +476,7 @@ begin
          end;
          addr := addr+count;
       end;
-      until count=0;
+      until (count=0) or (addr>=endAddr) ;
    finally
            BinFile.free;
    end;
@@ -455,7 +495,8 @@ begin
   AssignFile(hexFile,FileName);
   try
     reset(hexFile);
-    while not EOF(HexFile) do
+    line:=' ';
+    while (line.length>0) and (not EOF(HexFile)) do
     begin
          Readln(HexFile,line);
          eeProgCmd.eeProgCmd(line);
@@ -466,7 +507,6 @@ begin
        ShowMessage('File error: '+ E.Message);
   end;
   CloseFile(HexFile);
-
 end;
 
 begin
@@ -480,6 +520,9 @@ begin
   DefaultExt:='.hex';
   if Execute then
   begin
+      cmd:='1V' ;
+      eeProgCmd.eeProgCmd(cmd);
+      eeProgCmd.receiveData(memoConsole);
       MemoConsole.lines.append(FileName);
       cursorShape:=memoConsole.cursor;
       memoConsole.cursor:=crHourGlass;
@@ -487,6 +530,7 @@ begin
        if (fext='.bin') then
        begin
           FormRange.RBBinaryFile.checked:=true;
+          FormRange.RGFileFormat.enabled:=false;
           FormRange.showModal;
           if FormRange.Confirm then
           begin
@@ -497,7 +541,7 @@ begin
            ProgHexFile(FileName);
        end;
        memoConsole.cursor:=cursorShape;
-
+       timer1.enabled:=true;
 end;
 
 end;

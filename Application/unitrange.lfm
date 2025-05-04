@@ -1,69 +1,71 @@
 object FormRange: TFormRange
   Left = 951
-  Height = 234
+  Height = 292
   Top = 413
-  Width = 387
+  Width = 484
   BorderStyle = bsDialog
   Caption = 'range'
-  ClientHeight = 0
-  ClientWidth = 0
+  ClientHeight = 292
+  ClientWidth = 484
+  DesignTimePPI = 120
+  OnCreate = FormCreate
   OnShow = FormShow
   LCLVersion = '3.8.0.0'
   object Label1: TLabel
-    Left = 16
-    Height = 15
-    Top = 48
-    Width = 23
+    Left = 20
+    Height = 20
+    Top = 60
+    Width = 29
     Caption = 'start'
   end
   object EditStart: TEdit
-    Left = 62
-    Height = 23
-    Top = 47
-    Width = 112
+    Left = 78
+    Height = 28
+    Top = 59
+    Width = 140
     TabOrder = 0
     Text = '0'
     OnKeyPress = EditStartKeyPress
   end
   object Label2: TLabel
-    Left = 22
-    Height = 15
-    Top = 96
-    Width = 20
+    Left = 28
+    Height = 20
+    Top = 120
+    Width = 25
     Caption = 'end'
   end
   object EditEnd: TEdit
-    Left = 63
-    Height = 23
-    Top = 96
-    Width = 111
+    Left = 79
+    Height = 28
+    Top = 120
+    Width = 139
     TabOrder = 1
     Text = '0'
     OnKeyPress = EditEndKeyPress
   end
   object BtnOk: TButton
-    Left = 72
-    Height = 25
-    Top = 144
-    Width = 70
+    Left = 90
+    Height = 31
+    Top = 180
+    Width = 88
     Caption = '&Ok'
     TabOrder = 2
     OnClick = BtnOkClick
   end
   object BtnCancel: TButton
-    Left = 72
-    Height = 25
-    Top = 184
-    Width = 70
+    Left = 90
+    Height = 31
+    Top = 230
+    Width = 88
     Caption = '&Cancel'
     TabOrder = 3
     OnClick = BtnCancelClick
   end
   object RBbase: TRadioGroup
-    Left = 179
-    Height = 81
-    Top = 47
-    Width = 174
+    Left = 224
+    Height = 101
+    Top = 59
+    Width = 218
     AutoFill = True
     Caption = 'base'
     ChildSizing.LeftRightSpacing = 6
@@ -73,23 +75,23 @@ object FormRange: TFormRange
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 61
-    ClientWidth = 170
+    ClientHeight = 76
+    ClientWidth = 214
     TabOrder = 4
     object RBDecimal: TRadioButton
       Left = 6
-      Height = 19
-      Top = 42
-      Width = 158
+      Height = 24
+      Top = 52
+      Width = 202
       Align = alBottom
       Caption = 'decimal'
       TabOrder = 0
     end
     object RBHexadecimal: TRadioButton
       Left = 6
-      Height = 19
+      Height = 24
       Top = 0
-      Width = 158
+      Width = 202
       Align = alTop
       Caption = 'hexadecimal'
       Checked = True
@@ -98,10 +100,10 @@ object FormRange: TFormRange
     end
   end
   object RGFileFormat: TRadioGroup
-    Left = 184
-    Height = 65
-    Top = 144
-    Width = 161
+    Left = 230
+    Height = 81
+    Top = 180
+    Width = 201
     AutoFill = True
     Caption = 'File format'
     ChildSizing.LeftRightSpacing = 6
@@ -111,24 +113,24 @@ object FormRange: TFormRange
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 1
-    ClientHeight = 45
-    ClientWidth = 157
+    ClientHeight = 56
+    ClientWidth = 197
     Enabled = False
     TabOrder = 5
     object RBBinaryFile: TRadioButton
       Left = 6
-      Height = 19
-      Top = 26
-      Width = 145
+      Height = 24
+      Top = 32
+      Width = 185
       Align = alBottom
       Caption = 'binary'
       TabOrder = 0
     end
     object RBHexFile: TRadioButton
       Left = 6
-      Height = 19
+      Height = 24
       Top = 0
-      Width = 145
+      Width = 185
       Align = alTop
       Caption = 'hexadecimal'
       Checked = True

@@ -2,7 +2,7 @@
 
 ### 2025-04-25
 
-* Version 2.0.6 de l'application. Corrigé bogue dans la programmation des fichiers binaire.
+* Version 2.0.6 de l'application. Corrigé bogue dans la programmation des fichiers binaires.
 
 ### 2025-03-31
 
