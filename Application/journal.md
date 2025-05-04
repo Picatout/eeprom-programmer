@@ -1,5 +1,9 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-04-25
+
+* Version 2.0.6 de l'application. Corrigé bogue dans la programmation des fichiers binaires.
+
 ### 2025-03-31
 
 * GUI_V2.0.R5, Correction mineures

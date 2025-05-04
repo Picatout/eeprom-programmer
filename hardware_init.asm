@@ -193,6 +193,9 @@ cold_start:
 	ld PF_CR1,a 
 	ld PG_CR1,a 
 	ld PI_CR1,a
+; set EEPROM Vcc control on PF0 
+	BSET VCC_CTRL+2,#VCC_BIT ; DDR registe bit 0 as output 
+	BSET VCC_CTRL,#VCC_BIT ; EEPROM VCC_OFF  
 ; set user LED pin as output 
     bset LED_PORT+GPIO_CR1,#LED_BIT
     bset LED_PORT+GPIO_CR2,#LED_BIT
@@ -208,3 +211,15 @@ cold_start:
 	rim ; enable interrupts 
 	jp eeProg 
 	jra . 
+
+;-------------------------------
+; pause execution for 
+; some msec 
+; input:
+;    X    delay msec 
+;-------------------------------
+pause:
+	_strxz timer 
+	bset flags,#FTIMER 
+	btjt flags,#FTIMER,. 
+	ret 
