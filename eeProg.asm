@@ -55,6 +55,8 @@
     EEPROM_NCE=BIT1 ; eeprom enable 
     EEPROM_NOE=BIT2 ; eeprom output enable 
     EEPROM_NWE=BIT3 ; eeprom write enable 
+    VCC_CTRL=PF_ODR ; control EEPROM Vcc on PF0 
+    VCC_BIT=0 
 
 ;--------------------------------
 ;     MACROS 
@@ -155,6 +157,16 @@
         _eeprom_noe_high 
     .endm 
 
+    ; power EEPROM on  
+    .macro _eeprom_on 
+        bres VCC_CTRL,#VCC_BIT 
+    .endm 
+
+    ; power EEPOM off
+    .macro _eeprom_off  
+        bset VCC_CTRL,#VCC_BIT 
+    .endm 
+
 ;-----------------------------
 ;  24 bits variables operations
 ;-----------------------------
@@ -221,6 +233,7 @@
 ;       hex_numberXhex_number  erase range filling eeprom with FF
 ;       hex_numberS eeprom size in bytes   
 ;       {0,1}T  set eeprom type  AT28 or SST39
+;       {0,1}V  eeprom Vcc off,on 
 ;----------------------------------------------------
 ; operatiing modes 
     NOP=0
@@ -328,6 +341,11 @@ eeProg_1:
 	ldw x,#STACK_EMPTY ; in case CTRL_C was used 
 	ldw sp,x
     bset flags,#FUPPER ; commands all upper case 
+
+power_off: ; turn off eeprom Vcc 
+    ldw x,#50
+    call pause 
+    _eeprom_off 
 cli: 
     call new_line
     ld a,#'# 
@@ -349,6 +367,16 @@ next_char:
     call exam_block 
     jra cli 
 parse01: 
+    cp a,#'V'
+    jrne 0$
+    _ldaz xamadr+2 
+    and a,#1
+    jreq power_off 
+    _eeprom_on 
+    ldw x,#50 
+    call pause 
+    jra cli 
+0$:     
 ; write string test
     cp a,#'" 
     jrne 1$
@@ -391,7 +419,7 @@ parse01:
     _ldaz xamadr+2 
     and a,#15 
     _straz RowDelay
-    jra cli 
+    jp cli 
 34$:
     cp a,#'T ; eeprom type: 0->AT28,1->SST39 
     jrne 4$
@@ -399,7 +427,7 @@ parse01:
     and a,#1
     _straz eeType
     _clrz mode
-    jra next_char
+    jp next_char
 4$:
     cp a,#':
     jrne 5$ 

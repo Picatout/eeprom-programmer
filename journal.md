@@ -1,3 +1,11 @@
+### 2025-04-04 
+
+* Version 2.3 du circuit,  Ajout d'un Transistor pour commuter l'alimentation de l'EEPROM ainsi que d'une LED indicatrice. Ça va permettre d'enlever l'EEPROM du circuit sans avoir à débrancher le programmeur car l'EEPROM ne sera alimentée que durant les opérations.
+* Firmware version 2.1R0  Modification du firwmare en conséquence par ajout de de la commande **V**    
+    * __0V__  désactive l'alimentation sur l'EEPROM. 
+    * __1V__  applique l'alimentation sur l'EEPROM.
+    
+
 ### 2025-03-31
 
 * Modification de l'application. Création des exécutables pour Windows et Ubuntu/Linux. 
