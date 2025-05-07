@@ -54,6 +54,7 @@ type
     procedure MtemEraseAllClick(Sender: TObject);
     procedure Timer1Timer(Sender: TObject);
   private
+    lastFile:string;
   public
     maxAddr:integer; // last address of eeprom
   end;
@@ -189,7 +190,7 @@ begin
         ShowMessage('File error: '+ E.Message);
    end;
 
-end;
+end; // DumpAsHexFile(FileName:string)
 
 procedure DumpAsBinFile(FileName:string);
 
@@ -210,21 +211,21 @@ begin
    b:=ord(h)-ord('0');
    if b>9 then b:= b-7;
    if (b<16) then result:=true;
-end;
+end; // is_hex_digit(h:char):boolean
 
 function scan(s:string;c:char; i:integer):integer;
 {scan s from indice i and stop at c if in s else at end.}
 begin
    while (i<=length(s)) and (s[i]<>c) do inc(i);
    result:=i;
-end;
+end; // scan(s:string;c:char; i:integer):integer
 
 function skip(s:string;c:char;i:integer):integer;
 {scan s form indice i and stop after c or at end of string}
 begin
    while (i<=length(s)) and (s[i]=c) do inc(i);
    result:=i;
-end;
+end; // skip(s:string;c:char;i:integer):integer
 
 function next_hex(s:string;i:integer):integer;
 {
@@ -233,7 +234,7 @@ return indice after hex token}
 begin
    while (i<=length(s)) and is_hex_digit(s[i]) do inc(i);
    result:=i;
-end;
+end; // next_hex(s:string;i:integer):integer
 
 procedure ParseLine(const line:string);
 {
@@ -259,9 +260,9 @@ begin
       if line[k]=';' then k:= line.length else k:=after+1;
       k:=after+1;
    end;
-end;
+end; // ParseLine(const line:string)
 
-begin
+begin // DumpAsBinFile(FileName:string)
   assignFile(BinFile,FileName);
   try
     rewrite(BinFile);
@@ -279,15 +280,18 @@ begin
       on E: EInOutError do
       ShowMessage('Fie error: '+E.Message);
   end;
-end;
+end; // DumpAsBinFile(FileName:string)
 
-begin
+begin // TFormMain.mItemDumpClick(Sender: TObject)
+  SaveDialog.FileName:=lastFile;
+  if SaveDialog.Execute then
   with FormRange do
   begin
        RGFileFormat.Enabled:=true;
        showModal;
        if confirm then
        begin
+            lastFile:=SaveDialog.FileName;
             cmd:='1V';
             eeprogcmd.eeprogcmd(cmd);
             eeprogcmd.receiveData(memoConsole);
@@ -297,7 +301,6 @@ begin
             MemoConsole.lines.Clear;
             eeprogCmd.eeprogCmd(cmd);
             receiveData(memoConsole);
-            if SaveDialog.Execute then
               if RBHexFile.Checked then
               begin
                    DumpAsHexFile(SaveDialog.FileName);
@@ -312,7 +315,7 @@ begin
               eeprogcmd.receiveData(memoConsole);
        end;
   end;
-end;
+end; // TFormMain.mItemDumpClick(Sender: TObject)
 
 procedure TFormMain.EditCmdChange(Sender: TObject);
 begin
@@ -359,6 +362,7 @@ end;
 
 procedure TFormMain.FormCreate(Sender: TObject);
 begin
+  lastFile:='';
   DlgPortCfg:=TFormPortCfg.Create(FormMain);
   DlgPortCfg.CommPortName:='/dev/ttyACM0'; // default serial port
   FormEeprom:=TFormEeprom.Create(FormMain);
@@ -515,11 +519,12 @@ begin
   begin
   Title:='program file';
   Filter:='.hex,.txt,.bin';
-  FileName:='';
+  FileName:=lastFile;
   InitialDir:='.';
   DefaultExt:='.hex';
   if Execute then
   begin
+      lastFile:=FileName;
       cmd:='1V' ;
       eeProgCmd.eeProgCmd(cmd);
       eeProgCmd.receiveData(memoConsole);
