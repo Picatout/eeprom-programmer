@@ -14,14 +14,14 @@ J'avais besoin d'un programmeur d'EEPROM AT28C64B ou AT28C256  pour un projet. J
 
 ## montage 
 La carte de l'embase est conçue pour se brancher sur les connecteurs **CN1** et **CN9** de la carte  NUCLEO_8S208RB.
-![dessus](programmeur-dessus.jpg)
-![carte NUCLEO branchée](carte-nucleo-branchée.jpg)
-![programmeur dessous](programmeur-dessous.jpg)
+![dessus](docs/programmeur-dessus.jpg)
+![carte NUCLEO branchée](docs/carte-nucleo-branchée.jpg)
+![programmeur dessous](docs/programmeur-dessous.jpg)
 
 ##  Schématique 
 La schématique a étée dessinée dans [KiCAD](KiCAD) version 8.0.6
 
-![schématique](eeProg.png)
+![schématique](docs/eeProg.png)
 
 ## utilisation.
 L'embase accepte les EEPROM compatibles **AT28C64B** de **8KO** et **AT28C256** de **32KO**  au format **DIP-28**.

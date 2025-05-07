@@ -212,7 +212,7 @@
         <UsageCount Value="8"/>
       </Unit>
       <Unit>
-        <Filename Value="..\..\..\fpc\3.2.2\source\packages\rtl-extra\src\win\serial.pp"/>
+        <Filename Value="C:\fpc\3.2.2\source\packages\rtl-extra\src\win\serial.pp"/>
         <UnitName Value="Serial"/>
         <EditorIndex Value="-1"/>
         <TopLine Value="135"/>
@@ -250,7 +250,7 @@
         <Filename Value="journal.md"/>
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
-        <CursorPos X="101" Y="4"/>
+        <CursorPos Y="6"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
