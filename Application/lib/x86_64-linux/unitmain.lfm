@@ -1,28 +1,29 @@
 object FormMain: TFormMain
   Left = 410
-  Height = 746
+  Height = 932
   Top = 32
-  Width = 802
+  Width = 1002
   Align = alTop
   Anchors = []
   BorderStyle = bsSingle
   Caption = 'eeProg'
-  ClientHeight = 746
-  ClientWidth = 802
+  ClientHeight = 932
+  ClientWidth = 1002
+  DesignTimePPI = 120
   Menu = mItemFiles
   OnActivate = FormActivate
   OnClose = FormClose
   OnCreate = FormCreate
   OnShow = FormShow
-  LCLVersion = '3.0.0.3'
+  LCLVersion = '3.8.0.0'
   object MemoConsole: TMemo
     Left = 0
-    Height = 720
-    Top = 26
-    Width = 802
+    Height = 900
+    Top = 32
+    Width = 1002
     Align = alBottom
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
     Font.Quality = fqDraft
@@ -30,30 +31,31 @@ object FormMain: TFormMain
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
+    WantReturns = False
     OnChange = MemoConsoleChange
   end
   object LblCmd: TLabel
     Left = 0
-    Height = 26
+    Height = 32
     Top = 0
-    Width = 77
+    Width = 85
     Align = alLeft
     Caption = 'command'
     Font.CharSet = ANSI_CHARSET
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Sans'
     Font.Pitch = fpVariable
     Font.Quality = fqDraft
     ParentFont = False
   end
   object EditCmd: TEdit
-    Left = 80
-    Height = 26
+    Left = 100
+    Height = 32
     Top = 0
-    Width = 722
+    Width = 902
     Align = alRight
     Anchors = []
-    Font.Height = -16
+    Font.Height = -20
     Font.Name = 'Sans'
     ParentFont = False
     TabOrder = 1
@@ -62,8 +64,8 @@ object FormMain: TFormMain
     OnKeyPress = EditCmdKeyPress
   end
   object mItemFiles: TMainMenu
-    Left = 8
-    Top = 64
+    Left = 10
+    Top = 80
     object MenuItem1: TMenuItem
       Caption = '&Files'
       object mItemView: TMenuItem
@@ -125,19 +127,19 @@ object FormMain: TFormMain
     FilterIndex = -1
     InitialDir = '.'
     Options = [ofFileMustExist, ofEnableSizing, ofViewDetail]
-    Left = 88
-    Top = 32
+    Left = 110
+    Top = 40
   end
   object SaveDialog: TSaveDialog
     InitialDir = '.'
-    Left = 48
-    Top = 80
+    Left = 60
+    Top = 100
   end
   object Timer1: TTimer
     Enabled = False
     Interval = 50
     OnTimer = Timer1Timer
-    Left = 195
-    Top = 58
+    Left = 244
+    Top = 73
   end
 end
