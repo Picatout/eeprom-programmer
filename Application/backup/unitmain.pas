@@ -291,6 +291,7 @@ begin // TFormMain.mItemDumpClick(Sender: TObject)
        showModal;
        if confirm then
        begin
+            lastFile:=SaveDialog.FileName;
             cmd:='1V';
             eeprogcmd.eeprogcmd(cmd);
             eeprogcmd.receiveData(memoConsole);
@@ -327,12 +328,20 @@ end;
 
 procedure TFormMain.EditCmdExit(Sender: TObject);
 var
+  cmd:AnsiString;
   cursorShape:Tcursor;
 begin
+  cmd:='1V' ;
+  eeProgCmd.eeProgCmd(cmd);
+  cmd:=eeProgCmd.serReadLn;
+  receiveData(memoConsole);
   MemoConsole.lines.Clear;
   CursorShape:=MemoConsole.cursor;
   MemoConsole.cursor:=crHourGlass;
   eeProgCmd.eeProgCmd(EditCmd.Text);
+  receiveData(memoConsole);
+  cmd:='0V' ;
+  eeProgCmd.eeProgCmd(cmd);
   receiveData(memoConsole);
   MemoConsole.Cursor:=cursorShape;
 end;
@@ -436,6 +445,28 @@ var
    cmd,fExt:string; // file extension
    cursorShape:TCursor;
 
+// check for programming
+// ProgSend is data sent for programming
+// addr is start address for programming
+function verifyRow(ProgSend:AnsiString;addr:integer):boolean;
+var
+   s,s1:AnsiString;
+   p1,p2:integer;
+begin
+     cmd:=IntToHex(addr,6)+'.'+IntToHex(addr+15,6);
+     eeProgcmd.EeprogCmd(cmd);
+     eeProgcmd.ReceiveData(memoConsole);
+{     s:=eeProgCmd.serreadln;
+     s:=eeProgCmd.serreadln;
+     s1:=eeProgCmd.serreadln;
+     p1:=s.length-ansiString(strpos(pchar(s),':')).length;
+     p2:=sizeint(s)-ansiString(strpos(pchar(s),';')).length;
+     s:=s[p1..p2];
+     ShowMessage(s);
+}
+     result:=true;
+end;//verifyRow
+
 procedure ProgBinFile(FileName:string);
 {program eeprom from raw binary file
  start address take from range Dialog
@@ -459,9 +490,9 @@ begin
         line:= line+IntToHex(row[i],2)+' ';
         inc(i);
    end;
-end;
+end; //convert
 
-begin
+begin //ProgBinFile(FileName:string);
    addr:=FormRange.StartAddr;
    endAddr:=FormRange.endAddr;
    BinFile := TFileStream.Create(FileName,fmOpenRead);
@@ -476,6 +507,7 @@ begin
             convert;
             eeProgCmd.eeProgCmd(line);
             receiveData(memoConsole);
+            //verifyRow(line,addr);
          end;
          addr := addr+count;
       end;
@@ -488,7 +520,7 @@ begin
              ShowMessage('File error: '+ E.Message);
 
    end;
-end;
+end;//ProgBinFile(FileName:string);
 
 procedure ProgHexFile(FileName:string);
 var
@@ -510,9 +542,9 @@ begin
        ShowMessage('File error: '+ E.Message);
   end;
   CloseFile(HexFile);
-end;
+end;  //ProgHexFile(FileName:string);
 
-begin
+begin // TFormMain.MItemProgClick(Sender: TObject);
   MemoConsole.lines.Clear;
   With OpenDialog do
   begin
@@ -546,9 +578,9 @@ begin
        end;
        memoConsole.cursor:=cursorShape;
        timer1.enabled:=true;
-end;
+       end;
 
-end;
+end; //TFormMain.MItemProgClick(Sender: TObject);
 
 end.
 

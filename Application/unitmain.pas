@@ -328,12 +328,20 @@ end;
 
 procedure TFormMain.EditCmdExit(Sender: TObject);
 var
+  cmd:AnsiString;
   cursorShape:Tcursor;
 begin
+  cmd:='1V' ;
+  eeProgCmd.eeProgCmd(cmd);
+  cmd:=eeProgCmd.serReadLn;
+  receiveData(memoConsole);
   MemoConsole.lines.Clear;
   CursorShape:=MemoConsole.cursor;
   MemoConsole.cursor:=crHourGlass;
   eeProgCmd.eeProgCmd(EditCmd.Text);
+  receiveData(memoConsole);
+  cmd:='0V' ;
+  eeProgCmd.eeProgCmd(cmd);
   receiveData(memoConsole);
   MemoConsole.Cursor:=cursorShape;
 end;
@@ -460,9 +468,9 @@ begin
         line:= line+IntToHex(row[i],2)+' ';
         inc(i);
    end;
-end;
+end; //convert
 
-begin
+begin //ProgBinFile(FileName:string);
    addr:=FormRange.StartAddr;
    endAddr:=FormRange.endAddr;
    BinFile := TFileStream.Create(FileName,fmOpenRead);
@@ -476,6 +484,7 @@ begin
          begin
             convert;
             eeProgCmd.eeProgCmd(line);
+
             receiveData(memoConsole);
          end;
          addr := addr+count;
@@ -489,7 +498,7 @@ begin
              ShowMessage('File error: '+ E.Message);
 
    end;
-end;
+end;//ProgBinFile(FileName:string);
 
 procedure ProgHexFile(FileName:string);
 var
@@ -511,9 +520,9 @@ begin
        ShowMessage('File error: '+ E.Message);
   end;
   CloseFile(HexFile);
-end;
+end;  //ProgHexFile(FileName:string);
 
-begin
+begin // TFormMain.MItemProgClick(Sender: TObject);
   MemoConsole.lines.Clear;
   With OpenDialog do
   begin
@@ -547,9 +556,9 @@ begin
        end;
        memoConsole.cursor:=cursorShape;
        timer1.enabled:=true;
-end;
+       end;
 
-end;
+end; //TFormMain.MItemProgClick(Sender: TObject);
 
 end.
 

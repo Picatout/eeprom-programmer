@@ -42,6 +42,12 @@ input:
 procedure eeProgCmd(cmd:AnsiString);
 
 {
+function SerReadLn:integer;
+read caracters from serial port until it receive CR or '#' character.
+}
+function SerReadLn:ansiString;
+
+{
 procedure receiveData(answer:Tmemo);
 Receive data from programmer after
 sending a command.
@@ -122,58 +128,52 @@ begin
   end;
 
 {
+function SerReadLn:AnsiString;
+read caracters from serial port until it receive CR or '#' character.
+}
+function SerReadLn:AnsiString;
+var
+  s:ansiString;
+  c: array[0..2] of byte;
+  ReadCount,llen:integer;
+begin
+  c[0]:=0;
+  s:='';
+  llen:=0;
+  while true do
+  begin
+    ReadCount:=SerRead(serHandle,c,1);
+    if (ReadCount>0) then
+    begin
+       s := s + char(c[0]);
+       inc(llen);
+       if (c[0]=HASH) or (c[0]=CR) then break;
+    end;
+
+  end; //while
+  result:=S;
+end; // SerReadLn:AnsiString;
+
+{
 procedure receiveData(answer:Tmemo);
 Receive data from programmer after
 sending a command.
 }
 procedure receiveData(answer:Tmemo);
 var
-   s,flowCtrl:ansiString;
-   readCount: integer;
+   s:ansiString;
 
-   {
-   function SerReadLn:integer;
-   read caracters from serial port until it receive CR or '#' character.
-   }
-   function SerReadLn:integer;
-   var
-     c: array[0..2] of byte;
-     llen:integer;
-   begin
-     c[0]:=0;
-     s:='';
-     llen:=0;
-     while true do
-     begin
-       ReadCount:=SerRead(serHandle,c,1);
-       if (ReadCount>0) then
-       begin
-          s := s + char(c[0]);
-          inc(llen);
-          if (c[0]=HASH) or (c[0]=CR) then break;
-       end;
 
-     end; //while
-     result:=llen;
-   end;
-
-begin
-    flowCtrl:=' ';
-    readCount:=serReadln;
-    while readCount > 0 do
+begin //receiveData(answer:Tmemo):string;
+    s:=serReadln;
+    while s.length > 0 do
     begin
-//        flowCtrl[1]:=char(XOFF);
-//        eeProgCmd(flowCtrl);
-//        serDrain(serhandle);
-        answer.lines.Append(s);
-//        Application.ProcessMessages;
-//        flowCtrl[1]:=char(XON);
-//        eeProgCmd(flowCtrl);
-//        serDrain(serHandle);
         if (s.length=1) and (s[1]=char(HASH)) then break;
-        readCount:=serReadLn;
+        if (s.length>1) answer.lines.Append(s);
+        Application.ProcessMessages;
+        s:=serReadLn;
     end;
-end;
+end; // receiveData(answer:Tmemo);
 
 
 end.

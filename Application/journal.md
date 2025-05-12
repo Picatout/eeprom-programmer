@@ -1,5 +1,8 @@
 # Journal du projet **eeProg-GUI**
 
+### 2025-05-12
+* Version GUI_V2.1R2, La ligne de commande ne fonctionnait plus car l'alimentation Vcc n'était pas appliquée. Problème corrigé.
+
 ### 2025-05-07
 * Version GUI_V2.1R1  Modifié l'application pour que le dernier fichier utilisé dans les fonctions **Programm EEPROM** et **Dump range** soit conservé pour l'opération suivante.
 
