@@ -1,3 +1,10 @@
+### 2025-05-13
+
+* Modification du Firmware. 
+   * Commande **V** cancellée. Le Firmware contrôle automatiquement l'alimentation de l'EEPROM.
+   * Chaque programmation est suivit d'une vérification et envoie d'un code **ACK** en cas de succès ou **NAK** en cas d'échec.
+   * Corrigé bogue la routine **at28_prog_eeprom ne tenait pas compte des sauts de page dans la mémoire flash.
+
 ### 2025-04-01
 
 * Modification de la schématique. 

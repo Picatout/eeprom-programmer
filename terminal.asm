@@ -242,15 +242,18 @@ uart_getc::
 ; input: 
 ;   x 		char * 
 ; output:
-;   none 
+;   x      after string  
 ;-------------------------------
 puts::
+	push a 
+1$:
     ld a,(x)
-	jreq 1$
+	jreq 9$
 	call putc 
 	incw x 
-	jra puts 
-1$:	incw x 
+	jra 1$ 
+9$:	incw x 
+	pop a 
 	ret 
 
 ;---------------------------
@@ -280,18 +283,22 @@ bksp::
 ; as CRLF 
 ;---------------------------
 new_line:: 
+	push a 
 	ld a,#CR  
 	call putc 
+	pop a 
 	ret 
 
 ;--------------------------
 ; erase terminal screen 
 ;--------------------------
 clr_screen::
+	push a 
 	ld a,#ESC 
 	call putc 
 	ld a,#'c 
 	call putc 
+	pop a 
 	ret 
 
 ;--------------------------
@@ -312,6 +319,7 @@ space::
 ;	none 
 ;---------------------------
 spaces::
+	push a 
 	ld a,#SPACE 
 1$:	tnzw x
 	jreq 9$
@@ -319,6 +327,7 @@ spaces::
 	decw x
 	jra 1$
 9$: 
+	pop a 
 	ret 
 
 ;--------------------------
@@ -427,7 +436,7 @@ print_hex::
 
 ;------------------------------
 ; print A in decimal base 
-; not space after, no leading 
+; no space after, no leading 
 ; zero.
 ; input:
 ;    A    int8 to print 
@@ -451,9 +460,7 @@ print_dec:
 	jreq 2$ 
 	call prt_digit 
 2$:	pop a 
-	call prt_digit 
 	popw x 
-	ret 
 prt_digit:
 	add a,#'0 
 	call putc 

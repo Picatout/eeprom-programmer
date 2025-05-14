@@ -3,7 +3,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     MAJOR=2
-    MINOR=1
+    MINOR=2
     REV=0
 
     FMSTR=16 ; master clock frequency in Mhz 
