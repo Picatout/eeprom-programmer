@@ -1022,7 +1022,7 @@ sst39sf0xx_prog_eeprom:
     ld a,(y)
     incw y  
     call sst39sf0xx_write_byte
-    dec count 
+    dec (1,sp) 
     jreq 4$
     _inc_v24 storadr
     _cp_v24 limit, storadr 

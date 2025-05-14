@@ -1,3 +1,7 @@
+### 2025-05-14
+
+* débogage firwmare, bogue dans la procédure **sst39sf0xx_prog_eeprom**, décrémentait la variable count au lieu de la copie sur la pile.
+
 ### 2025-05-13
 
 * Modification du Firmware. 
