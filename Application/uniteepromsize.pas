@@ -87,7 +87,7 @@ end;
 { TFormEeprom }
 
 var
-  cmdStr: string;
+  cmdStr,echo: AnsiString;
 
 procedure TFormEeprom.BtnOkClick(Sender: TObject);
 begin
@@ -96,7 +96,7 @@ begin
     cmdStr:=IntToHex(integer(eeprom_list[CBEeprom.itemIndex].eeType),1)+
     'T'+IntToHex(eepromSize,5)+'S';
     eeProgCmd.eeProgCmd(cmdStr);
-    eeProgCmd.receiveData(FormMain.memoConsole);
+    eeProgCmd.receiveData(FormMain.MemoConsole);
     close;
 end;
 

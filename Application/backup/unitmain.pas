@@ -32,7 +32,6 @@ type
     OpenDialog: TOpenDialog;
     SaveDialog: TSaveDialog;
     Separator1: TMenuItem;
-    Timer1: TTimer;
     procedure EditCmdChange(Sender: TObject);
     procedure EditCmdEditingDone(Sender: TObject);
     procedure EditCmdExit(Sender: TObject);
@@ -52,7 +51,6 @@ type
     procedure MItemQuitClick(Sender: TObject);
     procedure mItemEraseClick(Sender: TObject);
     procedure MtemEraseAllClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
   private
     lastFile:string;
   public
@@ -100,16 +98,10 @@ begin
   FormRange.ShowModal;
   if FormRange.confirm then
   begin
-       cmd:='1V';
-       eeprogcmd.eeprogcmd(cmd);
-       eeprogcmd.receivedata(memoConsole);
        cursorType:=memoConsole.cursor;
        memoConsole.cursor:=crHourGlass;
        EraseRange;
        memoConsole.Cursor:=CursorType;
-       cmd:='0V';
-       eeprogcmd.eeprogcmd(cmd);
-       eeprogcmd.receivedata(memoConsole);
   end;
 end;
 
@@ -121,9 +113,6 @@ var
    cursorShape:TCursor;
 
 begin
-  cmd:='1V';
-  eeprogcmd.eeprogcmd(cmd);
-  eeprogcmd.receivedata(memoConsole);
   memoConsole.lines.clear;
   cursorShape:=memoConsole.cursor;
   memoConsole.cursor:=crHourGlass;
@@ -131,17 +120,8 @@ begin
   eeProgCmd.eeProgCmd(cmd);
   receiveData(memoConsole);
   memoConsole.cursor:=cursorShape;
-  timer1.enabled:=true;
 end;
 
-procedure TFormMain.Timer1Timer(Sender: TObject);
-var cmd:string;
-begin
-  timer1.enabled:=false;
-  cmd:='0V';
-  eeprogcmd.eeprogcmd(cmd);
-  eeprogcmd.receivedata(memoConsole);
-end;
 
 procedure TFormMain.MItemPortCfgClick(Sender: TObject);
 var
@@ -292,9 +272,6 @@ begin // TFormMain.mItemDumpClick(Sender: TObject)
        if confirm then
        begin
             lastFile:=SaveDialog.FileName;
-            cmd:='1V';
-            eeprogcmd.eeprogcmd(cmd);
-            eeprogcmd.receiveData(memoConsole);
             cursorType:=MemoConsole.cursor;
             memoConsole.cursor:=crHourGlass;
             cmd:=StartHex+'.'+EndHex;
@@ -310,9 +287,6 @@ begin // TFormMain.mItemDumpClick(Sender: TObject)
                    DumpAsBinFile(SaveDialog.FileName);
               end;
               memoConsole.cursor:=CursorType;
-              cmd:='0V';
-              eeprogcmd.eeprogcmd(cmd);
-              eeprogcmd.receiveData(memoConsole);
        end;
   end;
 end; // TFormMain.mItemDumpClick(Sender: TObject)
@@ -331,17 +305,10 @@ var
   cmd:AnsiString;
   cursorShape:Tcursor;
 begin
-  cmd:='1V' ;
-  eeProgCmd.eeProgCmd(cmd);
-  cmd:=eeProgCmd.serReadLn;
-  receiveData(memoConsole);
   MemoConsole.lines.Clear;
   CursorShape:=MemoConsole.cursor;
   MemoConsole.cursor:=crHourGlass;
   eeProgCmd.eeProgCmd(EditCmd.Text);
-  receiveData(memoConsole);
-  cmd:='0V' ;
-  eeProgCmd.eeProgCmd(cmd);
   receiveData(memoConsole);
   MemoConsole.Cursor:=cursorShape;
 end;
@@ -362,9 +329,6 @@ var
    cmd:string;
 
 begin
-  cmd:='0V' ;
-  eeProgCmd.eeProgCmd(cmd);
-  eeProgCmd.receiveData(memoConsole);
   CloseComm;
 end;
 
@@ -422,9 +386,6 @@ begin
        ShowModal;
        if Confirm then
        begin
-           cmd:='1V' ;
-           eeProgCmd.eeProgCmd(cmd);
-           eeProgCmd.receiveData(memoConsole);
            CursorType:=memoConsole.cursor;
            MemoConsole.cursor:=crHourGlass;
            cmd:=StartHex+'.'+EndHex;
@@ -432,9 +393,6 @@ begin
            eeprogCmd.eeprogCmd(cmd);
            receiveData(memoConsole);
            memoConsole.cursor:=CursorType;
-           cmd:='0V' ;
-           eeProgCmd.eeProgCmd(cmd);
-           eeProgCmd.receiveData(memoConsole);
        end;
   end;
 end;
@@ -444,28 +402,6 @@ procedure TFormMain.MItemProgClick(Sender: TObject);
 var
    cmd,fExt:string; // file extension
    cursorShape:TCursor;
-
-// check for programming
-// ProgSend is data sent for programming
-// addr is start address for programming
-function verifyRow(ProgSend:AnsiString;addr:integer):boolean;
-var
-   s,s1:AnsiString;
-   p1,p2:integer;
-begin
-     cmd:=IntToHex(addr,6)+'.'+IntToHex(addr+15,6);
-     eeProgcmd.EeprogCmd(cmd);
-     eeProgcmd.ReceiveData(memoConsole);
-{     s:=eeProgCmd.serreadln;
-     s:=eeProgCmd.serreadln;
-     s1:=eeProgCmd.serreadln;
-     p1:=s.length-ansiString(strpos(pchar(s),':')).length;
-     p2:=sizeint(s)-ansiString(strpos(pchar(s),';')).length;
-     s:=s[p1..p2];
-     ShowMessage(s);
-}
-     result:=true;
-end;//verifyRow
 
 procedure ProgBinFile(FileName:string);
 {program eeprom from raw binary file
@@ -506,8 +442,8 @@ begin //ProgBinFile(FileName:string);
          begin
             convert;
             eeProgCmd.eeProgCmd(line);
+
             receiveData(memoConsole);
-            //verifyRow(line,addr);
          end;
          addr := addr+count;
       end;
@@ -548,37 +484,35 @@ begin // TFormMain.MItemProgClick(Sender: TObject);
   MemoConsole.lines.Clear;
   With OpenDialog do
   begin
-  Title:='program file';
-  Filter:='.hex,.txt,.bin';
-  FileName:=lastFile;
-  InitialDir:='.';
-  DefaultExt:='.hex';
-  if Execute then
-  begin
-      lastFile:=FileName;
-      cmd:='1V' ;
-      eeProgCmd.eeProgCmd(cmd);
-      eeProgCmd.receiveData(memoConsole);
-      MemoConsole.lines.append(FileName);
-      cursorShape:=memoConsole.cursor;
-      memoConsole.cursor:=crHourGlass;
-      fext:=ExtractFileExt(FileName);
-       if (fext='.bin') then
-       begin
-          FormRange.RBBinaryFile.checked:=true;
-          FormRange.RGFileFormat.enabled:=false;
-          FormRange.showModal;
-          if FormRange.Confirm then
-          begin
-             ProgBinFile(FileName);
-          end;
-       end
-       else
-           ProgHexFile(FileName);
-       end;
-       memoConsole.cursor:=cursorShape;
-       timer1.enabled:=true;
-       end;
+    Title:='program file';
+    Filter:='.hex,.txt,.bin';
+    FileName:=lastFile;
+    InitialDir:='.';
+    DefaultExt:='.hex';
+    if Execute then
+    begin
+        lastFile:=FileName;
+        MemoConsole.lines.append(FileName);
+        cursorShape:=memoConsole.cursor;
+        memoConsole.cursor:=crHourGlass;
+        fext:=ExtractFileExt(FileName);
+        eeProgCmd.prog_ok:=true;
+        if (fext='.bin') then
+         begin
+            FormRange.RBBinaryFile.checked:=true;
+            FormRange.RGFileFormat.enabled:=false;
+            FormRange.showModal;
+            if FormRange.Confirm then
+            begin
+               ProgBinFile(FileName);
+            end;
+         end
+         else
+             ProgHexFile(FileName);
+         memoConsole.cursor:=cursorShape;
+         if not eeProgCmd.prog_ok then showMessage('Programmation operation failed!');
+    end; // if Execute
+  end; // with OpenDialog
 
 end; //TFormMain.MItemProgClick(Sender: TObject);
 

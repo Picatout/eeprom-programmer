@@ -87,7 +87,7 @@ end;
 { TFormEeprom }
 
 var
-  cmdStr: string;
+  cmdStr,echo: AnsiString;
 
 procedure TFormEeprom.BtnOkClick(Sender: TObject);
 begin
@@ -96,7 +96,18 @@ begin
     cmdStr:=IntToHex(integer(eeprom_list[CBEeprom.itemIndex].eeType),1)+
     'T'+IntToHex(eepromSize,5)+'S';
     eeProgCmd.eeProgCmd(cmdStr);
-    eeProgCmd.receiveData(FormMain.memoConsole);
+    echo:=eeProgCmd.serreadln;
+    with formMain do
+    begin
+    memoConsole.lines.append(echo);
+    while (strPos(pchar(cmdStr),pchar(echo))=NULL) do
+    begin
+        echo:=eeProgCmd.serreadln;
+        memoConsole.lines.append(echo);
+    end;
+    echo:=eeProgCmd.serreadln; // receive '#' character
+    memoConsole.lines.append(echo);
+    end;
     close;
 end;
 
@@ -118,7 +129,12 @@ begin
   begin
      items.Add(eeprom_list[i].name);
   end;
-  end;
+  end;//with CBeeprom
+  EditSize.text:='8';
+  EditeeType.text:='AT28';
+  RGJP3.ItemIndex:=1;
+  CBeeprom.ItemIndex:=3;
+
 end;
 
 procedure TFormEeprom.FormShow(Sender: TObject);

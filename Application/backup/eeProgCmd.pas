@@ -16,6 +16,12 @@ const
      CR:byte=13;    // carriage return (end of line).
      XON:byte=17;
      XOFF:byte=19;
+     ACK:byte=6;   // programmation réussie
+     NAK:byte=21;  // échec de la programmation
+
+var
+   prog_ok:boolean;
+
 {
 function OpenComm(ComPortName:String):LongInt;
 Open serial port
@@ -135,18 +141,16 @@ function SerReadLn:AnsiString;
 var
   s:ansiString;
   c: array[0..2] of byte;
-  ReadCount,llen:integer;
+  ReadCount:integer;
 begin
   c[0]:=0;
   s:='';
-  llen:=0;
   while true do
   begin
     ReadCount:=SerRead(serHandle,c,1);
     if (ReadCount>0) then
     begin
        s := s + char(c[0]);
-       inc(llen);
        if (c[0]=HASH) or (c[0]=CR) then break;
     end;
 
@@ -169,7 +173,10 @@ begin //receiveData(answer:Tmemo):string;
     while s.length > 0 do
     begin
         if (s.length=1) and (s[1]=char(HASH)) then break;
-        if (s.length>1) answer.lines.Append(s);
+        if (s[1]=char(NAK)) then
+           prog_ok:=false
+        else
+            answer.lines.Append(s);
         Application.ProcessMessages;
         s:=serReadLn;
     end;
