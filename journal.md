@@ -1,3 +1,8 @@
+### 2025-05-21 
+
+* GUI_V2.2.1, Correctif à l'application suite à la perte de données lors de la programmation. 
+
+
 ### 2025-05-14
 
 * débogage firwmare, bogue dans la procédure **sst39sf0xx_prog_eeprom**, décrémentait la variable count au lieu de la copie sur la pile.
