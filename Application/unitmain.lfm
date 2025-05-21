@@ -1,7 +1,7 @@
 object FormMain: TFormMain
-  Left = 410
+  Left = 710
   Height = 746
-  Top = 32
+  Top = 327
   Width = 802
   Align = alTop
   Anchors = []

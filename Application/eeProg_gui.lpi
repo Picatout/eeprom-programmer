@@ -19,6 +19,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
       <MinorVersionNr Value="2"/>
+      <RevisionNr Value="1"/>
       <StringTable LegalCopyright="Copyright Jacques Deschênes, 2025"/>
     </VersionInfo>
     <BuildModes>
@@ -108,7 +109,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <Target>
-      <Filename Value="eeProg_gui"/>
+      <Filename Value="eeProg"/>
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>

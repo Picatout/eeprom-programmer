@@ -62,7 +62,7 @@ var
 
 implementation
 uses
-  unitPortCfg, UnitEepromSize, eeProgCmd,CommError,FileUtil,unitRange,unitAbout;
+  unitPortCfg, UnitEepromSize, eeProgCmd,CommError,FileUtil,unitRange,unitAbout,serial;
 
 var
 DlgPortCfg:TFormPortCfg;
@@ -391,7 +391,7 @@ begin
            cmd:=StartHex+'.'+EndHex;
            MemoConsole.lines.Clear;
            eeprogCmd.eeprogCmd(cmd);
-           receiveData(memoConsole);
+           eeprogCmd.receiveData(memoConsole);
            memoConsole.cursor:=CursorType;
        end;
   end;
@@ -442,8 +442,9 @@ begin //ProgBinFile(FileName:string);
          begin
             convert;
             eeProgCmd.eeProgCmd(line);
-
             receiveData(memoConsole);
+            if not eeProgcmd.Prog_ok then break;
+            waitHash;
          end;
          addr := addr+count;
       end;
@@ -472,6 +473,8 @@ begin
          Readln(HexFile,line);
          eeProgCmd.eeProgCmd(line);
          receiveData(memoConsole);
+         if not eeProgcmd.prog_ok then break;
+         waitHash;
     end;
   except
       on E: EInOutError do
@@ -482,6 +485,7 @@ end;  //ProgHexFile(FileName:string);
 
 begin // TFormMain.MItemProgClick(Sender: TObject);
   MemoConsole.lines.Clear;
+  FlushInput;
   With OpenDialog do
   begin
     Title:='program file';

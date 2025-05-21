@@ -60,6 +60,20 @@ sending a command.
 }
 procedure receiveData(answer:Tmemo);
 
+
+{
+function waitHash:boolean;
+Wait reception of '#' character
+Time out after 100msec.
+}
+function waitHash:boolean;
+
+{
+procedure flushInput;
+flush any remaining serial input data.
+}
+procedure flushInput;
+
 implementation
 uses
   Forms,serial;
@@ -130,7 +144,7 @@ begin
   s:= s+char(CR);
   writecount:= s.length;
   WriteCount:= SerWrite(serhandle, s[1], writecount);
-  //SerSync(serhandle);
+  SerDrain(serhandle);
   end;
 
 {
@@ -151,7 +165,7 @@ begin
     if (ReadCount>0) then
     begin
        s := s + char(c[0]);
-       if (c[0]=HASH) or (c[0]=CR) then break;
+       if (c[0]=ACK) or (c[0]=NAK) or (c[0]=HASH) or (c[0]=CR) then break;
     end;
 
   end; //while
@@ -174,14 +188,40 @@ begin //receiveData(answer:Tmemo):string;
     begin
         if (s.length=1) and (s[1]=char(HASH)) then break;
         if (s[1]=char(NAK)) then
-           prog_ok:=false
-        else
+        begin
+           prog_ok:=false;
+           break;
+        end
+        else if not (s[1]=char(ACK)) then
             answer.lines.Append(s);
         Application.ProcessMessages;
         s:=serReadLn;
     end;
 end; // receiveData(answer:Tmemo);
 
+{
+function waitHash:boolean;
+Wait reception of '#' character
+}
+function waitHash:boolean;
+var
+   b:array[0..1] of byte;
+   count:integer;
+begin
+   repeat
+      count:=serReadTimeOut(serHandle,b,1,100);
+      if count=0 then break;
+   until b[0]=byte('#');
+end;
+
+{
+procedure flushInput;
+flush any remaining serial input data.
+}
+procedure flushInput;
+begin
+  serFlushInput(serHandle);
+end;
 
 end.
 
