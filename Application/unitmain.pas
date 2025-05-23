@@ -514,7 +514,12 @@ begin // TFormMain.MItemProgClick(Sender: TObject);
          else
              ProgHexFile(FileName);
          memoConsole.cursor:=cursorShape;
-         if not eeProgCmd.prog_ok then showMessage('Programmation operation failed!');
+         if not eeProgCmd.prog_ok then
+         begin
+            showMessage('Programmation operation failed!');
+            flushInput;
+         end;
+
     end; // if Execute
   end; // with OpenDialog
 

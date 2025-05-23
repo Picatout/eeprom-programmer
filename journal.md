@@ -1,3 +1,7 @@
+### 2025-05-22
+
+* GUI_V2.2.2, Correctif à l'application. Lorsque la programmation échouait, la file de réception n'était vidée, ce qui bloquait les autres opérations.
+
 ### 2025-05-21 
 
 * GUI_V2.2.1, Correctif à l'application suite à la perte de données lors de la programmation. 
