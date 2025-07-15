@@ -20,7 +20,7 @@ La carte de l'embase est conçue pour se brancher sur les connecteurs **CN1** et
 ##  Schématique 
 La schématique a étée dessinée dans [KiCAD](KiCAD) version 8.0.6
 
-![schématique](docs/eeProg_v2.3_schematic.png)
+![schématique](docs/eeProg_v2.4_schematic.png)
 
 ## utilisation.
 L'embase accepte les EEPROM compatibles **AT28C64B** de **8KO** et **AT28C256** de **32KO**  au format **DIP-28**.
