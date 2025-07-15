@@ -145,3 +145,10 @@ La version 2 de l'application est complétée. Voici le lien vers un vidéo de d
 La version 2.0R5 de l'application est complétée en pré-release  le vidéo suivant fait le tour de toutes les fonctionnalités.
 
 [démonstration V2.0R5](https://youtu.be/IvOhWJ9nTF0)
+
+### 2025-07-15 
+
+**Circuit version 2.4**
+
+Modification du circuit électronique pour remplacer le transistor de commutation de l'alimentation de l'EEPROM par un transistor P-MOSFET **SI2305CD**. La chute de tension dans le transistor PNP ztx749
+rendait l'opération de programmation instable. Aucune modification au firmware n'est requise. 
