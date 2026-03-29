@@ -1,4 +1,9 @@
-### 2026-06-28 
+### 2026-03-29
+
+* Travail sur [w25q80.asm](w25q80.asm).
+    * La commande de programmation fonctionne.
+
+### 2026-03-28 
 
 * Débuté travail sur version 3.0 , ajout de la fonctionnalité nécessaire pour programmer les mémoires à interface SPI.
     * lecture de la mémoire W25Q80DV fonctionne.

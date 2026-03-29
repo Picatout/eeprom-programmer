@@ -204,7 +204,11 @@ w25q_write_buffer:
     call    w25q_select 
     ld      a,#CMD_WRITE 
     call    spi_wr_byte
-    ldw     y,#pad 
+    ld      a,storadr 
+    ldw     x,storadr+1 
+    call    w25q_addr 
+    ldw     y,#pad
+    push    count  
 1$:
     ld      a,(y)
     incw    y  
@@ -212,8 +216,7 @@ w25q_write_buffer:
     dec     (1,sp) 
     jreq    4$
     _inc_v24 storadr
-    _cp_v24 limit, storadr 
-    jruge 1$     
+    jra     1$ 
 4$: 
     _drop   1 
     call    w25q_deselect 

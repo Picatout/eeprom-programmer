@@ -246,8 +246,9 @@
     STORE=2 
     ERASE=3 ; fill range with 0xFF 
 
-; eeprom programming buffe size 
-    DEFAULT_PAGE_SIZE=64 ; AT28C(BV)64B and AT28C(BV)256 
+; how many bytes programmed at once  
+    DEFAULT_PROG_SIZE=64 ; AT28C(BV)64B and AT28C(BV)256 
+    W25Q80_PAGE_SIZE=256 
 
 ; eeprom types 
     AT28=0   ; AT28Cxxx (Vcc=5v), AT28BVxxx (Vcc=3.3V)
@@ -344,7 +345,7 @@ eeProg:
     ldw limit+1,x 
     call init_ports 
 ; set default limit for 8KB eeprom     
-    mov page_size, #DEFAULT_PAGE_SIZE
+    mov page_size, #DEFAULT_PROG_SIZE
 ; row delay default to 4 msec 
     mov RowDelay,#4     
 ; set eeprom type to AT28xxxx 
@@ -494,14 +495,13 @@ parse01:
 ;--------------------------------------
 write_eeprom:
     _mov_v24 storadr, xamadr 
-    ld a,page_size 
 ; copy data to pad 
     ldw x,#pad 
     ldw ptr16,x  
-    clr count 
+    clr count
 1$: 
 ; skip spaces 
-    _next_char 
+     _next_char 
     cp a,#SPACE 
     jreq 1$
     call parse_hex
@@ -522,7 +522,7 @@ write_eeprom:
     ld a,page_size 
     _straz count 
 10$:
-    tnz   a 
+    ld    a,eeType 
     jreq  at28_prog_eeprom
     cp    a,#SST39  
     jreq  12$
