@@ -17,9 +17,10 @@
 ;;
 
 
-;;---------------------------------------
+;;--------------------------------------------
 ;; at28C64B || at28c256  EEPROM programmer 
-;;--------------------------------------
+;; version 3 add support for W25Q80 spi flash 
+;;--------------------------------------------
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;   COMMENTS 
@@ -37,11 +38,15 @@
 
     .module EEPROG  
 
+; version 3 update 
+; support w25q80dv spi flash memory 
+; W25Q80DV (20 bits address) 1MB 
+
 ; version 2 update 
 ; can work with 19 bits PLCC-32 EEPROM
-; SST39SF010 (17 bits address) 128KO
-; SST39SF020 (18 bits address) 256KO 
-; SST39SF040 (19 bits address) 512KO 
+; SST39SF010 (17 bits address) 128KB
+; SST39SF020 (18 bits address) 256KB 
+; SST39SF040 (19 bits address) 512KB 
 
     ADDR_UPPER=PE_ODR  ; bits 16..18
     ADDR_HIGH=PG_ODR   ; bits 8..15
@@ -247,6 +252,9 @@
 ; eeprom types 
     AT28=0   ; AT28Cxxx (Vcc=5v), AT28BVxxx (Vcc=3.3V)
     SST39=1  ; SST39SFxxx (Vcc=5V), SST39LFxxx (Vcc=3.3V), SST39VFxxx (Vcc=3.3V)
+; spi flash type 
+    W25Q=2  ; W25Q80DV spi flash memory (vCC=3.2V) page size 256 bytes, minimum erase sector 4KB  
+
 
 DEFAULT_LIMIT = 0x1FFF ; 8KO eeprom 
 
@@ -270,10 +278,15 @@ DEFAULT_LIMIT = 0x1FFF ; 8KO eeprom
 init_ports:
 ; PORT E (ADDR_UPPER) as output push-pull
 ; bits 18:16 
-   ld a,limit
+   ld a,PE_DDR 
+   or a,limit 
    ld PE_DDR,a ; bits 0..2 as output
+   ld  a,PE_CR1  
+   or  a, limit  
    ld PE_CR1,a ; bits 0..2 push pull output 
-   ld PE_CR1,a ; bits 0..2 high speed 
+   ld  a,PE_CR2  
+   or  a, limit 
+   ld PE_CR2,a ; bits 0..2 high speed 
    clr ADDR_UPPER       
 ; PORT G (ADDR_HIGH) as output push-pull 
 ; bits 15:8 
@@ -290,13 +303,18 @@ init_ports:
     ld PD_CR2,a ; high speed 
     clr ADDR_LOW  
 ; PORT C (control lines) bits 1,2,3 as output push-pull 
-    ld a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
+    ld a,PC_ODR 
+    or a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
     ld PC_ODR,a ; all control lines to high 
+    ld a,PC_CR1 
+    or a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
     ld PC_CR1,a ; push-pull 
-    ld PC_CR2,a ; high-speed 
+    ld a,PC_CR2  
+    or a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)
+    ld PC_CR2,a ; high-speed
+    ld a,PC_DDR 
+    or a,#(1<<EEPROM_NCE)+(1<<EEPROM_NOE)+(1<<EEPROM_NWE)    
     ld PC_DDR,a ; output 
-    _eeprom_nwe_high 
-    _eeprom_noe_high 
     _eeprom_nce_low  
     _config_read
     ret 
@@ -353,7 +371,7 @@ cli:
     ldw y,x 
     _eeprom_on
 ; Vcc eeprom stabilisation delay      
-    ldw x,#20 
+    ldw x,#50 
     call pause
 ; analyze input line       
     clr  mode 
@@ -415,10 +433,10 @@ parse01:
     clr  mode 
     jp cli 
 34$:
-    cp a,#'T ; eeprom type: 0->AT28,1->SST39 
+    cp a,#'T ; eeprom type: 0->AT28,1->SST39, 2-> W25Q80  
     jrne 4$
     ld a,xamadr+2 
-    and a,#1
+    and a,#3
     _straz eeType
     clr  mode
     jp next_char
@@ -504,8 +522,14 @@ write_eeprom:
     ld a,page_size 
     _straz count 
 10$:
-    btjf eeType,#0,at28_prog_eeprom
-    jp sst39sf0xx_prog_eeprom
+    tnz   a 
+    jreq  at28_prog_eeprom
+    cp    a,#SST39  
+    jreq  12$
+    jp    w25q_write_buffer
+12$:
+    jp    sst39sf0xx_prog_eeprom 
+
 
 ;------------------------------
 ; program data in pad to AT28 eeprom 
@@ -582,6 +606,11 @@ write_string:
     ROW_SIZE=1
     VSIZE=1
 exam_block:
+    ld  a,#W25Q 
+    cp  a,eeType
+    jrne 1$
+    jp w25q_dump 
+1$:
     _vars VSIZE
     _config_read ; to read data from eeprom  
 new_row: 
@@ -808,8 +837,14 @@ eeprom_addr:
 ;  cmd format: addr1Xaddr2 
 ;----------------------------
 erase_range:
-    btjf eeType,#0,at28_range_erase
+    tnz  eeType 
+    jreq at28_range_erase 
+    ld  a,#SST39 
+    cp  a,eeType 
+    jrne 1$
     jp sst39sf0xx_range_erase
+1$: jp w25q_erase_range 
+
 ;------------------------------
 ; AT28 type range erase  
 ;------------------------------
@@ -854,16 +889,21 @@ at28_range_erase:
 ; erase all eeprom 
 ;-------------------------
 erase_all:
-    btjt eeType,#0,1$
+    tnz   eeType 
+    jrne  1$ 
 ; AT28 EEPROM type 
     clr  storadr 
     clr  storadr+1
     clr  storadr+2 
     _mov_v24 last, limit 
     jra erase_range 
-1$: ; 39SF0xx eeprom type 
+1$: ld  a,#SST39 
+    cp  a,eeType 
+    jrne 2$ 
+    ; 39SF0xx eeprom type 
     jp sst39sf0xx_chip_erase
-
+2$:    ; w25q80dv 
+    jp w25q_erase_chip
 
 ;-----------------------------
 ; bit toggle at each read 

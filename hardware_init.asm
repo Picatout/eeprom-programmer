@@ -103,7 +103,7 @@ last: .blkb 3   ; last address parsed from input
 limit: .blkb 3 ; eeprom last address 0x1fff for 8KO, 0x7fff for 32KO, etc 
 count: .blkb 1 ; count bytes written
 eeType: .blkb 1; programming type AT28 =0, 39SF = 1 
-page_size: .blkb 1 ;  how many bytes can be programmed in one shot.
+page_size: .blkb 1 ;  how many bytes can be programmed in one shot, 0 is 256 bytes. 
 RowDelay: .blkb 1 ; delay msec between row send in exam_block
 
 	.org 0x80 
@@ -173,6 +173,7 @@ timer4_init:
 	bset TIM4_IER,#TIM4_IER_UIE
 	ret
 
+
 ;-------------------------------------
 ;  initialization entry point 
 ;-------------------------------------
@@ -205,6 +206,7 @@ cold_start:
 	clr CLK_CKDIVR ; 16Mhz HSI 
 	mov fmstr,#16
 	call timer4_init ; msec ticks timer 
+	call spi_config  ; used with memory with SPI interface 
 ; UART at 115200 BAUD
 ; used for user interface 
 	call uart_init

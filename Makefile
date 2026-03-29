@@ -17,7 +17,7 @@ CFLAGS=-mstm8 -lstm8
 INC=inc/
 INCLUDES=$(BOARD_INC) $(INC)ascii.inc $(INC)gen_macros.inc $(INC)app_macros.inc
 BUILD=build/
-SRC=hardware_init.asm terminal.asm eeProg.asm 
+SRC=hardware_init.asm terminal.asm eeProg.asm spi.asm w25q80.asm 
 OBJ=$(BUILD)eeProg.rel
 FLASH=stm8flash
 
@@ -67,3 +67,7 @@ ee_clear:
 	rm -f zero.bin 
  
  
+ .PHONY: reset 
+# reset mcu 
+reset: 
+	$(FLASH) -c $(PROGRAMMER) -p$(BOARD) -R 

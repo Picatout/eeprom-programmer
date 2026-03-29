@@ -1,3 +1,9 @@
+### 2026-06-28 
+
+* Débuté travail sur version 3.0 , ajout de la fonctionnalité nécessaire pour programmer les mémoires à interface SPI.
+    * lecture de la mémoire W25Q80DV fonctionne.
+    
+
 ### 2025-05-22
 
 * GUI_V2.2.2, Correctif à l'application. Lorsque la programmation échouait, la file de réception n'était vidée, ce qui bloquait les autres opérations.
