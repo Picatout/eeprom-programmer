@@ -25,6 +25,7 @@ w25q_select:
 ; deselect device 
 ;------------------------
 w25q_deselect: 
+    call    spi_wait 
     bset    PE_ODR,#CS_BIT 
     bres    PE_DDR,#CS_BIT
     ret 
@@ -90,6 +91,7 @@ w25q_wr_en:
 w25q_rd_sr1:
     call    w25q_select 
     ld      a,#CMD_READ_SR1 
+    call    spi_wr_byte 
     call    spi_rd_byte 
     call    w25q_deselect 
     ret 
@@ -142,12 +144,12 @@ w25q_erase_sector:
 ;   last     last sector adr 
 ;-----------------------------
 w25q_erase_range:
-; align to beginning of sector 
+; align storadr to beginning of sector 
     clr   storadr+2 
     ld    a, storadr+1
     and   a,#0xF0 
-    ld    storadr,a 
-; align to beginning of sector 
+    ld    storadr+1,a 
+; align last to beginning of sector 
     clr    last+2
     ld     a,last+1
     and    a,#0xF0 
@@ -158,11 +160,12 @@ w25q_erase_range:
     callr  w25q_erase_sector 
     ldw    x,storadr+1 
     ld     a,storadr 
-    call   w25q_next_page
+    addw   x,#4096 ; W25180DV sector size 
+    adc    a,#0 
     ld     storadr,a 
     ldw    storadr+1,x 
     _cp_v24  storadr, last
-    jrule  1$     
+    jrult  1$     
     ret 
 
 
@@ -188,10 +191,10 @@ w25q_verify:
     jreq 9$
     incw y 
     jra 1$ 
-9$:  
-    _drop 1     
-    call    w25q_deselect
+9$:     
+    call    w25q_deselect 
     ret 
+
 
 ;--------------------------
 ; write buffer to w25q80dv  

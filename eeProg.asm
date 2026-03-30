@@ -592,13 +592,16 @@ write_string:
     incw x 
     inc count 
     jra 1$ 
-2$: clr (x)
-    inc count 
-    btjt eeType,#0,3$ 
+2$:
+    tnz eeType
+    jrne 3$
     jp at28_prog_eeprom 
 3$:
+    ld a,#SST39 
+    cp a,eeType 
+    jrne 4$ 
     jp sst39sf0xx_prog_eeprom  
-
+4$: jp w25q_write_buffer
 
 ;-------------------------------------------
 ; display memory in range 'xamadr'...'last' 

@@ -2,6 +2,10 @@
 
 * Travail sur [w25q80.asm](w25q80.asm).
     * La commande de programmation fonctionne.
+* Corrigé bogues dans [w25q80.asm](w25q80.asm). 
+    * __w25q_write_buffer__  n'implémentait pas correctement l'incrément et la limite.
+* Modifié routine __write_sting__  dans [eeProg.asm](eeProg.asm), n'ajoute plus de zéro à la fin de la chaîne.
+
 
 ### 2026-03-28 
 
