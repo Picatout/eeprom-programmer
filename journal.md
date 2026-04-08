@@ -1,3 +1,9 @@
+# notes de travail
+
+### 2026-04-08 
+* Le firmware plante lors de la programmation des mémoires FLASH SPI Winbond, W2580 et W25Q128.
+    * Bogue résolue, la variable count n'était pas retirée de la pile des retours avant la sortie de la routine w25q_verify.
+
 ### 2026-03-29
 
 * Travail sur [w25q80.asm](w25q80.asm).
