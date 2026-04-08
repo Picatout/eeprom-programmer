@@ -152,3 +152,8 @@ La version 2.0R5 de l'application est complétée en pré-release  le vidéo sui
 
 Modification du circuit électronique pour remplacer le transistor de commutation de l'alimentation de l'EEPROM par un transistor P-MOSFET **SI2305CD**. La chute de tension dans le transistor PNP ztx749
 rendait l'opération de programmation instable. Aucune modification au firmware n'est requise. 
+
+### 2026-04-08 
+
+Nouvelle version du circuit pour supporter les mémoire FLASH SPI 
+![circuit V3.0](docs/eeprog_v3.0_schematic.png)
