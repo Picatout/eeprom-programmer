@@ -8,8 +8,9 @@
       <Unit>
         <Filename Value="eeProg_gui.lpr"/>
         <IsPartOfProject Value="True"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
-        <CursorPos Y="16"/>
+        <CursorPos Y="31"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -20,8 +21,8 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitMain"/>
-        <TopLine Value="498"/>
-        <CursorPos X="24" Y="520"/>
+        <TopLine Value="373"/>
+        <CursorPos X="29" Y="380"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
@@ -73,12 +74,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitRange"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
         <TopLine Value="34"/>
         <CursorPos X="5" Y="129"/>
-        <UsageCount Value="137"/>
+        <UsageCount Value="138"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uniteepromsize.pas"/>
@@ -90,7 +91,7 @@
         <EditorIndex Value="5"/>
         <TopLine Value="61"/>
         <CursorPos X="25" Y="77"/>
-        <UsageCount Value="132"/>
+        <UsageCount Value="133"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -103,7 +104,7 @@
         <EditorIndex Value="3"/>
         <TopLine Value="28"/>
         <CursorPos Y="28"/>
-        <UsageCount Value="102"/>
+        <UsageCount Value="103"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -112,13 +113,14 @@
         <EditorIndex Value="4"/>
         <TopLine Value="4"/>
         <CursorPos Y="5"/>
-        <UsageCount Value="42"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="eeProgCmd.pas"/>
         <EditorIndex Value="8"/>
-        <CursorPos X="21" Y="221"/>
+        <TopLine Value="158"/>
+        <CursorPos X="12" Y="169"/>
         <UsageCount Value="100"/>
         <Loaded Value="True"/>
       </Unit>
@@ -282,18 +284,6 @@
     <JumpHistory HistoryIndex="29">
       <Position>
         <Filename Value="unitmain.pas"/>
-        <Caret Line="453" Column="21" TopLine="439"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="459" Column="118" TopLine="445"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="463" Column="23" TopLine="445"/>
-      </Position>
-      <Position>
-        <Filename Value="unitmain.pas"/>
         <Caret Line="461" Column="46" TopLine="451"/>
       </Position>
       <Position>
@@ -400,6 +390,18 @@
         <Filename Value="uniteepromsize.pas"/>
         <Caret Line="69" Column="70" TopLine="46"/>
       </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="504" Column="24" TopLine="498"/>
+      </Position>
+      <Position>
+        <Filename Value="unitmain.pas"/>
+        <Caret Line="314" Column="19" TopLine="299"/>
+      </Position>
+      <Position>
+        <Filename Value="eeProgCmd.pas"/>
+        <Caret Line="169" Column="12" TopLine="158"/>
+      </Position>
     </JumpHistory>
     <RunParams>
       <FormatVersion Value="2"/>
@@ -410,8 +412,6 @@
         <Item1 Value="/usr/bin/gnome-terminal -t &apos;Lazarus Run Output&apos; -e &apos;$(LazarusDir)/tools/runwait.sh $(TargetCmdLine)&apos;"/>
         <Item2 Value="C:\windows\system32\cmd.exe /C ${TargetCmdLine}"/>
       </List>
-      <List Name="WorkingDirectory" Type="File" Count="1"/>
-      <List Name="CommandLineParameters" Count="1"/>
     </HistoryLists>
   </ProjectSession>
 </CONFIG>

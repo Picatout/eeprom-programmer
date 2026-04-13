@@ -165,7 +165,8 @@ begin
     if (ReadCount>0) then
     begin
        s := s + char(c[0]);
-       if (c[0]=ACK) or (c[0]=NAK) or (c[0]=HASH) or (c[0]=CR) then break;
+       if (c[0]=ACK) or (c[0]=NAK) or ((s.length=1) and (c[0]=HASH))
+           or (c[0]=CR) then break;
     end;
 
   end; //while
@@ -192,7 +193,7 @@ begin //receiveData(answer:Tmemo):string;
            prog_ok:=false;
            break;
         end
-        else if (s[1]=char(ACK)) then break;
+        else if (s.length=1) and (s[1]=char(ACK)) then break;
         answer.lines.Append(s);
         Application.ProcessMessages;
         s:=serReadLn;

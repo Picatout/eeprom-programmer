@@ -192,8 +192,8 @@ begin //receiveData(answer:Tmemo):string;
            prog_ok:=false;
            break;
         end
-        else if not (s[1]=char(ACK)) then
-            answer.lines.Append(s);
+        else if (s.length=1) and (s[1]=char(ACK)) then break;
+        answer.lines.Append(s);
         Application.ProcessMessages;
         s:=serReadLn;
     end;

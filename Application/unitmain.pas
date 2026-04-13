@@ -311,6 +311,7 @@ begin
   eeProgCmd.eeProgCmd(EditCmd.Text);
   receiveData(memoConsole);
   MemoConsole.Cursor:=cursorShape;
+  EditCmd.Text:='';
 end;
 
 procedure TFormMain.EditCmdKeyPress(Sender: TObject; var Key: char);
@@ -376,6 +377,7 @@ begin
   end;
 end;
 
+// View EEPROM memory range
 procedure TFormMain.mItemViewClick(Sender: TObject);
 var
     cmd:Ansistring;
@@ -501,7 +503,7 @@ begin // TFormMain.MItemProgClick(Sender: TObject);
         memoConsole.cursor:=crHourGlass;
         fext:=ExtractFileExt(FileName);
         eeProgCmd.prog_ok:=true;
-        if (fext='.bin') then
+        if (fext<>'.hex') then
          begin
             FormRange.RBBinaryFile.checked:=true;
             FormRange.RGFileFormat.enabled:=false;

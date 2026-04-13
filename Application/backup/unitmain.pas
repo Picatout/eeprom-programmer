@@ -311,6 +311,7 @@ begin
   eeProgCmd.eeProgCmd(EditCmd.Text);
   receiveData(memoConsole);
   MemoConsole.Cursor:=cursorShape;
+  EditCmd.Text:='';
 end;
 
 procedure TFormMain.EditCmdKeyPress(Sender: TObject; var Key: char);
@@ -501,7 +502,7 @@ begin // TFormMain.MItemProgClick(Sender: TObject);
         memoConsole.cursor:=crHourGlass;
         fext:=ExtractFileExt(FileName);
         eeProgCmd.prog_ok:=true;
-        if (fext='.bin') then
+        if (fext<>'.hex') then
          begin
             FormRange.RBBinaryFile.checked:=true;
             FormRange.RGFileFormat.enabled:=false;
@@ -514,7 +515,12 @@ begin // TFormMain.MItemProgClick(Sender: TObject);
          else
              ProgHexFile(FileName);
          memoConsole.cursor:=cursorShape;
-         if not eeProgCmd.prog_ok then showMessage('Programmation operation failed!');
+         if not eeProgCmd.prog_ok then
+         begin
+            showMessage('Programmation operation failed!');
+            flushInput;
+         end;
+
     end; // if Execute
   end; // with OpenDialog
 

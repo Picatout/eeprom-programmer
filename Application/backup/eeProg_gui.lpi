@@ -18,8 +18,9 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="2"/>
-      <MinorVersionNr Value="2"/>
-      <RevisionNr Value="2"/>
+      <MinorVersionNr Value="3"/>
+      <RevisionNr Value="1"/>
+      <Attributes pvaPreRelease="True"/>
       <StringTable LegalCopyright="Copyright Jacques Deschênes, 2025"/>
     </VersionInfo>
     <BuildModes>
