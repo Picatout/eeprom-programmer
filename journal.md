@@ -1,5 +1,9 @@
 # notes de travail
 
+### 2026-04-12 
+
+* Corrigé bogue dans [w25q80.asm](w25q80.asm).  **w25q_write_buffer__ n'appelait pas la routine **w25q_wait_eop** pour attendre la fin de l'opération.
+
 ### 2026-04-08 
 * Le firmware plante lors de la programmation des mémoires FLASH SPI Winbond, W2580 et W25Q128.
     * Bogue résolue, la variable count n'était pas retirée de la pile des retours avant la sortie de la routine w25q_verify.

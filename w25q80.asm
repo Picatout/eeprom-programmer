@@ -224,6 +224,7 @@ w25q_write_buffer:
 4$: 
     _drop   1 
     call    w25q_deselect 
+    call    w25q_wait_eop
     jp      w25q_verify
 
 
