@@ -20,12 +20,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitMain"/>
-        <IsVisibleTab Value="True"/>
-        <TopLine Value="489"/>
+        <TopLine Value="498"/>
         <CursorPos X="24" Y="520"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="unitportcfg.pas"/>
@@ -34,12 +32,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitPortCfg"/>
-        <EditorIndex Value="10"/>
-        <TopLine Value="20"/>
+        <EditorIndex Value="9"/>
+        <TopLine Value="17"/>
         <CursorPos Y="32"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="enumserial.pas"/>
@@ -66,7 +63,7 @@
         <UnitName Value="CommError"/>
         <EditorIndex Value="7"/>
         <CursorPos X="16" Y="25"/>
-        <UsageCount Value="199"/>
+        <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -76,12 +73,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unitRange"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="6"/>
-        <TopLine Value="78"/>
+        <TopLine Value="34"/>
         <CursorPos X="5" Y="129"/>
-        <UsageCount Value="135"/>
+        <UsageCount Value="137"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="uniteepromsize.pas"/>
@@ -91,9 +88,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="UnitEepromSize"/>
         <EditorIndex Value="5"/>
-        <TopLine Value="79"/>
-        <CursorPos Y="100"/>
-        <UsageCount Value="130"/>
+        <TopLine Value="61"/>
+        <CursorPos X="25" Y="77"/>
+        <UsageCount Value="132"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
@@ -106,9 +103,8 @@
         <EditorIndex Value="3"/>
         <TopLine Value="28"/>
         <CursorPos Y="28"/>
-        <UsageCount Value="100"/>
+        <UsageCount Value="102"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="vinfo.pas"/>
@@ -116,24 +112,23 @@
         <EditorIndex Value="4"/>
         <TopLine Value="4"/>
         <CursorPos Y="5"/>
-        <UsageCount Value="40"/>
+        <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="eeProgCmd.pas"/>
         <EditorIndex Value="8"/>
-        <TopLine Value="187"/>
         <CursorPos X="21" Y="221"/>
-        <UsageCount Value="98"/>
+        <UsageCount Value="99"/>
         <Loaded Value="True"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
         <UnitName Value="Serial"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="199"/>
-        <CursorPos X="52" Y="23"/>
-        <UsageCount Value="11"/>
+        <TopLine Value="17"/>
+        <CursorPos X="27" Y="17"/>
+        <UsageCount Value="10"/>
       </Unit>
       <Unit>
         <Filename Value="C:\usr\lib\lazarus\3.0\lcl\include\customform.inc"/>
@@ -251,7 +246,7 @@
         <Filename Value="journal.md"/>
         <EditorIndex Value="2"/>
         <CursorPos X="90" Y="4"/>
-        <UsageCount Value="15"/>
+        <UsageCount Value="16"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
@@ -278,26 +273,13 @@
       <Unit>
         <Filename Value="dump1.hex"/>
         <EditorIndex Value="-1"/>
-        <TopLine Value="10"/>
-        <CursorPos Y="22"/>
-        <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="None"/>
-      </Unit>
-      <Unit>
-        <Filename Value="..\..\..\..\..\usr\share\fpcsrc\3.2.2\packages\rtl-extra\src\unix\serial.pp"/>
-        <UnitName Value="Serial"/>
-        <EditorIndex Value="9"/>
         <TopLine Value="17"/>
-        <CursorPos X="27" Y="17"/>
+        <CursorPos Y="49"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="None"/>
       </Unit>
     </Units>
     <JumpHistory HistoryIndex="29">
-      <Position>
-        <Filename Value="unitmain.pas"/>
-        <Caret Line="460" Column="95" TopLine="446"/>
-      </Position>
       <Position>
         <Filename Value="unitmain.pas"/>
         <Caret Line="453" Column="21" TopLine="439"/>
@@ -413,6 +395,10 @@
       <Position>
         <Filename Value="unitmain.pas"/>
         <Caret Line="520" Column="13" TopLine="484"/>
+      </Position>
+      <Position>
+        <Filename Value="uniteepromsize.pas"/>
+        <Caret Line="69" Column="70" TopLine="46"/>
       </Position>
     </JumpHistory>
     <RunParams>

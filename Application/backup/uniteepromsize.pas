@@ -9,7 +9,7 @@ uses
 
 type
   {EEPROM TYPE }
-  EnumEEtype = (AT28=0,SST39=1);
+  EnumEEtype = (AT28=0,SST39=1,SPI=2);
   {EEPROM operating voltage}
   EnumVcc = (JP3_3V=0,JP3_5V=1);
 
@@ -49,7 +49,7 @@ type
 var
   FormEeprom: TFormEeprom;
 
-  const eeprom_list: array [0..12] of Teeprom=(
+  const eeprom_list: array [0..14] of Teeprom=(
   (name:'AT28BV256 - 32K 3.3V EEPROM';vcc:JP3_3V;size:32;eeType:AT28),
   (name:'AT28BV64B - 8K 3.3V EEPROM';vcc:JP3_3V;size:8;eeType:AT28),
   (name:'AT28C256 -   32K 5V EEPROM';vcc:JP3_5V;size:32;eeType:AT28),
@@ -62,7 +62,9 @@ var
   (name:'SST39SF040 - 128K 5V FLASH';vcc:JP3_5V;size:512;eeType:SST39),
   (name:'SST39VF010 - 128K 3.3V FLASH';vcc:JP3_3V;size:128;eeType:SST39),
   (name:'SST39VF020 - 256K 3.3V FLASH';vcc:JP3_3V;size:256;eeType:SST39),
-  (name:'SST39VF040 - 256K 3.3V FLASH';vcc:JP3_3V;size:512;eeType:SST39)
+  (name:'SST39VF040 - 256K 3.3V FLASH';vcc:JP3_3V;size:512;eeType:SST39),
+  (name:'W25Q80 - 1M 3.3V SPI FLASH';vcc:JP3_3V;size:1024;eeType:SPI),
+  (name:'W25Q128 - 8M 3.3V SPI FLASH';vcc:JP3_3V;size:8192;eeType:SPI)
   );
 
 implementation
@@ -96,18 +98,7 @@ begin
     cmdStr:=IntToHex(integer(eeprom_list[CBEeprom.itemIndex].eeType),1)+
     'T'+IntToHex(eepromSize,5)+'S';
     eeProgCmd.eeProgCmd(cmdStr);
-    echo:=eeProgCmd.serreadln;
-    with formMain do
-    begin
-    memoConsole.lines.append(echo);
-    while (strPos(pchar(cmdStr),pchar(echo))=NULL) do
-    begin
-        echo:=eeProgCmd.serreadln;
-        memoConsole.lines.append(echo);
-    end;
-    echo:=eeProgCmd.serreadln; // receive '#' character
-    memoConsole.lines.append(echo);
-    end;
+    eeProgCmd.receiveData(FormMain.MemoConsole);
     close;
 end;
 
